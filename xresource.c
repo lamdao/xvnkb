@@ -27,8 +27,12 @@ void VKLocaleInit()
 	if( !strstr(lang, ".UTF-8") ) {
 		char *p = strchr(lang, '.');
 		if( p ) *p = 0;
-		p = (char *)malloc(strlen(lang)+8);
-		sprintf(p, "%s%s", lang, ".UTF-8");
+		if( !strcmp(lang, "C") )
+			p = strdup("vi_VN.UTF-8");
+		else {
+			p = (char *)malloc(strlen(lang)+8);
+			sprintf(p, "%s%s", lang, ".UTF-8");
+		}
 		setenv("LANG", p, 1);
 		free(lang);
 		lang = p;
@@ -159,7 +163,9 @@ void VKLoadPalette()
 /*----------------------------------------------------------------------------*/
 void VKLoadXResource()
 {
+#ifndef USE_XFT
 	VKLocaleInit();
+#endif
 	VKLoadPalette();
 
 	if( !vk_font_name )
