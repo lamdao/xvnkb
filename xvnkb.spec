@@ -9,7 +9,6 @@ Version: %{version}
 Release: %{rel}
 License: GPL
 Group: System/Internationalization
-#Group: User Interface/X
 URL: http://xvnkb.sourceforge.net/
 Source: http://xvnkb.sourceforge.net/%{name}-%{version}.tar.bz2
 Prefix: %{myprefix}
@@ -28,9 +27,9 @@ xvnkb 0.2.x support UTF-8 Encoding ;). Good news, eh?
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS"
-./configure
+./configure --use-extstrocke
 
-make && ./scripts/adjver.sh
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -40,15 +39,50 @@ mkdir -p $RPM_BUILD_ROOT%{myprefix}/share/%{name}
 install -m 755 %{name} $RPM_BUILD_ROOT%{myprefix}/bin
 install -m 755 %{name}.so.%{version} $RPM_BUILD_ROOT%{myprefix}/lib
 install -m 755 tools/xvnkb_ctrl $RPM_BUILD_ROOT%{myprefix}/bin
-install -m 755 tools/xvnkb_setup $RPM_BUILD_ROOT%{myprefix}/bin
-install -m 755 scripts/xvnkb_setup.sh $RPM_BUILD_ROOT%{myprefix}/bin
 install -m 755 scripts/* $RPM_BUILD_ROOT%{myprefix}/share/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/usr/local/bin/xvnkb_setup
+VERSION="%{version}"
+LD="/etc/ld.so.preload"
+SO="/lib/xvnkb.so"
+XVNKB_CORE="$SO.$VERSION"
+N=""
+while [ -f $XVNKB_CORE ]; do
+	if [ "$N" = "" ]; then
+		N=1
+	else
+		N=$((N + 1))
+	fi
+	XVNKB_CORE="$SO.$VERSION-$N"
+done
+cp %{myprefix}/xvnkb.so.$VERSION $XVNKB_CORE
+ln -sf $XVNKB_CORE $SO
+chattr +i $XVNKB_CORE
+if [ -f $LD -a "`grep xvnkb.so $LD`" != "" ]; then
+	# Remove old settings
+	grep -v xvnkb.so $LD > $LD.xvnkb
+	/bin/mv -f $LD.xvnkb $LD
+fi
+echo "$SO" >> $LD
+
+if [ "`echo $LANG | grep UTF-8`" = "" ]; then
+	echo "If you want to input Vietnamese Unicode, please run"
+	echo "  # $PREFIX/bin/xvnkb_localeconf.sh $LANG.UTF-8"
+	echo "and set your LANG to $LANG.UTF-8."
+	echo "See xvnkb documents at $PREFIX/share/doc/xvnkb-$VERSION for more information."
+fi
+
+if [ "`echo $LD_PRELOAD | grep xvnkb.so`" != "" ]; then
+	echo -e "\\033[1;31m"
+	echo "* NOTICE:"
+	echo "You are using LD_PRELOAD to load xvnkb core. If you set it somewhere else"
+	echo "(e.g. /etc/profile, /etc/bashrc, ~/.bash_profile, ~/.bashrc, ~/.xinitrc)"
+	echo "by yourself, please remove it also!"
+	echo -e "\\033[0;39m"
+fi
 
 %files
 %defattr(-,root,root)
