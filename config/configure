@@ -60,6 +60,7 @@ use_xft=1
 use_spellcheck=1
 use_vietkey=0
 use_extra=0
+use_prostroke=0
 for a in $*; do
 	case "$a" in
 #		--prefix=*)
@@ -82,6 +83,11 @@ for a in $*; do
 
 		--use-xstroke)
 			use_extra=1
+			;;
+
+		--use-prostroke)
+			use_prostroke=1
+			use_extra=0
 			;;
 
 		--no-spellcheck)
@@ -127,6 +133,11 @@ fi
 
 if [ "$use_vietkey" = "1" ]; then
 	echo "#define VK_USE_VIETKEYSTROKE" >> config.h
+fi
+
+if [ "$use_prostroke" = "1" ]; then
+	echo "#define VK_USE_PROSTROKE" >> config.h
+	use_extra=1
 fi
 
 if [ "$use_extra" = "1" ]; then

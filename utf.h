@@ -353,12 +353,21 @@ vietcode_t code_z[] =
 modifier_t telex[] =
 {
 #ifdef VK_USE_EXTRASTROKE
+#ifdef VK_USE_PROSTROKE
 	{0, '[', (vietcode_t *)utf_u7},
 	{0, ']', (vietcode_t *)utf_o7},
 	{0, '{', (vietcode_t *)utf_U7},
 	{0, '}', (vietcode_t *)utf_O7},
 	{0, 'w', (vietcode_t *)utf_u7},
 	{0, 'W', (vietcode_t *)utf_U7},
+#else
+	{0, ']', (vietcode_t *)utf_u7},
+	{0, '[', (vietcode_t *)utf_o7},
+	{0, '}', (vietcode_t *)utf_U7},
+	{0, '{', (vietcode_t *)utf_O7},
+	{0, 'w', (vietcode_t *)utf_u7},
+	{0, 'W', (vietcode_t *)utf_U7},
+#endif
 #endif
 	{1, 'A', code_A},
 	{1, 'a', code_a},
