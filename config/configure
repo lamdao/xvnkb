@@ -185,3 +185,7 @@ echo "  Enable spell checking: ${status[$use_spellcheck]}"
 echo "done."
 echo
 
+sys=`uname -s | tr [A-Z] [a-z] | sed -e "s/.*bsd.*/bsd/"`
+ln -sf Makefile.$sys Makefile
+cd tools
+ln -sf Makefile.$sys Makefile
