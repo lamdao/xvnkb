@@ -1,4 +1,9 @@
 0.2.8:
+	* 2004/01/12:
+	- Checking LD_PRELOAD, LANG & locale information when xvnkb (GUI) start
+	- Add message box
+	* 2004/01/11:
+	- Undocking when systray has been removed & redocking when systray reappears
 	* 2004/01/07:
 	- Add dock/undock capabilities
 	- Save docking information to resource file
