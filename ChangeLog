@@ -1,4 +1,9 @@
 0.2.8:
+	(2003/10/02)
+	- Add Makefile for *BSD
+	- Allow using "Windows" key as hotkey prefix
+	- Cleanup some code in xresource.c
+	(2003/XX/XX)
 	- Add menu option to disable/enable spellcheck
 	- Fixed compilation on FreeBSD
 	- Fixed configure/Makefile (checking dl, xft libs)
