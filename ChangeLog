@@ -1,14 +1,23 @@
 0.2.8:
-	(2003/11/14)
+	* 2003/11/15:
+	- Use different word separators for each input method
+	- Add Makefile.sunos => Makefile.linux (use GNU make syntax temporarily)
+	- Add flags supporting for linking shared library on SunSolaris
+	- Support some extra Telex keystrokes
+	  -- Use --use-xstroke as option of configure script to enable
+	  -- Rule: [ => u+, ] => o+, { => U+, } => O+
+	           w => u+, W => U+ (where 'w' or 'W' is start character of a word)
+	- Use Telex standard key stroke as default - Vietkey style is option
+	  -- Use --use-vkstroke as option of configure script to replace standard
+	* 2003/11/14:
 	- Remove Bash syntax in configure
 	- Add checking for uchar, ushort, uint, ulong
-	-
-	(2003/10/02)
+	* 2003/10/02:
 	- Create softlink to particular Makefile based on Platform info (configure)
 	- Add Makefile for *BSD, separate common code & dependent code
 	- Allow using "Windows" key as hotkey prefix
 	- Cleanup some code in xresource.c
-	(2003/XX/XX)
+	* 2003/XX/XX:
 	- Add menu option to disable/enable spellcheck
 	- Fixed compilation on FreeBSD
 	- Fixed configure/Makefile (checking dl, xft libs)

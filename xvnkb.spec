@@ -14,7 +14,7 @@ URL: http://xvnkb.sourceforge.net/
 Source: http://xvnkb.sourceforge.net/%{name}-%{version}.tar.bz2
 Prefix: %{myprefix}
 BuildRoot: %{_tmppath}/%{name}-buildroot
-#Packager: Dao Hai Lam <lam@visc-network.com>
+#Packager: Dao Hai Lam <lam at visc-network dot com>
 
 %description
 xvnkb is a Vietnamese keyboard input for X-Window. It provides an 
@@ -28,7 +28,7 @@ xvnkb 0.2.x support UTF-8 Encoding ;). Good news, eh?
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS"
-./configure --spell-check --use-xft
+./configure
 
 make && ./scripts/adjver.sh
 
@@ -57,24 +57,28 @@ rm -rf $RPM_BUILD_ROOT
 %{myprefix}/*/*
 
 %changelog
-* Wed Oct 15 2003 Nguyen Dai Quy <quy@nguyendai.org>
+* Sun Nov 16 2003 Dao Hai Lam <daohailam at yahoo dot com>
+- use new configure's options
+- anti email spam :)
+
+* Wed Oct 15 2003 Nguyen Dai Quy <quy at nguyendai dot org>
 - correction for multi-target RPM building.
 
-* Sun Apr 20 2003 Dao Hai Lam <lam@visc-network.com>
+* Sun Apr 20 2003 Dao Hai Lam <lam at visc-network dot com>
 - updated to version 0.2.8
 
-* Sun Mar  2 2003 Dao Hai Lam <lam@visc-network.com>
+* Sun Mar  2 2003 Dao Hai Lam <lam at visc-network dot com>
 - updated to version 0.2.7
 
-* Sun Feb  9 2003 Dao Hai Lam <lam@visc-network.com>
+* Sun Feb  9 2003 Dao Hai Lam <lam at visc-network dot com>
 - updated to version 0.2.6
 
-* Tue Aug 13 2002 Dao Hai Lam <lam@visc-network.com>
+* Tue Aug 13 2002 Dao Hai Lam <lam at visc-network dot com>
 - updated to version 0.2.5
 
-* Thu May  9 2002 Nguyen-Dai Quy <Quy@NguyenDai.org>
+* Thu May  9 2002 Nguyen-Dai Quy <Quy at NguyenDai dot org>
 - updated to version 0.2.4
 
-* Mon May  6 2002 Nguyen-Dai Quy <Quy@NguyenDai.org>
+* Mon May  6 2002 Nguyen-Dai Quy <Quy at NguyenDai dot org>
 - build RPM for version 0.2.2
 
