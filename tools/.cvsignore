@@ -1,0 +1,10 @@
+data.c
+data.h
+debug.h
+mode.c
+mode.h
+property.c
+property.h
+typedefs.h
+xconfig.c
+xconfig.h
