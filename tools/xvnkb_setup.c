@@ -26,6 +26,7 @@
 #include "event.h"
 #include "button.h"
 #include "xresource.h"
+#include "msgbox.h"
 /*----------------------------------------------------------------------------*/
 #define TESTING
 /*----------------------------------------------------------------------------*/
@@ -54,12 +55,6 @@ typedef struct {
 	VKStatusButton button;
 } VKLocaleInfo;
 /*----------------------------------------------------------------------------*/
-typedef struct {
-	char *message;
-	Window win;
-	GC gc;
-} VKMessageBox;
-/*----------------------------------------------------------------------------*/
 char localedef[256];
 VKLocaleInfo locale[2] = {
 	{0, "/usr/lib/locale", 1, {CHECKBUTTON, 0, 1, 0}},
@@ -75,7 +70,6 @@ VKStatusButton lang[4] = {
 VKStatusButton *slang = &lang[3];
 /*----------------------------------------------------------------------------*/
 VKButtonControl ok;
-VKMessageBox msgbox;
 /*----------------------------------------------------------------------------*/
 XErrorHandler old_error_handler;
 Atom close_request;
@@ -255,7 +249,7 @@ void VKCheckLocale()
 		}
 		XftDrawDestroy(draw);
 	#else
-		XSetForeground(display, b->gc, clGray);
+		XSetForeground(display, main_gc, clGray);
 		for( i=0; i<2; i++ ) {
 			sprintf(lc, "[%s]", locale[i].location);
 			XmbDrawString(display, main_window, vk_fontset, main_gc,
@@ -309,7 +303,7 @@ void VKCheckLocale()
 							(XftChar8*)lc, strlen(lc));
 		XftDrawDestroy(draw);
 	#else
-		XSetForeground(display, b->gc, clText);
+		XSetForeground(display, main_gc, clText);
 		XmbDrawString(display, main_window, vk_fontset, main_gc,
 							locale[i].button.h+24, locale[i].button.y+vk_text_ascent+4,
 							lc, strlen(lc));
@@ -334,30 +328,6 @@ void VKSetupLang()
 	}
 	lang[1].text = malloc(strlen(s) + 7);
 	sprintf(lang[1].text, "%s.UTF-8", s);
-}
-/*----------------------------------------------------------------------------*/
-void VKShowMessage(char *s)
-{
-#ifdef USE_XFT
-	XftDraw *draw;
-#endif
-
-	if( s ) {
-		if( msgbox.message )
-			free(msgbox.message);
-		msgbox.message = strdup(s);
-	}
-	XClearWindow(display, msgbox.win);
-#ifdef USE_XFT
-	draw = XftDrawCreate(display, msgbox.win, visual, colormap);
-	XftDrawStringUtf8(draw, &clText, vk_font, 10, 10+vk_text_ascent,
-						(XftChar8*)msgbox.message, strlen(msgbox.message));
-	XftDrawDestroy(draw);
-#else
-	XSetForeground(display, b->gc, clText);
-	XmbDrawString(display, main_window, vk_fontset, main_gc, 10, 10+vk_text_ascent
-						msgbox.message, strlen(msgbox.message));
-#endif
 }
 /*----------------------------------------------------------------------------*/
 void VKProcessEvent()
@@ -405,7 +375,6 @@ void VKSetup()
 	}
 	XDefineCursor(display, main_window, busy_cursor);
 
-	XMapWindow(display, msgbox.win);
 	VKShowMessage("Copy X init resource script for xvnkb...");
 	i = 0;
 	while( i < 100000 ) {
@@ -543,25 +512,6 @@ void VKProcessMessage(XEvent *event, void *data)
 	}
 }
 /*----------------------------------------------------------------------------*/
-void VKCreateMessageBox()
-{
-#ifndef USE_XFT
-	msgbox.win = XCreateSimpleWindow(display, main_window, 20, 100,
-										SETUP_WIDTH-40, 40, 2, clBlack, clWhite);
-#else
-	msgbox.win = XCreateSimpleWindow(display, main_window, 20, 100,
-										SETUP_WIDTH-40, 40,
-										2, clBlack.pixel, clWhite.pixel);
-#endif
-	XSelectInput(display, msgbox.win, ExposureMask);
-	msgbox.gc = XCreateGC(display, msgbox.win, 0, 0);
-	XDefineCursor(display, msgbox.win, vk_cursor);
-#ifndef USE_XFT
-	XSetFont(display, msgbox.gc, vk_font->fid);
-#endif
-	VKRegisterEvent(msgbox.win, VKProcessMessage, &msgbox);
-}
-/*----------------------------------------------------------------------------*/
 void VKCreateMainWindow()
 {
 	int i;
@@ -611,8 +561,6 @@ void VKCreateMainWindow()
 	ok.action = VKSetup;
 	VKCreateButton(main_window, &ok);
 	VKShowButtons(&ok, 1);
-
-	VKCreateMessageBox();
 }
 /*----------------------------------------------------------------------------*/
 void VKDrawMain()
