@@ -188,9 +188,10 @@ extern int XLookupString(XKeyEvent *event, char *buffer, int size,
 
 	if( event->keycode!=VK_MAGIC_CHAR )
 		r = (*fptr)(event, buffer, size, keysym, cstatus);
-	else {
+	else
+	if( buffer ) {
 	#ifdef VK_USE_KEYSYM
-		extern ushort word[32];
+		extern ushort *pw;
 	#endif
 
 		if( utf_lang && vk_charset!=VKC_UTF8 )
@@ -206,7 +207,7 @@ extern int XLookupString(XKeyEvent *event, char *buffer, int size,
 		 *   compilers will force RHS operand of = to type of LHS, and buffer
 		 *   will be treated as a pointer to 2-byte buffer
 		 */
-		*keysym = vk_charset==VKC_UTF8 ? word[0] : (*(char *)buffer & 0xFF);
+		*keysym = vk_charset==VKC_UTF8 ? *pw|0x01000000 : (*(char *)buffer & 0xFF);
 	#else
 		*keysym = 0;
 	#endif
