@@ -305,6 +305,9 @@ inline long VKAddKey( char key )
 	ushort c, cc, lastkey = 0;
 	modifier_t *m = modes[ vk_method-1 ];
 	vietcode_t *v = NULL;
+	#ifdef VK_USE_EXTRASTROKE
+	static int wcase = 0;
+	#endif
 
 	if( count>=30 )
 		VKShiftBuffer();
@@ -324,6 +327,7 @@ inline long VKAddKey( char key )
 				lvs[0] = key;
 			#endif
 				backup[ 0 ] = (ushort)key;
+				wcase = (key == 'w' || key == 'W');
 				word[ count++ ] = (ushort)(int)m[i].code;
 				vk_plength = VKStrLen(word, 1);
 				VKMapToCharset(word, 1);
@@ -345,22 +349,33 @@ inline long VKAddKey( char key )
 	#ifdef VK_USE_EXTRASTROKE
 		case 0:
 			c = word[ p=count-1 ];
+	__extra_case:
+			vk_plength = VKStrLen(&word[p], 1);
 			if( c == (ushort)(int)v ) {
 				word[ tempoff=p ] = key;
+				wcase = 0;
 				i = -2;
 			}
 			else {
 				backup[ count ] = (ushort)key;
 				word[ count++ ] = (ushort)(int)v;
+				wcase = (key == 'w' || key == 'W');
 				i = -3;
 				p++;
 			}
-			vk_plength = VKStrLen(&word[p], 1);
 			VKMapToCharset(&word[p], 1);
 			return i;
 	#endif
 		case 1:
 			c = word[ p=count-1 ];
+	#ifdef VK_USE_EXTRASTROKE
+			if( (key == 'w' || key == 'W') && (wcase || strchr(consonants, c)) ) {
+				for( i = 0; !m[i].level && m[i].modifier != key; i++ );
+				v = m[i].code;
+				goto __extra_case;
+			}
+			wcase = 0;
+	#endif
 			break;
 		default:
 		case 2:

@@ -159,9 +159,15 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 					xk.time = event->time;
 					xk.serial = event->serial;
 					XPutBackEvent(display, (XEvent *)&xk);
+					xk.keycode = bs;
+					for( bk=1, i=0; i<vk_plength-1; i++, bk++ ) {
+						xk.time -= 2;
+						xk.serial--;
+						XPutBackEvent(display, (XEvent *)&xk);
+					}
 					rk = event->keycode;
-					event->time -= 2;
-					event->serial -= 1;
+					event->time = xk.time - 2;
+					event->serial = xk.serial - 1;
 					event->keycode = bs;
 					event->state = 0;
 					break;
