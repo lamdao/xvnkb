@@ -19,10 +19,10 @@ all: do-it-all
 	$(CC) -fpic $(CFLAGS) $(FPTR) $(VK_OPT) -DVERSION=\"$(VERSION)\" -Wall -I$(XLIB_INC) -c $<
 
 $(CORE): $(CORE_OBJS)
-	$(CC) $(CFLAGS) -shared -fpic -Wl,-soname,$@ -o $@ $(CORE_OBJS) -L$(XLIB_PATH) $(LIBS)
+	$(CC) $(CFLAGS) $(DLFLAGS) $(CORE_OBJS) -o $@ -L$(XLIB_PATH) $(LIBS)
 
 $(GUI): $(GUI_OBJS)
-	$(CC) $(CFLAGS) -o $@ $(GUI_OBJS) -L$(XLIB_PATH) $(LIBS) $(XFT_LIBS)
+	$(CC) $(CFLAGS) $(GUI_OBJS) -o $@ -L$(XLIB_PATH) $(LIBS) $(XFT_LIBS)
 
 main: $(CORE) $(GUI)
 	@echo >/dev/null
