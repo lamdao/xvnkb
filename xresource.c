@@ -20,9 +20,11 @@
 #include "data.h"
 #include <locale.h>
 /*----------------------------------------------------------------------------*/
+char *sys_lang = NULL;
+/*----------------------------------------------------------------------------*/
 void VKLocaleInit()
 {
-	char *lang = getenv("LANG");
+	char *lang = sys_lang = getenv("LANG");
 	lang = lang ? strdup(lang) : strdup("en_US");
 	if( !strstr(lang, ".UTF-8") ) {
 		char env[256];
@@ -39,8 +41,11 @@ void VKLocaleInit()
 		free(lang);
 		lang = p;
 	}
-	if( !setlocale(LC_ALL, "") )
+	if( !setlocale(LC_ALL, "") ) {
+#ifndef USE_XFT
 		error("Error: Cannot set locale %s!\n", lang);
+#endif
+	}
 	free(lang);
 }
 /*----------------------------------------------------------------------------*/
@@ -157,9 +162,7 @@ void VKLoadPalette()
 /*----------------------------------------------------------------------------*/
 void VKLoadXResource()
 {
-#ifndef USE_XFT
 	VKLocaleInit();
-#endif
 	VKLoadPalette();
 
 	if( !vk_font_name )
@@ -188,7 +191,7 @@ void VKLoadXResource()
 	{
 		XFontSetExtents *fse = XExtentsOfFontSet(vk_fontset);
 		vk_text_height = fse->max_logical_extent.height + 4;
-		vk_text_ascent = vk_font->ascent;
+		vk_text_ascent = vk_font->ascent + 3;
 	}
 #endif
 }
