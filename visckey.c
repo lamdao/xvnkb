@@ -25,11 +25,7 @@
 #include "debug.h"
 /*----------------------------------------------------------------------------*/
 #include "visckey.h"
-#ifndef VK_USE_VIETKEYSTROKE
 #include "utf.h"
-#else
-#include "utf-vkstyle.h"
-#endif
 #include "viqr.h"
 #include "tcvn.h"
 #include "vni.h"

@@ -3,6 +3,6 @@
 Makefile.dep
 Makefile.cfg
 configure
-install
-uninstall
-localeconf
+xvnkb_install
+xvnkb_uninstall
+xvnkb_localeconf

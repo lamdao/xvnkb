@@ -86,9 +86,9 @@ check_locale() {
 		else
 			if [ "$ID" != "0" ]; then
 				echo "*** Please input root password for locale creating!"
-				su -c "./localeconf $LANG"
+				su -c "./xvnkb_localeconf $LANG"
 			else
-				./localeconf $LANG
+				./xvnkb_localeconf $LANG
 			fi
 		fi
 	fi
@@ -129,6 +129,7 @@ else
 fi
 
 if [ ! -f ./xvnkb.so.$VERSION ]; then
+	echo "Run \"./configure\" and then"
 	echo "Type \"make\" to build xvnkb (core & gui)!"
 	exit
 fi
@@ -158,7 +159,7 @@ else
 	echo
 	if [ "$r" = "y" -o "$r" = "Y" ]; then
 		echo "* Please input root password for installation!!!"
-		su -c './install ok'
+		su -c './xvnkb_install ok'
 		exit
 	fi
 	XVN_SYS=$HOME
@@ -218,6 +219,11 @@ else
 fi
 
 LANG=`echo $LANG|cut -f1 -d.`
+ENCODING=`echo $LANG|cut -f2 -d.`
+
+if [ "$ENCODING" = "UTF-8" ]; then
+fi
+
 if [ "$LANG" = "" -o "$LANG" = "UTF-8" -o "$LANG" = "vi_VN" ]; then
 	LANG="en_US"
 fi

@@ -63,7 +63,7 @@ else
 	read r
 	if [ "$r" = "y" -o "$r" = "Y" ]; then
 		echo "* Please input root password for uninstallation!"
-		su -c './uninstall ok'
+		su -c './xvnkb_uninstall ok'
 		exit
 	fi
 	XID_SYS=$HOME

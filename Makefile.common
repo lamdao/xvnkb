@@ -44,10 +44,10 @@ distclean:
 	rm -f .*.sw*
 
 install: all
-	@./install
+	@./xvnkb_install
 
 uninstall:
-	@./uninstall
+	@./xvnkb_uninstall
 
 debug: clean
 	@$(MAKE) CFLAGS="-DDEBUG $(CFLAGS)"
