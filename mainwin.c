@@ -138,11 +138,11 @@ void VKCreateMainWindow()
 		XA_STRING, 8, PropModeReplace, PROGRAM_NAME, strlen(PROGRAM_NAME));
 	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
 
-	VKSetMainWindowHints(vk_icon_height, vk_icon_height);
-
 	if( vk_docking ) {
-		if( VKIsDockable() )
+		if( VKIsDockable() ) {
+			VKSetMainWindowHints(vk_icon_height, vk_icon_height);
 			VKRequestDocking();
+		}
 		else {
 			vk_docking = 0;
 			XMapWindow(display, main_window);
@@ -249,16 +249,18 @@ void VKMainWindowProcess(XEvent *event, void *data)
 			}
 			break;
 		case ConfigureNotify:
-			vk_x = event->xconfigure.x;
-			vk_y = event->xconfigure.y;
-			vk_icon_width = event->xconfigure.width;
-			vk_icon_height = event->xconfigure.height;
-			if( vk_icon_height > vk_icon_width )
-				vk_icon_width = vk_icon_height;
-			else
-				vk_icon_height = vk_icon_width;
+			if( vk_docking ) {
+				vk_x = event->xconfigure.x;
+				vk_y = event->xconfigure.y;
+				vk_icon_width = event->xconfigure.width;
+				vk_icon_height = event->xconfigure.height;
+				if( vk_icon_height > vk_icon_width )
+					vk_icon_width = vk_icon_height;
+				else
+					vk_icon_height = vk_icon_width;
 
-			VKSetMainWindowHints(vk_icon_width, vk_icon_height);
+				VKSetMainWindowHints(vk_icon_width, vk_icon_height);
+			}
 			break;
 		case ClientMessage:
 			TRACE("MessageID = %ld\n", event->xclient.data.l[1]);
