@@ -161,12 +161,12 @@ void VKLoadConfig(int argc, char **argv)
 				break;
 			case 3:
 			case 16:
-				if( *p && VKSetResourceInfo(vk_mopts, p, -1) )
+				if( p && *p && VKSetResourceInfo(vk_mopts, p, -1) )
 					vk_using = vk_method;
 				break;
 			case 6:
 			case 25:
-				if( *p ) VKSetResourceInfo(vk_copts, p, -1);
+				if( p && *p ) VKSetResourceInfo(vk_copts, p, -1);
 				break;
 			default:
 			#ifdef XVNKB_TOOL
