@@ -1,5 +1,5 @@
 %define name xvnkb
-%define version 0.2.6
+%define version 0.2.7
 %define rel 1
 #%define myprefix /usr/local
 
@@ -10,8 +10,8 @@ Release: %{rel}
 License: GPL
 Group: System/Internationalization
 #Group: User Interface/X
-URL: http://www.visc-network.com/
-Source: http://visc-network.com/downloads/%{name}-%{version}.tar.bz2
+URL: http://xvnkb.sourceforge.net/
+Source: http://xvnkb.sourceforge.net/%{name}-%{version}.tar.bz2
 #Prefix: %{myprefix}
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Packager: Dao Hai Lam <lam@visc-network.com>
@@ -27,7 +27,7 @@ xvnkb 0.2.x support UTF-8 Encoding ;). Good news, eh?
 %setup
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" ./configure --spell-check --use-xft
+CFLAGS="$RPM_OPT_FLAGS" ./configure
 
 make && ./scripts/adjver.sh
 
@@ -57,6 +57,9 @@ echo
 %{myprefix}/*/*
 
 %changelog
+* Sun Mar  2 2003 Dao Hai Lam <lam@visc-network.com>
+- update to version 0.2.7
+
 * Sun Feb  9 2003 Dao Hai Lam <lam@visc-network.com>
 - update to version 0.2.6
 
