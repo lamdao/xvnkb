@@ -1,3 +1,11 @@
+0.2.8:
+	- Fixed crashing on KDE 3.x (cvs version)
+	- Fixed error with determination of focus window
+	  -- Very rarely, found in Links2.1pre9 graphics only (at the moment)
+	- Fixed spell checking with "gio<...>"
+	- Fixed compilation bug with Debian gcc 2.95.4
+	- Updated documents
+
 0.2.7:
 	- Fixed Hotkey recording
 	- Fixed configure script for XFT detecting
