@@ -39,6 +39,8 @@ distclean:
 	rm -f *.o core *.core
 	rm -f $(CORE) $(GUI)
 	rm -f Makefile.cfg
+	rm -f Makefile
+	rm -f config.h
 	rm -f .*.sw*
 
 install: all

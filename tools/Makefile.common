@@ -34,6 +34,8 @@ clean:
 
 distclean: clean
 	rm -f $(TOOLS)
+	rm -f Makefile
+	rm -f config.h
 
 install: all
 	@/bin/cp -f $(TOOLS) /usr/local/bin
