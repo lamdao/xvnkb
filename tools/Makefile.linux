@@ -1,0 +1,21 @@
+ifeq (../Makefile.cfg,$(wildcard ../Makefile.cfg))
+include ../Makefile.cfg
+endif
+
+ifeq "$(CFLAGS)" ""
+CFLAGS=-O3 -s
+endif
+
+include Makefile.common
+
+ifneq (../Makefile.cfg,$(wildcard ../Makefile.cfg))
+do-it-all: need-config
+else
+ifeq (Makefile.dep,$(wildcard Makefile.dep))
+include Makefile.dep
+do-it-all: main-tools
+else
+do-it-all: dep
+	@$(MAKE) main-tools
+endif
+endif

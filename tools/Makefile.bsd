@@ -1,0 +1,19 @@
+.if exists(../Makefile.cfg)
+include ../Makefile.cfg
+.endif
+
+.if !defined(CFLAGS) || empty(CFLAGS)
+CFLAGS=-O3 -s
+.endif
+
+include Makefile.common
+
+.if !exists(../Makefile.cfg)
+do-it-all: need-config
+.elif exists(Makefile.dep)
+include Makefile.dep
+do-it-all: main-tools
+.else
+do-it-all: dep
+	@$(MAKE) main-tools
+.endif
