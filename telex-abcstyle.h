@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/*  telex-vkstyle.h                                                           */
+/*  telex-abcstyle.h -- ABC liked Telex keystroke                             */
 /*----------------------------------------------------------------------------*/
 /*  copyright         : (C) 2002 by Dao Hai Lam                               */
 /*                      VISC Software & Security Consultant Company           */
@@ -17,8 +17,8 @@
 /*   (at your option) any later version.                                      */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-#ifndef __VK_TELEX_VIETKEY
-#define __VK_TELEX_VIETKEY
+#ifndef __VK_ABC_TELEX
+#define __VK_ABC_TELEX
 /*----------------------------------------------------------------------------*/
 vietcode_t code_A[] =
 {
