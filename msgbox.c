@@ -155,7 +155,7 @@ void VKCreateMsgBoxWindow(char *message)
 	}
 	msgbox.data.count = i;
 	msgbox.width = w = (w < 250 ? 250 : w) + fw;
-	msgbox.height = j = i * (vk_text_height + 8);
+	msgbox.height = j = (i + 1) * vk_text_height;
 	for( i--; i >= 0; i--, j -= vk_text_height ) {
 		msgbox.data.text[i].x = (w - msgbox.data.text[i].width) / 2;
 		msgbox.data.text[i].y = j + 4;
