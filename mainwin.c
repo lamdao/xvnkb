@@ -20,6 +20,7 @@
 #include "data.h"
 #include "menu.h"
 #include "event.h"
+#include "systray.h"
 /*----------------------------------------------------------------------------*/
 char *Ss[] = { "Off", "Vni", "Telex", "Viqr" };
 /*----------------------------------------------------------------------------*/
@@ -33,7 +34,7 @@ void VKMainWindowProcess(XEvent *event, void *data);
 void VKDrawIcon()
 {
 	long x, y, h, l;
-	char *S = Ss[vk_method];
+	char *S = docking ? (vk_method == VKM_OFF ? "N" : "V") : Ss[vk_method];
 
 #ifdef USE_XFT
 	XftDraw *draw;
@@ -108,7 +109,8 @@ void VKCreateMainWindow()
 					DefaultDepth(display, screen), InputOutput, visual,
 					vk_attribmask, &vk_attrib);
 	XSetSelectionOwner(display, visckey_atom, main_window, CurrentTime);
-	XSelectInput(display, main_window, MAIN_EVENT_MASKS|VisibilityChangeMask);
+	XSelectInput(display, main_window,
+		MAIN_EVENT_MASKS|VisibilityChangeMask|StructureNotifyMask);
 
 	main_gc = XCreateGC(display, main_window, 0, 0);
 	XDefineCursor(display, main_window, vk_cursor);
@@ -116,7 +118,12 @@ void VKCreateMainWindow()
 	XSetFont(display, main_gc, vk_font->fid);
 #endif
 	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
-	XMapWindow(display, main_window);
+
+	VKCheckSystray();
+	if( VKIsDockable() )
+		VKRequestDocking();
+	else
+		XMapWindow(display, main_window);
 
 	VKSetDefaultColor();
 }
@@ -146,7 +153,7 @@ void VKMainWindowProcess(XEvent *event, void *data)
 			dragging = event->xbutton.button==Button1;
 			break;
 		case MotionNotify:
-			if( dragging ) {
+			if( !docking && dragging ) {
 				has_moved = True;
 				vk_x += event->xbutton.x_root - x;
 				vk_y += event->xbutton.y_root - y;
@@ -175,6 +182,11 @@ void VKMainWindowProcess(XEvent *event, void *data)
 					vk_done = True;
 					break;
 				case Button3:
+					// * Workaround for Fluxbox systray
+					// Fluxbox systray doesn't report absolute position
+					// of client in ConfigureNotify message event
+					vk_x = event->xbutton.x_root - event->xbutton.x;
+					vk_y = event->xbutton.y_root - event->xbutton.y;
 					VKShowMenu();
 					break;
 			}
@@ -182,6 +194,15 @@ void VKMainWindowProcess(XEvent *event, void *data)
 		case VisibilityNotify:
 			if( ((XVisibilityEvent *)event)->state != VisibilityUnobscured )
 				XRaiseWindow(display, main_window);
+			break;
+		case ReparentNotify:
+			docking = event->xreparent.parent != root;
+			break;
+		case ConfigureNotify:
+			vk_x = event->xconfigure.x;
+			vk_y = event->xconfigure.y;
+			vk_icon_width = event->xconfigure.width;
+			vk_icon_height = event->xconfigure.height;
 			break;
 	}
 }
