@@ -25,12 +25,8 @@
 #include <string.h>
 /*----------------------------------------------------------------------------*/
 #include "debug.h"
+#include "typedefs.h"
 #include "property.h"
-/*----------------------------------------------------------------------------*/
-typedef unsigned char uchar;
-#ifndef __linux__
-typedef unsigned long ulong;
-#endif
 /*----------------------------------------------------------------------------*/
 Atom vk_using_atom;
 Atom vk_method_atom;

@@ -184,10 +184,6 @@
 #define	utf_J		0x004A
 #define	utf_j		0x006A
 /*----------------------------------------------------------------------------*/
-#ifdef __linux__
-typedef unsigned short ushort;
-#endif
-/*----------------------------------------------------------------------------*/
 typedef struct {
 	ushort c;
 	ushort r1;

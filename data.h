@@ -55,10 +55,6 @@
 /*----------------------------------------------------------------------------*/
 #define	MAIN_EVENT_MASKS	ExposureMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask
 /*----------------------------------------------------------------------------*/
-#ifndef __linux__
-typedef unsigned long ulong;
-#endif
-/*----------------------------------------------------------------------------*/
 extern int screen;
 extern int screen_width;
 extern int screen_height;

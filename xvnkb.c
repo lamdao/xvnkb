@@ -29,6 +29,7 @@
 #include <X11/keysym.h>
 /*----------------------------------------------------------------------------*/
 #include "debug.h"
+#include "typedefs.h"
 #include "visckey.h"
 #include "property.h"
 #include "xvnkb_dll.h"

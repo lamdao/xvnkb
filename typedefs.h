@@ -20,6 +20,8 @@
 #ifndef __VK_TYPEDEFS_H
 #define __VK_TYPEDEFS_H
 /*----------------------------------------------------------------------------*/
+#include "config.h"
+/*----------------------------------------------------------------------------*/
 typedef enum {
 	VKM_OFF, VKM_VNI, VKM_TELEX, VKM_VIQR
 } vk_methods;
@@ -28,6 +30,20 @@ typedef enum {
 	VKC_TCVN, VKC_VNI, VKC_VIQR, VKC_VISCII, VKC_VPS, VKC_UTF8
 } vk_charsets;
 /*----------------------------------------------------------------------------*/
+#ifdef VK_NEED_UCHAR
 typedef unsigned char uchar;
+#endif
+/*----------------------------------------------------------------------------*/
+#ifdef VK_NEED_USHORT
+typedef unsigned short ushort;
+#endif
+/*----------------------------------------------------------------------------*/
+#ifdef VK_NEED_UINT
+typedef unsigned int uint;
+#endif
+/*----------------------------------------------------------------------------*/
+#ifdef VK_NEED_ULONG
+typedef unsigned long ulong;
+#endif
 /*----------------------------------------------------------------------------*/
 #endif

@@ -1,4 +1,8 @@
 0.2.8:
+	(2003/11/14)
+	- Remove Bash syntax in configure
+	- Add checking for uchar, ushort, uint, ulong
+	-
 	(2003/10/02)
 	- Create softlink to particular Makefile based on Platform info (configure)
 	- Add Makefile for *BSD, separate common code & dependent code
