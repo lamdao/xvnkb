@@ -3,6 +3,8 @@ ln -sf ./config/configure .
 ln -sf ./scripts/install.sh ./xvnkb_install
 ln -sf ./scripts/uninstall.sh ./xvnkb_uninstall
 ln -sf ./scripts/xvnkb.lconf.sh ./xvnkb_localeconf
+ln -sf ./Makefile.linux ./Makefile.sunos
+ln -sf ./Makefile.linux ./tools/Makefile.sunos
 ln -sf ../data.c ./tools
 ln -sf ../data.h ./tools
 ln -sf ../debug.h ./tools
