@@ -47,7 +47,7 @@ else
 fi
 
 echo
-echo "xvnkb $version"
+echo "Configuration for xvnkb $version on `uname`"
 echo
 
 if [ "$xcc" = "" ]; then
@@ -58,6 +58,8 @@ vk_opt=
 xlib_dir=
 use_xft=1
 use_spellcheck=1
+use_vietkey=0
+use_extra=0
 for a in $*; do
 	case "$a" in
 #		--prefix=*)
@@ -72,6 +74,14 @@ for a in $*; do
 			if [ -d "$v" ]; then
 				xlib_dir=$v
 			fi
+			;;
+
+		--use-vkstroke)
+			use_vietkey=1
+			;;
+
+		--use-xstroke)
+			use_extra=1
 			;;
 
 		--no-spellcheck)
@@ -92,6 +102,8 @@ for a in $*; do
 			echo "Options:"
 			echo "--help             Display help and exit"
 			echo "--x-dir=DIR        Xlib path"
+			echo "--use-xstroke      Enable extra Telex keystroke"
+			echo "--use-vkstroke     Enable Vietkey likes keystroke"
 			echo "--no-spellcheck    Spelling check"
 			echo "--no-xft           X freetype"
 			echo
@@ -100,17 +112,27 @@ for a in $*; do
 	esac
 done
 
-if [ "$use_spellcheck" = "1" ]; then
-	vk_opt="$vk_opt -DVK_CHECK_SPELLING"
-fi
-
 rm -f Makefile.cfg
 
 if [ "$XLIB_DIR" != "" ]; then
 	x_dirs="$XLIB_DIR $x_dirs"
 fi
 
+# Create config.h
 echo -e "#ifndef __VK_CONFIG_H\n#define __VK_CONFIG_H" > config.h
+
+if [ "$use_spellcheck" = "1" ]; then
+	echo "#define VK_CHECK_SPELLING" >> config.h
+fi
+
+if [ "$use_vietkey" = "1" ]; then
+	echo "#define VK_USE_VIETKEYSTROKE" >> config.h
+fi
+
+if [ "$use_extra" = "1" ]; then
+	echo "#define VK_USE_EXTRASTROKE" >> config.h
+fi
+
 for dtype in VK_NEED_UCHAR VK_NEED_USHORT VK_NEED_UINT VK_NEED_ULONG; do
 	ctype=`echo $dtype | cut -f3 -d_ | tr [A-Z] [a-z]`
 	echo -n "Checking $ctype... "
@@ -123,12 +145,13 @@ for dtype in VK_NEED_UCHAR VK_NEED_USHORT VK_NEED_UINT VK_NEED_ULONG; do
 		echo "#define $dtype" >> config.h
 	fi
 done
+
 echo "#endif" >> config.h
 
 echo -n "Checking dynamic linking loader... "
-$xcc config/dl.c &>/dev/null
+$xcc config/dl.c >/dev/null 2>&1
 if [ $? != 0 ]; then
-	$xcc config/dl.c -ldl &>/dev/null
+	$xcc config/dl.c -ldl >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		rm -f a.out
 		echo no
@@ -144,7 +167,7 @@ echo yes
 echo -n "Checking X11 lib... "
 xlib_dir=
 for x in $x_dirs; do
-	$xcc -I$x/include config/x.c -L$x/lib -lX11 &>/dev/null
+	$xcc -I$x/include config/x.c -L$x/lib -lX11 >/dev/null 2>&1
 	if [ $? = 0 ]; then
 		rm -f a.out
 		xlib_dir=$x
@@ -180,7 +203,7 @@ if [ "$use_xft" = "1" ]; then
 
 	echo -n "Checking Xft... "
 	$xcc -I$xlib_dir/include $xft_incs config/xft.c \
-		-L$xlib_dir/lib -lX11 $xft_libs &>/dev/null
+		-L$xlib_dir/lib -lX11 $xft_libs >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		echo no
 		use_xft=0
@@ -200,17 +223,25 @@ fi
 echo "XFT_LIBS=$xft_libs" >> Makefile.cfg
 echo "LIBDL=$lib_dl" >> Makefile.cfg
 
+sys=`uname -s | tr [A-Z] [a-z] | sed -e "s/.*bsd.*/bsd/"`
+if [ "$sys" = "sunos" ]; then
+	echo 'DLFLAGS=-dy -G -B dynamic -fpic -Wl' >> Makefile.cfg
+else
+	echo 'DLFLAGS=-shared -fpic -Wl,-soname,$@' >> Makefile.cfg
+fi
+
 echo
 echo "Compile options:"
 echo -n "  Enable XFT: "; show_status $use_xft
 echo -n "  Enable spell checking: "; show_status $use_spellcheck
+echo -n "  Enable Vietkey like keystroke: "; show_status $use_vietkey
+echo -n "  Enable extra Telex keystroke: "; show_status $use_extra
 echo "done."
 echo
 echo "Type \"make\" to compile"
 echo
 
 rm -f a.out
-sys=`uname -s | tr [A-Z] [a-z] | sed -e "s/.*bsd.*/bsd/"`
 ln -sf Makefile.$sys Makefile
 cd tools
 ln -sf ../config.h
