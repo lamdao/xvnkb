@@ -67,7 +67,7 @@ static char *separators[] = {
 	" ",										// VKM_OFF
 	" !@#$%&)_|\\-{}[]:\";<>,/'`~?.^*(+=",		// VKM_VNI
 	" !@#$%&)_|\\-:\";<>,/'`~?.^*(+="			// VKM_TELEX
-#ifndef VK_USE_EXTRASTROKE
+#ifndef VK_USE_EXTSTROKE
 	"{}[]"
 #endif
 	,
@@ -151,7 +151,7 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 			switch( VKAddKey(key) ) {
 				case -1:
 					break;
-			#ifdef VK_USE_EXTRASTROKE
+			#ifdef VK_USE_EXTSTROKE
 				case -2:
 					xk.display = display;
 					xk.window = focus;
