@@ -31,7 +31,7 @@ o First of all:
 
     - Without  X freetype
 
-      $ ./configure ----no-xft
+      $ ./configure --no-xft
 
     - Some above options can be combined together
 	

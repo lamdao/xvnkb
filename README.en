@@ -1,23 +1,23 @@
 xvnkb  - Vietnamese keyboard input for X-Window
 
 1. Description
-    xvnkb is a Vietnamese keyboard input for X-Window. It provides an
+    xvnkb is a Vietnamese keyboard input for X-Window. It provides a
     useful way for editing Vietnamese on X-Window environment with popular
-    input methods and charsets. This software released under GNU GPL
-    license.
+    input methods and charsets. The software is released under the GNU 
+    General Public License.
 
 2. Features
-    - Run as a small X application in the background without any interfere
+    - Runs as a small X application in the background without any interfere
       with others.
     - Can work well with most X applications included: editors, browsers,
       office suites, ...
     - Supported Vietnamese input methods: VNI, TELEX, VIQR.
     - Supported Vietnamese charsets: TCVN3, VISCII, VPS, VNI, VIQR, Unicode
       (UTF-8).
-    - Switch on/off input mode with shortcut key "Alt+Shift" or with Left
-      mouse click on running icon.
-    - xvnkb was tested with XFree86 on Linux, FreeBSD, OpenBSD, and hope
-      work on other UNIX (need time to test).
+    - Switch on/off input mode with shortcut key or with left mouse click on 
+      the running icon.
+    - Has been successfully tested with XFree86 on Linux, FreeBSD, OpenBSD, 
+      and hope to work on other UNICES (anyone can test please contact me).
 
 3. User Guide
 3.1. Install
@@ -32,46 +32,49 @@ xvnkb  - Vietnamese keyboard input for X-Window
     [xvnkb2-source]$ make
     [xvnkb2-source]$ ./install
 
-    and then follow the instructions of install script
+    and then follow the instructions of the install script.
+
+    See the INSTALL file for more information.
 
 3.2. Launch
     To control the status of xvnkb core (xvnkb.so), launch xvnkb gui
 
     $ xvnkb
 
-    A small icon of xvnkb will appear on screen, it displays status of
-    xvnkb core (input mode). Using mouse to change status:
-    - Left button: Switch on/off input method support.
-    - Right button: Activate menu for choosing input method, charset, ...
+    A small icon of xvnkb will appear on the screen and display the status of
+    xvnkb core (input mode), which can be changed by using mouse:
+    - Left button: Switch off the Vietnamese typing mode or switch on the previous
+      input method,
+    - Right button: Activate menu for configuring xvnkb,
     - Middle button: Exit.
 
-    Status of current input method, charset, ... will be stored in file
-    $HOME/.xvnkbrc and will be restored in next session of xvnkb.
+    Pesonal configurations (status of current input method, charset,...) are 
+    stored in file $HOME/.xvnkbrc and will be restored in the next session of xvnkb.
 
 3.3. Manually install & launch
     In the case you want to do it manually:
 
     [xvnkb2-source]$ ./configure
     [xvnkb2-source]$ make
-    [xvnkb2-source]$ cp xvnkb.so /path/to/your/lib/folder
+    [xvnkb2-source]$ cp xvnkb.so.<version> /path/to/your/lib/folder
     [xvnkb2-source]$ cp xvnkb /path/to/your/bin/folder
 
-    $ export LD_PRELOAD=/path/to/your/lib/folder/xvnkb.so
+    $ export LD_PRELOAD=/path/to/your/lib/folder/xvnkb.so.<version>
     $ <launch xvnkb to control>
     $ <launch your apps here>
 
 3.4. Function
     With your default LANG, xvnkb can help you to input following charsets:
-    tcvn, vni, viscii, vps, ... but unicode. So, when you want to input
+    tcvn, vni, viscii, vps,... but maybe not unicode. So, when you want to input
     unicode, you have to set LANG=UTF-8.
 
     $ export LANG=UTF-8       # or LANG=en_US.UTF-8 or {something}.UTF-8
     $ <launch your apps here>
 
     * NOTICE:
-    xvnkb will work fine with all other charsets when LANG=*UTF-8
+    xvnkb works fine with all other charsets when LANG=*UTF-8 is set.
 
-3.5. Hints for advanced user (who dont want to use GUI :)):
+3.5. Hints for advanced users (who don't want to use GUI :)):
     Make core only with default input method = viqr
 
     $ make core
@@ -86,19 +89,19 @@ xvnkb  - Vietnamese keyboard input for X-Window
 
     where N: 1=vni, 2=telex, 3=viqr
 
-    Also, you can change input method by setting evironment variable
+    Also, you can change input method by setting environment variable
     VK_CORE_METHOD
 
     $ export VK_CORE_METHOD=1 # vni input method
     $ <launch apps>
 
-    In this case GUI has no effect to the core. Using Alt-Shift to switch
+    In this case GUI has no effect on the core. Use Alt-Shift to switch
     on/off Vietnamese input method (default is off).
 
     See also 3.3
 
 4. Limits
-    - Installation scripts only work if bash exists.
+    - Installation script works only if bash exists.
 
 5. Others
     * Create UTF-8 locale
@@ -156,6 +159,13 @@ xvnkb  - Vietnamese keyboard input for X-Window
 
       Ex: release number is 2.2.0
          "/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
+
+      Or just use 
+         export GTK_IM_MODULE=xim
+      insteads of 
+         export GTK_IM_MODULE=/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so
+      in the above files.
+
 
 Thank you for using xvnkb!!! Have fun!!!
 
