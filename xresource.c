@@ -25,6 +25,7 @@ void VKLocaleInit()
 	char *lang = getenv("LANG");
 	lang = lang ? strdup(lang) : strdup("en_US");
 	if( !strstr(lang, ".UTF-8") ) {
+		char env[256];
 		char *p = strchr(lang, '.');
 		if( p ) *p = 0;
 		if( !strcmp(lang, "C") )
@@ -33,7 +34,8 @@ void VKLocaleInit()
 			p = (char *)malloc(strlen(lang)+8);
 			sprintf(p, "%s%s", lang, ".UTF-8");
 		}
-		setenv("LANG", p, 1);
+		snprintf(env, sizeof(env), "LANG=%s", p);
+		putenv(env);
 		free(lang);
 		lang = p;
 	}
