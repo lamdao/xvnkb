@@ -45,6 +45,13 @@ check_localedef() {
 	return 1
 }
 
+ID=`id -u`
+
+if [ "$ID" != "0" ]; then
+	echo "You must be root to run $this."
+	exit 1
+fi
+
 if [ "$*" = "" ]; then
 	usage
 	exit
