@@ -1,4 +1,7 @@
 0.2.8:
+	* 2004/01/13:
+	- Fix thinko in size calcation of Message box
+	- Display message box instead of exit if error occurs on setting locale
 	* 2004/01/12:
 	- Checking LD_PRELOAD, LANG & locale information when xvnkb (GUI) start
 	- Add message box
