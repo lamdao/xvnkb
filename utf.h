@@ -196,10 +196,10 @@ typedef struct {
 	vietcode_t *code;
 } modifier_t;
 /*----------------------------------------------------------------------------*/
-#ifndef VK_USE_VIETKEYSTROKE
+#ifndef VK_USE_ABCSTROKE
 #include "telex-standard.h"
 #else
-#include "telex-vkstyle.h"
+#include "telex-abcstyle.h"
 #endif
 /*----------------------------------------------------------------------------*/
 vietcode_t code_z[] =
@@ -352,7 +352,7 @@ vietcode_t code_z[] =
 /*----------------------------------------------------------------------------*/
 modifier_t telex[] =
 {
-#ifdef VK_USE_EXTRASTROKE
+#ifdef VK_USE_EXTSTROKE
 #ifdef VK_USE_PROSTROKE
 	{0, '[', (vietcode_t *)utf_u7},
 	{0, ']', (vietcode_t *)utf_o7},
