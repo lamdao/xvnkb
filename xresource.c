@@ -20,6 +20,7 @@
 #include "data.h"
 #include <locale.h>
 /*----------------------------------------------------------------------------*/
+int sys_utf8 = 1;
 char *sys_lang = NULL;
 /*----------------------------------------------------------------------------*/
 void VKLocaleInit()
@@ -43,7 +44,10 @@ void VKLocaleInit()
 	}
 	if( !setlocale(LC_ALL, "") ) {
 #ifndef USE_XFT
-		error("Error: Cannot set locale %s!\n", lang);
+		// Cannot use XmbDrawingString in this case
+		// to draw UTF-8 string => force back to English
+		vk_interface = 0;
+		sys_utf8 = 0;
 #endif
 	}
 	free(lang);
