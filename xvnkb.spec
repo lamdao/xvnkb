@@ -46,10 +46,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 VERSION="%{version}"
+OL=`echo $LD_PRELOAD | grep xvnkb.so`
 LD="/etc/ld.so.preload"
 SO="/lib/xvnkb.so"
 XVNKB_CORE="$SO.$VERSION"
-N=""
+unset LD_PRELOAD N
 while [ -f $XVNKB_CORE ]; do
 	if [ "$N" = "" ]; then
 		N=1
@@ -58,24 +59,28 @@ while [ -f $XVNKB_CORE ]; do
 	fi
 	XVNKB_CORE="$SO.$VERSION-$N"
 done
-cp %{myprefix}/xvnkb.so.$VERSION $XVNKB_CORE
-ln -sf $XVNKB_CORE $SO
+cp %{myprefix}/lib/xvnkb.so.$VERSION $XVNKB_CORE
 chattr +i $XVNKB_CORE
-if [ -f $LD -a "`grep xvnkb.so $LD`" != "" ]; then
-	# Remove old settings
+if [ -f "$LD" ]; then
 	grep -v xvnkb.so $LD > $LD.xvnkb
 	/bin/mv -f $LD.xvnkb $LD
 fi
-echo "$SO" >> $LD
+echo "$XVNKB_CORE" >> $LD
+
+if [ "$LANG" = "C" ]; then
+	LANG="en_US"
+fi
 
 if [ "`echo $LANG | grep UTF-8`" = "" ]; then
 	echo "If you want to input Vietnamese Unicode, please run"
+	echo
 	echo "  # $PREFIX/bin/xvnkb_localeconf.sh $LANG.UTF-8"
+	echo
 	echo "and set your LANG to $LANG.UTF-8."
-	echo "See xvnkb documents at $PREFIX/share/doc/xvnkb-$VERSION for more information."
+	echo "See xvnkb documents at %{myprefix}/share/doc/xvnkb for more information."
 fi
 
-if [ "`echo $LD_PRELOAD | grep xvnkb.so`" != "" ]; then
+if [ "$OL" != "" ]; then
 	echo -e "\\033[1;31m"
 	echo "* NOTICE:"
 	echo "You are using LD_PRELOAD to load xvnkb core. If you set it somewhere else"
@@ -84,6 +89,11 @@ if [ "`echo $LD_PRELOAD | grep xvnkb.so`" != "" ]; then
 	echo -e "\\033[0;39m"
 fi
 
+echo "You can use xvnkb now!  If you are using X, please restart your Window Manager."
+echo "It will load xvnkb core control automatically for you and affect to all"
+echo "applications.  Right now, xvnkb core control can affect to new starting"
+echo "applications only.  Run \"xvnkb\" to control status."
+
 %files
 %defattr(-,root,root)
 %doc AUTHORS ChangeLog README* INSTALL* TODO THANKS COPYING 
@@ -91,6 +101,9 @@ fi
 %{myprefix}/*/*
 
 %changelog
+* Fri Jan 16 2004 Dao Hai Lam <daohailam at yahoo dot com>
+- use new installation style
+
 * Sun Nov 16 2003 Dao Hai Lam <daohailam at yahoo dot com>
 - use new configure's options
 - anti email spam :)

@@ -40,10 +40,15 @@ fi
 
 OL="`echo $LD_PRELOAD | grep xvnkb.so`"
 unset LD_PRELOAD
+unset N
 
-cp ./xvnkb $PREFIX/bin
-cp ./xvnkb.so.$VERSION $PREFIX/lib
-cp ./scripts/xvnkb.lconf.sh $PREFIX/bin/xvnkb_localeconf.sh
+echo -n "Copy xvnkb  =>  $PREFIX/bin ... "
+cp ./xvnkb $PREFIX/bin && echo ok
+echo -n "Copy xvnkb.so.$VERSION  =>  $PREFIX/lib ... "
+cp ./xvnkb.so.$VERSION $PREFIX/lib && echo ok
+echo -n "Copy xvnkb_localeconf.sh  =>  $PREFIX/bin ... "
+cp ./scripts/xvnkb.lconf.sh $PREFIX/bin/xvnkb_localeconf.sh && echo ok
+echo -n "Initialize xvnkb core ... "
 XVNKB_CORE="$SO.$VERSION"
 while [ -f $XVNKB_CORE ]; do
 	if [ "$N" = "" ]; then
@@ -54,23 +59,28 @@ while [ -f $XVNKB_CORE ]; do
 	XVNKB_CORE="$SO.$VERSION-$N"
 done
 cp ./xvnkb.so.$VERSION $XVNKB_CORE
-ln -sf $XVNKB_CORE $SO
 chattr +i $XVNKB_CORE
-if [ -f $LD -a "`grep xvnkb.so $LD`" != "" ]; then
-	# Remove old settings
+if [ -f "$LD" ]; then
 	grep -v xvnkb.so $LD > $LD.xvnkb
 	/bin/mv -f $LD.xvnkb $LD
 fi
-echo "$SO" >> $LD
+echo "$XVNKB_CORE" >> $LD
+echo done
+
+if [ "$LANG" = "C" ]; then
+	LANG="en_US"
+fi
 
 if [ "`echo $LANG | grep UTF-8`" = "" ]; then
 	echo "If you want to input Vietnamese Unicode, please run"
+	echo
 	echo "  # $PREFIX/bin/xvnkb_localeconf.sh $LANG.UTF-8"
+	echo
 	echo "and set your LANG to $LANG.UTF-8."
-	echo "See xvnkb documents at $PREFIX/share/doc/xvnkb-$VERSION for more information."
+	echo "See xvnkb documents for more information."
 fi
 
-if [ "$OL" != "" ];
+if [ "$OL" != "" ]; then
 	echo "You are using LD_PRELOAD to load xvnkb core."
 	echo "Try to remove this old setting style..."
 	if [ -f /etc/X11/xinit/xinitrc.d/xvnkb.sh ]; then
@@ -81,4 +91,11 @@ if [ "$OL" != "" ];
 	echo "~/.bash_profile, ~/.bashrc, ~/.xinitrc) by yourself, please remove it also!"
 	echo -e "\\033[0;39m"
 fi
+
+echo
+echo "You can use xvnkb now!  If you are using X, please restart your Window Manager."
+echo "It will load xvnkb core control automatically for you and affect to all"
+echo "applications.  Right now, xvnkb core control can affect to new starting"
+echo "applications only.  Run \"xvnkb\" to control status."
+echo
 

@@ -23,7 +23,6 @@ PREFIX="/usr/local"
 
 ID=`id -u`
 LD="/etc/ld.so.preload"
-SO="/lib/xvnkb.so"
 
 if [ "$ID" != "0" ]; then
 	echo "You must be root to uninstall xvnkb."
@@ -31,15 +30,27 @@ if [ "$ID" != "0" ]; then
 	exit 1
 fi
 
-if [ -f $LD -a "`grep xvnkb.so $LD`" != "" ]; then
-	grep -v xvnkb.so $LD > $LD.xvnkb
-	/bin/mv -f $LD.xvnkb $LD
+if [ -f VERSION ]; then
+	VERSION=`cat VERSION`;
+else
+	echo "Missing version information (file VERSION)!!!"
+	exit 1
 fi
 
-if [ -f $SO ]; then
-	XVNKB_CORE=`ls -l $SO | sed -e "s/.*-> //"`
+if [ -f "$LD" ]; then
+	XVNKB_CORE=`grep xvnkb.so.$VERSION $LD`
 	if [ -n "$XVNKB_CORE" ]; then
-		chattr -i $XVNKB_CORE
-		echo "You can remove $SO & $XVNKB_CORE safely in the *NEXT* boot time"
+		grep -v xvnkb.so $LD > $LD.xvnkb
+		/bin/mv -f $LD.xvnkb $LD
 	fi
+fi
+
+/bin/rm -f $PREFIX/bin/xvnkb
+/bin/rm -f $PREFIX/bin/xvnkb_localeconf.sh
+/bin/rm -f $PREFIX/lib/xvnkb.so.$VERSION
+if [ -n "$XVNKB_CORE" ]; then
+	chattr -i $XVNKB_CORE >/dev/null 2>&1
+	echo
+	echo "You can remove $XVNKB_CORE safely on the *NEXT* boot time."
+	echo
 fi
