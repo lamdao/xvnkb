@@ -10,8 +10,8 @@ CORE_OBJS=xvnkb.o visckey.o property.o
 
 GUI=xvnkb
 GUI_OBJS=data.o flash.o main.o event.o mainwin.o menu.o hotkey.o systray.o \
-		mode.o property.o session.o xconfig.o xresource.o label.o button.o
-
+		mode.o property.o session.o xconfig.o xresource.o label.o button.o \
+		msgbox.o
 
 all: do-it-all
 

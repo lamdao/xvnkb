@@ -21,3 +21,5 @@ ln -sf ../event.c ./tools
 ln -sf ../event.h ./tools
 ln -sf ../button.c ./tools
 ln -sf ../button.h ./tools
+ln -sf ../msgbox.c ./tools
+ln -sf ../msgbox.h ./tools
