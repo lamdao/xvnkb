@@ -1,4 +1,7 @@
 0.2.8:
+	* 2003/11/18:
+	- Fixed thinko in Shift/Capslock case => Fixed bug in VNI input method
+	- Add more extra keystroke for all input methods
 	* 2003/11/15:
 	- Use different word separators for each input method
 	- Add Makefile.sunos => Makefile.linux (use GNU make syntax temporarily)
