@@ -1,0 +1,8 @@
+* What's next ?
+	- Support interface font selection dialog
+	- Support load/unload charsets
+(0.3.x)
+	- Integrate xvnkb.so into xvnkb
+	- Add more rules for spell checking (replaced by FSA)
+	- Use FSA for spell checking
+	- Support input macro

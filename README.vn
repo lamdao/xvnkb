@@ -1,0 +1,153 @@
+xvnkb  - Vietnamese keyboard input for X-Window
+
+1. So+ Lu+o+.c
+	xvnkb la` mo^.t chu+o+ng tri`nh ho^~ tro+. nha^.p tie^'ng Vie^.t trong
+	mo^i tru+o+`ng X-Window. Vo+'i ca'c kie^?u go~ tho^ng du.ng, xvnkb ddem
+	la.i su+. thua^.n tie^.n trong vie^.c soa.n tha?o ca'c va(n ba?n tie^'ng
+	Vie^.t. Pha^`n me^`m ddu+o+.c du+.a tre^n GNU GPL license.
+
+2. Ti'nh na(ng
+	- DDu+o+.c na.p le^n nhu+ ca'c u+'ng du.ng bi`nh thu+o+`ng kha'c.
+	- Co' the^? la`m vie^.c to^'t vo+'i ha^`u he^'t ca'c tri`nh soa.n tha?o
+	  va(n ba?n, tri`nh duye^.t web, ca'c u+'ng du.ng va(n pho`ng, ...
+    - Ho^~ tro+. ca'c kie^?u go~: VNI, TELEX, VIQR.
+    - Ho^~ tro+. ca'c ba?ng ma~: TCVN3, VISCII, VPS, VNI, VIQR, Unicode (UTF-8).
+	- Ta('t ba^.t kie^?u go~ de^~ da`ng vo+'i phi'm ta('t "Alt+Shift" hoa(.c
+	  nha^'n phi'm tra'i cu?a mouse le^n bie^?u tu+o+.ng cu?a xvnkb khi ddang cha.y.
+	- xvnkb dda~ ddu+o+.c cha.y thu+? tre^n Linux, FreeBSD, OpenBSD mo^i tru+o+`ng
+	  XFree86, va` mong la` cu~ng la`m vie^.c to^'t vo+'i ca'c he^. UNIX kha'c.
+
+3. Hu+o+ng da^~n su+? du.ng
+3.1. Ca`i dda(.t
+    Ba.n chi? vie^.c la`m nhu+ sau:
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make install
+
+    hoa(.c
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make
+    [xvnkb2-source]$ ./install
+
+	va` theo ca'c bu+o+'c ddu+o+.c tri`nh ba`y trong qu'a tri`nh ca`i dda(.t dde^?
+	hoa`n ta^'t.
+
+3.2. Su+? du.ng
+    DDe^? thay ddo^? tra.ng tha'i la`m vie^.c cu?a pha^`n lo~i (core), cha.y xvnkb
+	dde^? ddie^`u khie^?n.
+
+    $ xvnkb
+
+	Mo^.t icon nho? cu?a xvnkb se~ xua^'t hie^.n tre^n ma`n hi`nh, the^? hie^.n
+	tra.ng tha'i cu?a pha^`n lo~i (Kie^?u go~). Du`ng mouse dde^? ddie^`u khie^?n:
+    - Nha^'n phi'm tra'i: Ta('t ba^.t ho^~ tro+. nha^.p tie^'ng Vie^.t.
+    - Nha^'n phi'm pha?i: Mo+? menu cho.n lu+.a kie^?u go~, ba?n ma~, ...
+    - Nha^'n phi'm giu+~a: Thoa't.
+
+	Ca'c tra.ng tha'i ve^` kie^?u go~, ba?n ma~, ... se~ ddu+o+.c lu+u la.i	trong
+	file $HOME/.xvnkbrc, va` se~ ddu+o+.c phu.c ho^`i la.i trong ca'c la^`n cha.y
+	sau cu?a xvnkb.
+
+3.3. Tu+. ca`i dda(.t
+    Trong tru+o+`ng ho+.p ba.n muo^'n tu+. ca`i dda(.t la^'y:
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make
+    [xvnkb2-source]$ cp xvnkb.so /path/to/your/lib/folder
+    [xvnkb2-source]$ cp xvnkb /path/to/your/bin/folder
+
+    $ export LD_PRELOAD=/path/to/your/lib/folder/xvnkb.so
+    $ <cha.y xvnkb dde^? ddie^`u khie^?n>
+    $ <cha.y ca'c u+'ng du.ng cu?a ba.n ngay ta.i shell na`y>
+
+3.4. Hoa.t ddo^.ng
+	Vo+'i ngo^n ngu+~ ma(.c ddi.nh (default LANG), xvnkb co' the^? giu'p ba.n la`m
+	vie^.c vo+'i ca'c ba?n ma~ sau: tcvn, vni, viscii, vps, ... nhu+ng kho^ng the^?
+	la`m vie^.c vo+'i unicode. Vi` va^.y khi muo^'n la`m vie^.c vo+'i unicode, ba.n
+	ca^`n pha?i dda(.t la.i LANG=UTF-8.
+
+    $ export LANG=UTF-8       # hoa(.c LANG=en_US.UTF-8 hoa(.c {something}.UTF-8
+    $ <cha.y ca'c chu+o+ng tri`nh cu?a ba.n ta.i shell na`y>
+
+    * Chu' y':
+    xvnkb cu~ng la`m vie^.c to^'t vo+'i ca'c ba?n ma~ tho^ng thu+o+`ng khi dda(.t
+	LANG=*.UTF-8.
+
+3.5. Hu+o+'ng da^~n cho nhu+~ng ngu+o+`i du`ng chuye^n (nhu+~ng ngu+o+`i kho^ng
+	 thi'ch du`ng GUI dde^? ddie^`u khie^?n :)):
+
+    Chi? ta.o pha^`n lo~i vo+'i kie^?u go~ ma(.c ddi.nh la` viqr
+
+    $ make core
+
+    Ta.o lo~i co' ho^~ tro+. ca'c tho^ng ba'o debug (kie^?u go~ viqr)
+
+    $ make core_debug
+
+    Ta.o lo~i vo+'i kie^?u go~ ma(.c ddi.nh do ngu+o+`i du`ng ddi.nh nghia~
+
+    $ make core CFLAGS="-DVK_CORE_METHOD=<N>"
+
+    Trong ddo' N: 1=vni, 2=telex, 3=viqr
+
+	Ngoa`i ra, ba.n co' the^? thay ddo^?i kie^?u go~ ma(.c ddi.nh ba(`ng ca'ch thay
+	ddo^?i bie^'n mo^i tru+o+`ng VK_CORE_METHOD
+
+    $ export VK_CORE_METHOD=1 # kie^?u go~ vni
+    $ <cha.y u+'ng du.ng>
+
+	Trong tru+o+`ng ho+.p na`y, pha^`n giao die^.n (GUI) kho^ng co' ta'c du.ng ddo^'i
+	vo+'i pha^`n lo~i\. Co' the^? du`ng Alt-Shift dde^? ta('t/ba^.t ho^~ tro+. kie^?u
+	go~ tie^'ng Vie^.t (ma(.c ddi.nh la` ta('t).
+
+    Xem the^m 3.3
+
+4. Gio+'i ha.n
+    - Pha^`n install chi? la`m vie^.c chi'nh xa'c khi co' "bash" shell.
+
+5. Ca'ch ta.o tho^ng tin ve^` locale:
+    * Ta.o UTF-8 locale
+	La^'y vi' du., ngo^n ngu+~ ma(.c ddi.nh cu?a ba.n la` en_US (LANG=en_US). Ba^y gio+`
+	ba.n muo^'n ta.o mo^.t UTF-8 locale tu+` ngo^n ngu+~ ma(.c ddi.nh na`y. La`m theo
+	ca'c bu+o+'c sau:
+
+    # mkdir /usr/share/locale/en_US.UTF-8
+    # localedef -v -ci en_US -f UTF-8 /usr/share/locale/en_US.UTF-8
+    (bo? qua ca'c tho^ng ba'o lo^~i)
+
+    Nhu+ng to^'t ho+n he^'t, ba.n ne^n ta.o vi_VN.UTF-8 ;)
+    # mkdir /usr/share/locale/vi_VN.UTF-8
+    # localedef -v -ci vi_VN -f UTF-8 /usr/share/locale/vi_VN.UTF-8
+
+	* Gtk/Gnome 2.x
+	Ca'c u+'ng du.ng Gtk/Gnome 2.x co' the^? du`ng chung vo+'i xvnkb ba(`ng ca'ch cho.n
+	kie^?u go~ la` X-Input-Method
+	- Cho.n ta.m tho+`i: nha^'n phi'm pha?i chuo^.t le^n vu`ng nha^.p lie^.u (input box)
+	ro^`i cho.n Input-method/X-Input-Method
+	- Cho.n co^' ddi.nh:
+	Su+?a file /etc/gtk-2.0/gtk.modules
+
+	,-- /etc/gtk-2.x/gtk.modules ------------------------------------
+	| ...
+	|
+	| "/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so" 
+	| "xim" "X Input Method" "gtk+" "/usr/share/locale" "ko:ja:zh:vi"
+	|
+	| ...
+	|
+	| #"/usr/lib/gtk-2.0/<gtk-release>/immodules/im-viqr.so" 
+	| #"viqr" "Vietnamese (VIQR)" "gtk+" "/usr/share/locale" "vi"
+	|
+	| ...
+	`----------------------------------------------------------------
+
+	Trong ddo':
+		<gtk-release>: so^' release hie^.n ta.i cu?a gtk lib trong he^. tho^'ng cu?a ba.n
+
+	Vi' du.: so^' release la` 2.2.0
+		"/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
+
+Ca'm o+n ba.n dda~ su+? du.ng xvnkb!!! Chu'c ba.n la`m vie^.c vui ve? !!!
+
+Dao Hai Lam <lam@visc-network.com>

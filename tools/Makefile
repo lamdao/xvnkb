@@ -1,0 +1,68 @@
+ifeq (../Makefile.cfg,$(wildcard ../Makefile.cfg))
+include ../Makefile.cfg
+endif
+
+CC=gcc
+ifeq "$(CFLAGS)" ""
+CFLAGS=-O3 -s
+endif
+
+XLIB_INC=$(XLIB_DIR)/include
+XLIB_PATH=$(XLIB_DIR)/lib
+LIBS=-lX11
+
+DEFS=$(VK_OPT) -DVERSION=\"$(VERSION)\" -DXVNKB_TOOL
+
+.PHONY: debug need-config uninstall
+
+CONTROL_OBJS=xvnkb_ctrl.o data.o mode.o property.o xconfig.o
+TOOLS=xvnkb_ctrl
+
+all: do-it-all
+
+.c.o:
+	$(CC) $(CFLAGS) $(DEFS) -Wall -I$(XLIB_INC) -c $<
+
+xvnkb_ctrl: $(CONTROL_OBJS)
+	$(CC) $(CFLAGS) -o $@ $(CONTROL_OBJS) -L$(XLIB_PATH) $(LIBS)
+
+main-tools: $(TOOLS)
+
+need-config:
+	@echo
+	@echo "* Warning: Please run configure script in main source folder of xvnkb"
+	@echo "and run make again"
+	@echo
+
+clean:
+	rm -f *.o core
+
+distclean: clean
+	rm -f $(TOOLS)
+
+install: all
+	@/bin/cp -f $(TOOLS) /usr/local/bin
+
+uninstall:
+	@/bin/rm -f /usr/local/bin/$(TOOLS)
+
+dep: Makefile.dep
+
+Makefile.dep:
+	@echo
+	@echo -n Create $@ ... 
+	@gcc -I$(XLIB_INC) -MM *.c > $@
+	@echo " done"
+	@echo
+
+ifneq (../Makefile.cfg,$(wildcard ../Makefile.cfg))
+do-it-all: need-config
+else
+ifeq (Makefile.dep,$(wildcard Makefile.dep))
+include Makefile.dep
+do-it-all: main-tools
+else
+do-it-all: dep
+	@$(MAKE) main-tools
+endif
+endif

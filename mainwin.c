@@ -1,0 +1,188 @@
+/*----------------------------------------------------------------------------*/
+/*  mainwin.c                                                                 */
+/*----------------------------------------------------------------------------*/
+/*  copyright         : (C) 2002 by Dao Hai Lam                               */
+/*                      VISC Software & Security Consultant Company           */
+/*                      Hall 3, Quang Trung Software City                     */
+/*                      Tan Chanh Hiep Ward, District 12,                     */
+/*                      Ho Chi Minh city, VIETNAM                             */
+/*  website           : http://www.visc-network.com                           */
+/*  email             : lam@visc-network.com                                  */
+/*  last modify       : Thu, 18 Apr 2002 22:00:33 +0700                       */
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/*   This program is free software; you can redistribute it and/or modify     */
+/*   it under the terms of the GNU General Public License as published by     */
+/*   the Free Software Foundation; either version 2 of the License, or        */
+/*   (at your option) any later version.                                      */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+#include "data.h"
+#include "menu.h"
+#include "event.h"
+/*----------------------------------------------------------------------------*/
+char *Ss[] = { "Off", "Vni", "Telex", "Viqr" };
+/*----------------------------------------------------------------------------*/
+void VKIconLoadInterface()
+{
+	Ss[0] = vk_interface==VK_VIETNAMESE ? "Tắt" : "Off";
+}
+/*----------------------------------------------------------------------------*/
+void VKMainWindowProcess(XEvent *event);
+/*----------------------------------------------------------------------------*/
+void VKDrawIcon()
+{
+	long x, y, h, l;
+	char *S = Ss[vk_method];
+
+#ifdef USE_XFT
+	XftDraw *draw;
+	XGlyphInfo fi;
+	XftTextExtentsUtf8(display, vk_font, S, l=strlen(S), &fi);
+#else
+	XRectangle fi;
+	XmbTextExtents(vk_fontset, S, l=strlen(S), 0, &fi);
+#endif
+	h = vk_text_height;
+	x = (vk_icon_width - fi.width)/2;
+	y = vk_text_ascent + (vk_icon_height - h)/2 + 1;
+
+	XRaiseWindow(display, main_window);
+	XClearWindow(display, main_window);
+	VKSetColor(display, main_gc, clBackground);
+	XFillRectangle(display, main_window, main_gc,
+							0, 0, vk_icon_width, vk_icon_height);
+	VKSetColor(display, main_gc, clBorder);
+	XDrawRectangle(display, main_window, main_gc,
+							1, 1, vk_icon_width-3, vk_icon_height-3);
+#ifdef USE_XFT
+	draw = XftDrawCreate(display, main_window, visual, colormap);
+	XftDrawStringUtf8(draw, &clGray, vk_font, x+1, y+1, (XftChar8*)S, l);
+	XftDrawStringUtf8(draw, &clText, vk_font, x, y, (XftChar8*)S, l);
+	XftDrawDestroy(draw);
+#else
+	XSetForeground(display, main_gc, clGray);
+	XmbDrawString(display, main_window, vk_fontset, main_gc, x+1, y+1, S, l);
+	XSetForeground(display, main_gc, clText);
+	XmbDrawString(display, main_window, vk_fontset, main_gc, x, y, S, l);
+#endif
+}
+/*----------------------------------------------------------------------------*/
+void VKSetDefaultColor()
+{
+	clBackground = clWhite;
+	clBorder = clMenuBar;
+	clText = clRed;
+}
+/*----------------------------------------------------------------------------*/
+void VKCreateMainWindow()
+{
+#ifdef USE_XFT
+	XGlyphInfo fi;
+	XftTextExtentsUtf8(display, vk_font, "Telex", 5, &fi);
+	vk_icon_width = fi.width + 16;
+	vk_icon_height = 16 + vk_text_height;
+#else
+	vk_icon_width = XTextWidth(vk_font, "Telex", 5) + 16;
+	vk_icon_height = 16 + vk_text_height;
+#endif
+	VKIconLoadInterface();
+	if( vk_x==-1 && vk_y==-1 ) {
+		vk_x = screen_width - vk_icon_width - 12;
+		vk_y = screen_height - vk_icon_height - 2;
+	}
+	else {
+		if( vk_x<0 )
+			vk_x = 0;
+		else
+		if( vk_x+vk_icon_width>=screen_width )
+			vk_x = screen_width - vk_icon_width - 1;
+
+		if( vk_y<0 )
+			vk_y = 0;
+		else
+		if( vk_y+vk_icon_height>=screen_height )
+			vk_y = screen_height - vk_icon_height - 1;
+	}
+	main_window = XCreateWindow(display, root,
+					vk_x, vk_y, vk_icon_width, vk_icon_height, 0,
+					DefaultDepth(display, screen), InputOutput, visual,
+					vk_attribmask, &vk_attrib);
+	XSetSelectionOwner(display, visckey_atom, main_window, CurrentTime);
+	XSelectInput(display, main_window, MAIN_EVENT_MASKS|VisibilityChangeMask);
+
+	main_gc = XCreateGC(display, main_window, 0, 0);
+	XDefineCursor(display, main_window, vk_cursor);
+#ifndef USE_XFT
+	XSetFont(display, main_gc, vk_font->fid);
+#endif
+	VKRegisterEvent(main_window, VKMainWindowProcess);
+	XMapWindow(display, main_window);
+
+	VKSetDefaultColor();
+}
+/*----------------------------------------------------------------------------*/
+void VKDestroyMainWindow()
+{
+	VKUnregisterEvent(main_window);
+
+	XFreeGC(display, main_gc);
+	XDestroyWindow(display, main_window);
+}
+/*----------------------------------------------------------------------------*/
+void VKMainWindowProcess(XEvent *event)
+{
+	static int x, y;
+	static int dragging = False, has_moved = False;
+
+	switch( event->type ) {
+		case Expose:
+		case GraphicsExpose:
+			VKDrawIcon();
+			break;
+		case ButtonPress:
+			VKHideMenu();
+			x = event->xbutton.x_root;
+			y = event->xbutton.y_root;
+			dragging = event->xbutton.button==Button1;
+			break;
+		case MotionNotify:
+			if( dragging ) {
+				has_moved = True;
+				vk_x += event->xbutton.x_root - x;
+				vk_y += event->xbutton.y_root - y;
+				x = event->xbutton.x_root;
+				y = event->xbutton.y_root;
+				if( vk_x<0 ) vk_x = 0;
+				if( vk_y<0 ) vk_y = 0;
+				if( vk_x+vk_icon_width>=screen_width )
+					vk_x = screen_width-vk_icon_width-1;
+				if( vk_y+vk_icon_height>=screen_height )
+					vk_y = screen_height-vk_icon_height-1;
+				XMoveWindow(display, main_window, vk_x, vk_y);
+			}
+			break;
+		case ButtonRelease:
+			dragging = False;
+			if( has_moved )
+				has_moved = False;
+			else
+			switch( event->xbutton.button ) {
+				case Button1:
+					VKSwitchMethod();
+					VKDrawIcon();
+					break;
+				case Button2:
+					vk_done = True;
+					break;
+				case Button3:
+					VKShowMenu();
+					break;
+			}
+			break;
+		case VisibilityNotify:
+			XRaiseWindow(display, main_window);
+			break;
+	}
+}
+/*----------------------------------------------------------------------------*/

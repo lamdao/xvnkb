@@ -1,0 +1,78 @@
+- How to install ?
+
+o First of all:
+
+    $ ./configure
+
+    or
+
+    - Specify path to Xlib 
+
+      $ ./configure --x-dir=/path/to/Xlib
+
+    - Enable spell checking support
+
+      $ ./configure --spell-check
+
+    - Enable gtk2 support
+
+      $ ./configure --with-gtk2
+
+    - All above options can be combine together
+	
+      $ ./configure --spell-check --with-gtk2
+
+    - Display help of configure script
+
+      $ ./configure --help
+
+o Normal: Very easy
+
+    $ make
+    $ make install
+
+  * Debug mode:
+    $ make debug
+    $ make install
+
+  * Follow the instructions of installation script, it will guide you through, don't worry, it's very simple ;).
+
+    a. Install as "root":
+        Install script will:
+        - copy xvnkb => /usr/local/bin
+        - copy xvnkb.so => /usr/local/lib
+        - copy scripts/xvnkb.sys.sh => /etc/X11/xinit/xinitrc.d/xvnkb.sh (*)
+        (*) xvnkb.sh will be called automatically when X start,
+            it will set LD_PRELOAD=/usr/local/lib/xvnkb.so,
+            and also set LANG=UTF-8 if you selected it
+
+    b. Install as normal user:
+        Install script will ask if you want to install for every one => a.
+        If not (just for you):
+        - copy xvnkb => $HOME/bin
+        - copy xvnkb.so => $HOME/lib
+        - copy scripts/xvnkb.user.sh => $HOME/.xvnkb.preload
+        - backup $HOME/.xinitrc => $HOME/.xvnkb.xrcdefaults (if exists)
+        - copy scripts/xvnkb.xinitrc.sh => $HOME/.xinitrc (*)
+        (*) $HOME/.xinitrc will:
+            - call $HOME/.xvnkb.preload to set LD_PRELOAD=$HOME/lib/xvnkb.so
+            (also set LANG=UTF-8 if you selected it)
+            - if $HOME/.xvnkb.xrcdefaults exists, call it to load all your
+            X settings.
+            - if $HOME/.xvnkb.xrcdefaults does not exists, .xinitrc will call
+            /etc/X11/xinit/xinitrc to load the default system settings
+
+o Core: if you want only the core (xvnkb.so) and load it by yourself - You are an advanced user 8-)
+
+    $ make core
+
+    then use contrib/profile to load it
+
+    $ source contrib/profile
+    $ <load your apps here>
+
+  * Debug mode:
+    $ make core_debug
+
+o Comment:
+    - For more information please see README also

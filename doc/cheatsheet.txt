@@ -1,0 +1,85 @@
+From thang@unixcircle.org Sat Apr 20 11:30:14 2002
+X-Apparently-To: daohailam@yahoo.com via web11007.mail.yahoo.com; 19 Apr 2002 21:30:12 -0700 (PDT)
+X-Track: 1: 40
+Return-Path: <thang@unixcircle.org>
+Received: from adsl-63-193-121-28.dsl.snfc21.pacbell.net  (EHLO mail.unixcircle.com) (63.193.121.28)
+  by mta552.mail.yahoo.com with SMTP; 19 Apr 2002 21:30:12 -0700 (PDT)
+Received: from unixcircle.org (pissboy.unixcircle.com [10.0.0.13])
+	by mail.unixcircle.com (8.11.6/unixcircle) with ESMTP id g3K3AeJ11891;
+	Fri, 19 Apr 2002 20:10:40 -0700
+Message-ID: <3CC0EED6.7030709@unixcircle.org>
+Date: Fri, 19 Apr 2002 21:30:14 -0700
+From: thang <thang@unixcircle.org>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.4.1) Gecko/20020314 Netscape6/6.2.2
+X-Accept-Language: en-us
+MIME-Version: 1.0
+To: daohailam@yahoo.com,
+ Larry Nguyen <larry@myvietnam.org>,
+ hoang@muine.org
+Subject: xvnkb for xterm & vim
+Content-Type: text/plain;
+  charset=us-ascii;
+  format=flowed
+Content-Transfer-Encoding: 7bit
+Status: R 
+X-Status: N
+
+
+Here is my cheat notes:
+
+So, assume you manage to compile xvnkb from source and install
+it to /usr/local/lib as root, or to your homedir $HOME/lib
+
+XFree86 & xterm:
+
+         If you have xterm came with XFree86 4.0.3 and up, then
+	your xterm support uft-8.
+
+         To check X version:
+                 % /usr/X11R6/bin/X -version
+
+         To chekc xterm version:
+                 % /usr/X11R6/bin/xterm -version
+
+         To really see if xterm has utf-8 support:
+                 % xterm -help
+         and look to see if it has an option for:  [-/+u8]
+
+VIM:
+         VIM 6.x support utf-8, check by:
+                 % vim -h
+         and look for:
+             -H                   start in Hebrew mode
+             -F                   start in Farsi mode
+         if they're there, your vim support multibyte.
+
+         If not, you will need to get the latest VIM package or
+	recompile VIM yourself
+
+Launching:
+
+         Add the folowing to your .profile
+
+                 # for edit Viet with uft-8 encoding
+
+                 if [ -f /usr/local/bin/xvnkb.so ] ; then
+                         export LD_PRELOAD=/usr/local/lib/xvnkb.so
+                 fi
+                 if [ -f $HOME/lib/xvnkb.so ] ; then
+                         export LD_PRELOAD=$HOME/lib/xvnkb.so
+                 fi
+                 export LANG=en_US.UTF-8
+                 alias vnterm='xterm -u8 -fn -misc-fixed-medium-r-normal--0-0-75-75-c-0-iso10646-1 -e vim &'
+
+         Then add the below to your .vimrc
+                 set encoding=utf-8
+
+         Now you should be source your .profile and launch an xterm for
+	use with xvnkb
+
+                 % source .profile
+                 % vnterm
+
+Cheers!
+
+

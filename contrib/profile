@@ -1,0 +1,26 @@
+#!/bin/sh
+#----------------------------------------------------------------------------#
+# Author: Thang T. Mai <thang@unixcircle.org>                                #
+# Comment: xvnkb for xterm & vim                                             #
+# Purpose: for edit Viet with uft-8 encoding                                 #
+# Modified by: Dao Hai Lam <lam@visc-network.com>                            #
+#----------------------------------------------------------------------------#
+# See also doc/cheatsheet.txt                                                #
+#----------------------------------------------------------------------------#
+#                                                                            #
+#   This program is free software; you can redistribute it and/or modify     #
+#   it under the terms of the GNU General Public License as published by     #
+#   the Free Software Foundation; either version 2 of the License, or        #
+#   (at your option) any later version.                                      #
+#                                                                            #
+#----------------------------------------------------------------------------#
+
+if [ -f $HOME/lib/xvnkb.so ] ; then
+	export LD_PRELOAD=$HOME/lib/xvnkb.so
+else
+	if [ -f /usr/local/lib/xvnkb.so ]; then
+		export LD_PRELOAD=/usr/local/lib/xvnkb.so
+	fi
+fi
+export LANG=en_US.UTF-8
+alias vnvi='xterm -title XVNKB-VI -u8 -fn -misc-fixed-medium-r-normal--0-0-75-75-c-0-iso10646-1 -e vim &'

@@ -1,0 +1,151 @@
+xvnkb  - Vietnamese keyboard input for X-Window
+
+1. Description
+    xvnkb is a Vietnamese keyboard input for X-Window. It provides an
+    useful way for editing Vietnamese on X-Window environment with popular
+    input methods and charsets. This software released under GNU GPL
+    license.
+
+2. Features
+    - Run as a small X application in the background without any interfere
+      with others.
+    - Can work well with most X applications included: editors, browsers,
+      office suites, ...
+    - Supported Vietnamese input methods: VNI, TELEX, VIQR.
+    - Supported Vietnamese charsets: TCVN3, VISCII, VPS, VNI, VIQR, Unicode
+      (UTF-8).
+    - Switch on/off input mode with shortcut key "Alt+Shift" or with Left
+      mouse click on running icon.
+    - xvnkb was tested with XFree86 on Linux, FreeBSD, OpenBSD, and hope
+      work on other UNIX (need time to test).
+
+3. User Guide
+3.1. Install
+    The install script will help you to do all things:
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make install
+
+    or
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make
+    [xvnkb2-source]$ ./install
+
+    and then follow the instructions of install script
+
+3.2. Launch
+    To control the status of xvnkb core (xvnkb.so), launch xvnkb gui
+
+    $ xvnkb
+
+    A small icon of xvnkb will appear on screen, it displays status of
+    xvnkb core (input mode). Using mouse to change status:
+    - Left button: Switch on/off input method support.
+    - Right button: Activate menu for choosing input method, charset, ...
+    - Middle button: Exit.
+
+    Status of current input method, charset, ... will be stored in file
+    $HOME/.xvnkbrc and will be restored in next session of xvnkb.
+
+3.3. Manually install & launch
+    In the case you want to do it manually:
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make
+    [xvnkb2-source]$ cp xvnkb.so /path/to/your/lib/folder
+    [xvnkb2-source]$ cp xvnkb /path/to/your/bin/folder
+
+    $ export LD_PRELOAD=/path/to/your/lib/folder/xvnkb.so
+    $ <launch xvnkb to control>
+    $ <launch your apps here>
+
+3.4. Function
+    With your default LANG, xvnkb can help you to input following charsets:
+    tcvn, vni, viscii, vps, ... but unicode. So, when you want to input
+    unicode, you have to set LANG=UTF-8.
+
+    $ export LANG=UTF-8       # or LANG=en_US.UTF-8 or {something}.UTF-8
+    $ <launch your apps here>
+
+    * NOTICE:
+    xvnkb will work fine with all other charsets when LANG=*UTF-8
+
+3.5. Hints for advanced user (who dont want to use GUI :)):
+    Make core only with default input method = viqr
+
+    $ make core
+
+    Make core with debug (viqr)
+
+    $ make core_debug
+
+    Make core with user defined input method
+
+    $ make core CFLAGS="-DVK_CORE_METHOD=<N>"
+
+    where N: 1=vni, 2=telex, 3=viqr
+
+    Also, you can change input method by setting evironment variable
+    VK_CORE_METHOD
+
+    $ export VK_CORE_METHOD=1 # vni input method
+    $ <launch apps>
+
+    In this case GUI has no effect to the core. Using Alt-Shift to switch
+    on/off Vietnamese input method (default is off).
+
+    See also 3.3
+
+4. Limits
+    - Installation scripts only work if bash exists.
+
+5. Others
+    * Create UTF-8 locale
+    For instance, your default LANG is en_US. Now you want to create UTF-8
+    locale from your defalt LANG. Follow these instructions:
+
+    # mkdir /usr/share/locale/en_US.UTF-8
+    # localedef -v -ci en_US -f UTF-8 /usr/share/locale/en_US.UTF-8
+    (ignore all warning & error messages)
+
+    But it is better if you create vi_VN.UTF-8 ;)
+    # mkdir /usr/share/locale/vi_VN.UTF-8
+    # localedef -v -ci vi_VN -f UTF-8 /usr/share/locale/vi_VN.UTF-8
+
+    Some applications (e.g. OpenOffice) use locale info in /usr/lib/locale.
+    If your desired locale does not exist in /usr/lib/locale, you have to
+    do the same as above or just make a soft link to that folder:
+
+    # cd /usr/lib/locale
+    # ln -s /usr/share/locale/en_US.UTF-8 en_US.UTF-8
+    # ln -s /usr/share/locale/vi_VN.UTF-8 vi_VN.UTF-8
+
+	* Gtk/Gnome 2.x
+	Gtk/Gnome 2.x applications can use xvnkb with X-Input-Method.
+	- Temporary setting: right click on	input box and choose X-Input-Method
+	- Permanent setting:
+	Edit file /etc/gtk-2.0/gtk.modules like this:
+	,-- /etc/gtk-2.0/gtk.modules ------------------------------------
+	| ...
+	|
+	| "/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so" 
+	| "xim" "X Input Method" "gtk+" "/usr/share/locale" "ko:ja:zh:vi"
+	|
+	| ...
+	|
+	| #"/usr/lib/gtk-2.0/<gtk-release>/immodules/im-viqr.so" 
+	| #"viqr" "Vietnamese (VIQR)" "gtk+" "/usr/share/locale" "vi"
+	|
+	| ...
+	`----------------------------------------------------------------
+
+	Where:
+		<gtk-release>: exactly release number of gtk in your system
+
+	Ex: release number is 2.2.0
+		"/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
+
+Thank you for using xvnkb!!! Have fun!!!
+
+Dao Hai Lam <lam@visc-network.com>

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+case "$1" in
+	v)
+		xprop -root | grep ^VK_
+		;;
+	r)
+		xprop -root -remove VK_CHARSET
+		xprop -root -remove VK_USING
+		xprop -root -remove VK_METHOD
+		;;
+	*)
+		echo "* Usage: rc {v|r}"
+		;;
+esac

@@ -1,0 +1,174 @@
+#!/bin/sh
+#----------------------------------------------------------------------------#
+#  configuration script for xvnkb                                            #
+#----------------------------------------------------------------------------#
+#  copyright         : (C) 2002 by Dao Hai Lam                               #
+#                      VISC Software & Security Consultant Company           #
+#                      Hall 3, Quang Trung Software City                     #
+#                      Tan Chanh Hiep Ward, District 12,                     #
+#                      Ho Chi Minh city, VIETNAM                             #
+#  website           : http://www.visc-network.com                           #
+#  email             : lam@visc-network.com                                  #
+#  last modify       : Sun,  4 Aug 2002 23:29:07 +0700                       #
+#----------------------------------------------------------------------------#
+#                                                                            #
+#   This program is free software; you can redistribute it and/or modify     #
+#   it under the terms of the GNU General Public License as published by     #
+#   the Free Software Foundation; either version 2 of the License, or        #
+#   (at your option) any later version.                                      #
+#                                                                            #
+#----------------------------------------------------------------------------#
+
+xcc=$CC
+#prefix=/usr/local
+x_dirs="/usr/X11R6 /usr/X11 /usr/include \
+		/usr/local/X11R6 /usr/local/X11 /usr/local/include \
+		/opt/X11R6 /opt/X11 /opt/include"
+
+if [ ! -f VERSION ]; then
+	echo
+	echo "Version info is missing. Try:"
+	echo
+	echo "$ echo version.numder > VERSION"
+	echo
+	echo "then run ./configure again"
+	echo
+	exit
+else
+	version=`cat VERSION`
+fi
+
+echo
+echo "xvnkb $version configuration..."
+echo
+
+if [ "$xcc" = "" ]; then
+	xcc=gcc
+fi
+
+vk_opt=
+xlib_dir=
+use_xft=1
+use_spellcheck=1
+for a in $*; do
+	case "$a" in
+#		--prefix=*)
+#			v=`echo $1|cut -f2 -d=`;
+#			if [ -d "$v" ]; then
+#				prefix=$v
+#			fi
+#			;;
+
+		--x-dir=*)
+			v=`echo $1|cut -f2 -d=`;
+			if [ -d "$v" ]; then
+				xlib_dir=$v
+			fi
+			;;
+
+		--no-spellcheck)
+			use_spellcheck=0
+			;;
+
+		--no-xft)
+			use_xft=0
+			;;
+
+		--enable-debug)
+			vk_opt="-DDEBUG $vk_opt"
+			;;
+
+		--help)
+#			echo "$0 [--help] [--prefix=<path>] [--x-dir=<path>] [--spell-check]."
+			echo "$0 [--help] [--x-dir=<path>] [--no-spellcheck] [--no-xft]."
+			echo
+			exit
+			;;
+	esac
+done
+
+if [ "$use_spellcheck" = "1" ]; then
+	vk_opt="$vk_opt -DVK_SPELL_CHECKING"
+fi
+
+rm -f Makefile.cfg
+
+if [ "$XLIB_DIR" != "" ]; then
+	x_dirs="$XLIB_DIR $x_dirs"
+fi
+
+echo -n "Checking dynamic linking loader... "
+$xcc config/dl.c -ldl &>/dev/null
+if [ $? != 0 ]; then
+	echo no
+	exit
+fi
+rm -f a.out
+echo yes
+
+echo -n "Checking X11 lib... "
+xlib_dir=
+for x in $x_dirs; do
+	$xcc -I$x/include config/x.c -L$x/lib -lX11 &>/dev/null
+	if [ $? = 0 ]; then
+		rm -f a.out
+		xlib_dir=$x
+		echo $x
+		break
+	fi
+done
+
+if [ "$xlib_dir" = "" ]; then
+	echo no
+	exit
+fi
+
+if [ "$use_xft" = "1" ]; then
+	echo -n "Checking xft-config... "
+	xft_incs=`xft-config --cflags 2>/dev/null`
+	xft_libs=`xft-config --libs 2>/dev/null`
+	if [ $? != 0 ]; then
+		echo no
+		echo -n "Checking freetype-config... "
+		xft_incs=`freetype-config --cflags 2>/dev/null`
+		if [ $? != 0 ]; then
+			echo no
+			xft_incs=
+			xft_libs=-lXft
+		else
+			echo yes
+			xft_libs="`freetype-config --libs` -lXft"
+		fi
+	else
+		echo yes
+	fi
+
+	echo -n "Checking Xft... "
+	$xcc -I$xlib_dir/include $xft_incs config/xft.c \
+		-L$xlib_dir/lib -lX11 $xft_libs &>/dev/null
+	if [ $? != 0 ]; then
+		echo no
+		use_xft=0
+	else
+		echo yes
+		rm -f a.out
+		vk_opt="$vk_opt -DUSE_XFT $xft_incs"
+	fi
+fi
+
+echo "VERSION=$version" > Makefile.cfg
+#echo "PREFIX=$prefix" >> Makefile.cfg
+echo "XLIB_DIR=$xlib_dir" >> Makefile.cfg
+if [ "$vk_opt" != "" ]; then
+	echo "VK_OPT=$vk_opt" >> Makefile.cfg
+fi
+echo "XFT_LIBS=$xft_libs" >> Makefile.cfg
+
+status=('no' 'yes')
+echo
+echo "Compile options:"
+echo "  Enable XFT: ${status[$use_xft]}"
+echo "  Enable spell checking: ${status[$use_spellcheck]}"
+echo "done."
+echo
+

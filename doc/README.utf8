@@ -1,0 +1,131 @@
+xvnkb  - Vietnamese keyboard input for X-Window
+
+1. Sơ Lược
+    xvnkb là một chương trình hỗ trợ nhập tiếng Việt trong môi trường X-Window. Với các kiểu gõ thông dụng, xvnkb đem lại sự thuận tiện trong việc soạn thảo các văn bản tiếng Việt. Phần mềm được dựa trên GNU GPL license.
+
+2. Tính năng
+    - Được nạp lên như các ứng dụng bình thường khác.
+    - Có thể làm việc tốt với hầu hết các trình soạn thảo văn bản, trình duyệt web, các ứng dụng văn phòng, ...
+    - Hỗ trợ các kiểu gõ: VNI, TELEX, VIQR.
+    - Hỗ trợ các bản mã: TCVN3, VISCII, VPS, VNI, VIQR, Unicode (UTF-8).
+    - Tắt bật kiểu gõ dễ dàng với phím tắt "Alt+Shift" hoặc nhấn phím trái của mouse lên "biểu tượng" của xvnkb khi đang chạy.
+    - xvnkb đã được chạy thử trên Linux, FreeBSD, OpenBSD môi trường XFree86, và mong là cũng làm việc tốt với các hệ UNIX khác.
+
+3. Hướng dẫn sử dụng
+3.1. Cài đặt
+    Bạn chỉ việc làm như sau:
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make install
+
+    hoặc
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make
+    [xvnkb2-source]$ ./install
+
+    và theo các bước được trình bày trong quá trình cài đặt để hoàn tất.
+
+3.2. Sử dụng
+    Để thay đổi trạng thái làm việc của phần lõi (core), chạy xvnkb để điều khiển.
+
+    $ xvnkb
+
+    Một icon nhỏ của xvnkb sẽ xuất hiện trên màn hình, thể hiện trạng thái của phần lõi (Kiểu gõ). Dùng mouse để điều khiển:
+    - Nhấn phím trái: Tắt bật hỗ trợ nhập tiếng Việt.
+    - Nhấn phím phải: Mở menu chọn lựa kiểu gõ, bản mã, ...
+    - Nhấn phím giữa: Thoát.
+
+    Các trạng thái về kiểu gõ, bản mã, ... sẽ được lưu lại trong file $HOME/.xvnkbrc, và sẽ được phục hồi lại trong các lần chạy sau của xvnkb.
+
+3.3. Tự cài đặt
+    Trong trường hợp bạn muốn tự cài đặt lấy:
+
+    [xvnkb2-source]$ ./configure
+    [xvnkb2-source]$ make
+    [xvnkb2-source]$ cp xvnkb.so /path/to/your/lib/folder
+    [xvnkb2-source]$ cp xvnkb /path/to/your/bin/folder
+
+    $ export LD_PRELOAD=/path/to/your/lib/folder/xvnkb.so
+    $ <chạy xvnkb để điều khiển>
+    $ <chạy các ứng dụng của bạn ngay tại shell này>
+
+3.4. Hoạt động
+    Với ngôn ngữ mạc định (default LANG), xvnkb có thể giúp bạn làm việc với các bản mã sau: tcvn, vni, viscii, vps, ... nhưng không thể làm việc với unicode. Vì vậy khi muốn làm việc với unicode, bạn cần phải đặt lại LANG=*UTF-8.
+
+    $ export LANG=UTF-8       # hoặc LANG=en_US.UTF-8 hoặc {something}.UTF-8
+    $ <chạy các chương trình của bạn tại shell này>
+
+    * Chú ý:
+    - Nếu khi "make install" bạn đã chọn LANG=*UTF-8 thì không cần thiết phải làm các việc trên, chỉ cần nhấn mouse lên biểu tượng của các chương trình để chạy.
+    - Từ release 0.2.4, xvnkb cũng làm việc tốt với các bản mã thông thường khi đặt LANG=*.UTF-8.
+
+3.5. Hướng dẫn cho những người dùng chuyên (những người không thích dùng GUI để điều khiển :)):
+    Chỉ tạo phần lõi với kiểu gõ mặc định là viqr
+
+    $ make core
+
+    Tạo lõi có hỗ trợ các thông báo debug (kiểu gõ viqr)
+
+    $ make core_debug
+
+    Tạo lõi với kiểu gõ mặc định do người dùng định nghĩa
+
+    $ make core CFLAGS="-DVK_CORE_METHOD=<N>"
+
+    Trong đó N: 1=vni, 2=telex, 3=viqr
+
+    Ngoài ra, bạn có thể thay đổi kiểu gõ mặc định bằng cách thay đổi biến môi trường VK_CORE_METHOD
+
+    $ export VK_CORE_METHOD=1 # kiểu gõ vni
+    $ <chạy ứng dụng>
+
+    Trong trường hợp này, phần giao diện (GUI) không có tác dụng đối với phần lõi. Có thể dùng Alt-Shift để tắt/bật hỗ trợ kiểu gõ tiếng Việt (mặc định là tắt).
+
+    Xem thêm 3.3
+
+4. Giới hạn
+    - Phần install chỉ làm việc chính xác khi có "bash" shell.
+
+5. Cách tạo thông tin về locale:
+    * Tạo UTF-8 locale
+    Lấy ví dụ, ngôn ngữ mặc định của bạn là en_US (LANG=en_US). Bây giờ bạn muốn tạo một UTF-8 locale từ ngôn ngữ mặc định này. Làm theo các bước sau:
+
+    # mkdir /usr/share/locale/en_US.UTF-8
+    # localedef -v -ci en_US -f UTF-8 /usr/share/locale/en_US.UTF-8
+    (bỏ qua các thông báo lỗi)
+
+    Nhưng tốt hơn hết, bạn nên tạo vi_VN.UTF-8 ;)
+    # mkdir /usr/share/locale/vi_VN.UTF-8
+    # localedef -v -ci vi_VN -f UTF-8 /usr/share/locale/vi_VN.UTF-8
+
+	* Gtk/Gnome 2.x
+	Các ứng dụng Gtk/Gnome 2.x có thể dùng chung với xvnkb bằng cách chọn kiểu gõ là X-Input-Method
+	- Chọn tạm thời: nhấn phím phải chuột lên vùng nhập liệu (input box) rồi chọn Input-method/X-Input-Method
+	- Chọn cố định:
+	Sửa file /etc/gtk-2.0/gtk.modules
+
+	,-- /etc/gtk-2.x/gtk.modules ------------------------------------
+	| ...
+	|
+	| "/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so" 
+	| "xim" "X Input Method" "gtk+" "/usr/share/locale" "ko:ja:zh:vi"
+	|
+	| ...
+	|
+	| #"/usr/lib/gtk-2.0/<gtk-release>/immodules/im-viqr.so" 
+	| #"viqr" "Vietnamese (VIQR)" "gtk+" "/usr/share/locale" "vi"
+	|
+	| ...
+	`----------------------------------------------------------------
+
+	Trong đó:
+		<gtk-release>: số release hiện tại của gtk lib trong hệ thống của bạn
+
+	Ví dụ: số release là 2.2.0
+		"/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
+
+Cám ơn bạn đã sử dụng xvnkb!!! Chúc bạn làm việc vui vẻ!!!
+
+Đào Hải Lâm <lam@visc-network.com>
+

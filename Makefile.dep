@@ -1,0 +1,111 @@
+button.o: button.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h button.h event.h
+data.o: data.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h
+event.o: event.c event.h data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h
+flash.o: flash.c flash.h data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h event.h
+font.o: font.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h property.h event.h font.h vkeydefs.h
+hotkey.o: hotkey.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h property.h event.h hotkey.h vkeydefs.h \
+  button.h
+label.o: label.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h label.h
+main.o: main.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h xconfig.h xresource.h flash.h session.h \
+  mainwin.h menu.h hotkey.h vkeydefs.h property.h event.h
+mainwin.o: mainwin.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h menu.h event.h
+menu.o: menu.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h flash.h event.h
+mode.o: mode.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h property.h
+property.o: property.c /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h debug.h \
+  property.h
+session.o: session.c session.h data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h property.h hotkey.h vkeydefs.h
+visckey.o: visckey.c visckey.h typedefs.h utf.h viqr.h tcvn.h vni.h \
+  viscii.h vps.h utf8.h
+xconfig.o: xconfig.c xconfig.h data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h property.h
+xresource.o: xresource.c data.h /usr/X11R6/include/X11/X.h \
+  /usr/X11R6/include/X11/Xlib.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xatom.h \
+  /usr/X11R6/include/X11/Xproto.h /usr/X11R6/include/X11/Xmd.h \
+  /usr/X11R6/include/X11/Xprotostr.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h /usr/X11R6/include/X11/cursorfont.h \
+  debug.h typedefs.h mode.h
+xvnkb.o: xvnkb.c /usr/X11R6/include/X11/X.h /usr/X11R6/include/X11/Xlib.h \
+  /usr/X11R6/include/X11/Xfuncproto.h /usr/X11R6/include/X11/Xosdefs.h \
+  /usr/X11R6/include/X11/Xutil.h /usr/X11R6/include/X11/keysym.h \
+  /usr/X11R6/include/X11/keysymdef.h debug.h visckey.h typedefs.h \
+  property.h xvnkb_dll.h vkeydefs.h

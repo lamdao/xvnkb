@@ -1,0 +1,5 @@
+data.o: data.c data.h debug.h typedefs.h mode.h
+mode.o: mode.c data.h debug.h typedefs.h mode.h property.h
+property.o: property.c property.h
+xconfig.o: xconfig.c xconfig.h data.h debug.h typedefs.h mode.h
+xvnkb_ctrl.o: xvnkb_ctrl.c data.h debug.h typedefs.h mode.h property.h xconfig.h

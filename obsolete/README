@@ -1,0 +1,19 @@
+In Gnome 2.x, xvnkb can use with X-Input-Method
+
+Set X-Input-Method as default input method in Gnome 2.x:
+
+Edit file:
+,-- /etc/gtk-2.x/gtk.modules ------------------------------------
+| ...
+|
+| "/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so" 
+| "xim" "X Input Method" "gtk+" "/usr/share/locale" "ko:ja:zh:vi"
+|
+| ...
+|
+| #"/usr/lib/gtk-2.0/2.2.0/immodules/im-viqr.so" 
+| #"viqr" "Vietnamese (VIQR)" "gtk+" "/usr/share/locale" "vi"
+|
+| ...
+`----------------------------------------------------------------
+

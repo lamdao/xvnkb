@@ -1,0 +1,88 @@
+0.2.7:
+	- Fixed Hotkey recording
+	- Fixed configure script for XFT detecting
+	  -- Looking for xft-config script
+	- Enable spell checking as default in configure script
+	  -- Disable with --no-spellcheck option
+	- Display Vietnamese menu w/o using XFT
+	  -- use XmbDrawString
+
+0.2.6:
+	- Use XFT (support Vietnamese interface & antilias)
+	  -- Auto detect, disable with option --no-xft
+	- Remove gtk2 module
+	  -- Move xvnkb_gtk.c to "obsolete" folder.
+	  -- Remove option --with-gtk2 in configure script
+	- Add Event handler for all windows (event.c)
+	- Add "Select hotkey" dialog/add resource entry for hotkey
+	- Change popup menu style (cascade)
+	- Fixed more spell check
+	- Fixed tools/xvnkb_ctrl
+
+	- Update documents for Gtk/Gnome 2.x users.
+	  -- Gtk/Gnome 2.x apps can use X-Input-Method with xvnkb (see README)
+
+0.2.5:
+	- Fix & update documents (locale)
+	- Add more options for shared libs compilation
+	- Add support for gtk2 (xvnkb_gtk.c)
+	  -- Add option --with-gtk2 for configure script
+	  -- Usage: $ ./configure --with-gtk2
+	- Add more functions for installation script
+	  -- Detect and help user create UTF-8 locale
+	- Add more scripts for installation (localesetup.sh, xvnkb.sh)
+	  -- localesetup.sh: help user creating locale
+	  -- xvnkb.sh: a shell script which help user set LD_PRELOAD, LANG automatically
+	- Code cleanup
+
+0.2.4:
+	- Smart Vietnamese input (auto regconize Foreign languages word): spell checking
+	  -- Add option --spell-check for configure script
+	  -- Usage: $ ./configure --spell-check
+	- Rewrite xvnkb_ctrl
+	  -- use xconfig source for load/save configuration
+	  -- add option -t for toggle status
+	- Optimize and cleanup code
+
+	- Add version info used for all scripts (file VERSION)
+	- Add version number to xvnkb.so. In this release it will be xvnkb.so.0.2.4
+	- Safe install/uninstall scripts, add version info to all xvnkb scripts
+	- Update Makefile, fixed tools/Makefile
+	- Update documents
+
+0.2.3:
+	- (*) Support input other charsets (vni, tcvn, viscii, vps,...) when LANG=*UTF-8
+	- (Testing) In XLookupString, returned Keysym always set to 0
+	  -- export CFLAGS=-DVK_USE_KEYSYM before compilling to use old style (0.2.2)
+	- Smarter Vietnamese input
+	  -- auto switch off temporality after reversing mark
+	  -- turn back when:
+		. Delete reversed mark character (using backspace)
+		. Start next word
+	- More cleanup
+
+	- Fixed and update documents
+
+0.2.2:
+	- Fixed XLookupString treating buffer as 2-byte buffer pointer
+	  -- report and fixed by Egor Yu. Shkerin <egor@papillon.ru>
+	- Fixed "DD" bug in telex mode (KDE3) -- forgot to clear shift state
+	- Optimized & cleanup some code
+	- Makefile more robust -- can "make" without run "./configure" (auto)
+
+0.2.1:
+	- Add "mark deletting" feature
+		Telex: 'z'/'Z'
+		Vni: '0'
+		Viqr: '='
+	- Add configure script to detect X lib & dynamic link loader lib
+	- Add tools/xvnkb_ctrl - console utility
+	- (Testing) In UTF-8 mode, always return XK_a keysym to avoid KDE hotkey lookup
+
+0.2.0:
+	- GUI (xvnkb)
+	- Install scripts
+	- DOCS
+
+0.1.99:
+	- CORE (xvnkb.so) - support UTF-8 input

@@ -1,0 +1,84 @@
+- La`m ca'ch na`o dde^? ca`i dda(.t ?
+
+o DDa^`u tie^n:
+
+    $ ./configure
+
+    hoa(.c
+
+    - Chi? ddi.nh ddu+o+`ng da^~n to+'i Xlib
+
+      $ ./configure --x-dir=/path/to/Xlib
+
+    - Ho^~ tro+. nha^.n da.ng tu+` tie^'ng Vie^.t
+
+      $ ./configure --spell-check
+
+    - Ho^~ tro+. gtk version 2.0.x
+
+      $ ./configure --with-gtk2
+
+    - Ta^'t ca? ca'c "lu+.a cho.n" tre^n co' the^? ke^'t ho+.p la.i vo+'i nhau
+
+      $ ./configure --spell-check --with-gtk2
+
+    - Hie^.n ca'c tho^ng tin giu'p ddo+~ dde^? du`ng configure
+
+      $ ./configure --help
+
+o Ca'ch tho^ng thu+o+`ng: ra^'t de^~
+
+    $ make
+    $ make install
+
+  * Debug mode:
+    $ make debug
+    $ make install
+
+  * Theo ca'c bu+o+'c trong script ca`i dda(.t, ba.n se~ ddu+o+.c hu+o+'ng da^~n tu+`ng bu+o+'c va` ddu+`ng qu'a lo la('ng gi`, ra^'t la` ddo+n gia?n ;).
+
+    a. Ca`i dda(.t vo+'i quye^`n "root":
+        script ca`i dda(.t se~:
+        - che'p xvnkb => /usr/local/bin
+        - che'p xvnkb.so => /usr/local/lib
+        - che'p scripts/xvnkb.sys.sh => /etc/X11/xinit/xinitrc.d/xvnkb.sh (*)
+        (*) xvnkb.sh se~ ddu+o+.c go.i khi X kho+?i ddo^.ng,
+            no' se~ dda(.t LD_PRELOAD=/usr/local/lib/xvnkb.so,
+            va` cu~ng dda(.tt LANG=UTF-8 ne^'u ba.n dda~ co' cho.n
+
+    b. Ca`i dda(.t vo+'i quye^`n bi`nh thu+o+`ng:
+        script ca`i dda(.t se~ ho?i ba.n xem co' muo^'n cho mo.i ngu+o+`i cu`ng
+        du`ng chung hay kho^ng => a.
+        
+        Ne^'u kho^ng (chi? da`nh rie^ng cho ba.n):
+        - che'p xvnkb => $HOME/bin
+        - che'p xvnkb.so => $HOME/lib
+        - che'p scripts/xvnkb.user.sh => $HOME/.xvnkb.preload
+        - lu+u $HOME/.xinitrc => $HOME/.xvnkb.xrcdefaults (ne^'u co')
+        - che'p scripts/xvnkb.xinitrc.sh => $HOME/.xinitrc (*)
+        (*) $HOME/.xinitrc ddu+o+.c go.i tu+. ddo^.ng khi ba.n kho+?i ddo^.ng X,
+            va` no' se~:
+            - na.p $HOME/.xvnkb.preload dde^? dda(.t
+                LD_PRELOAD=$HOME/lib/xvnkb.so
+              va` dda(.t
+                LANG=UTF-8 ne^'u ba.n dda~ co' cho.n
+            - ne^'u co' $HOME/.xvnkb.xrcdefaults thi` go.i no' dde^? na.p ta^'t
+            ca? nhu+~ng gi` ba.n dda~ cho.n lu+.a khi X kho+?i ddo^.ng.
+            - ne^'u kho^ng co' $HOME/.xvnkb.xrcdefaults, thi` go.i
+            /etc/X11/xinit/xinitrc dde^? na.p ta^'t ca? nhu+~ng cho.n lu+.a
+            ma(.c ddi.nh cu?a he^. tho^'ng.
+
+o Chi? ca^`n "lo~i" (core): ne^'u ba.n chi? ca^`n pha^`n "lo~i" (xvnkb.so) va` muo^'n tu+. mi`nh na.p no' khi ca^`n thie^'t - Ba.n la` 1 ngu+o+`i du`ng chuye^n nghie^.p 8-)
+
+    $ make core
+
+    co' the^? tham kha?o the^m script contrib/profile dde^? bie^'t ca'ch na.p xvnkb.so\. Co`n dda^y la` ca'ch du`ng tho^ng thu+o+`ng
+
+    $ source contrib/profile
+    $ <load your apps here>
+
+  * Debug mode:
+    $ make core_debug
+
+o Chu' y':
+    - Xem them README.vn
