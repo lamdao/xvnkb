@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #----------------------------------------------------------------------------#
 #  configuration script for xvnkb                                            #
 #----------------------------------------------------------------------------#
@@ -18,6 +18,14 @@
 #   (at your option) any later version.                                      #
 #                                                                            #
 #----------------------------------------------------------------------------#
+
+show_status() {
+	if [ "$1" = "1" ]; then
+		echo yes
+	else
+		echo no
+	fi
+}
 
 xcc=$CC
 #prefix=/usr/local
@@ -102,6 +110,21 @@ if [ "$XLIB_DIR" != "" ]; then
 	x_dirs="$XLIB_DIR $x_dirs"
 fi
 
+echo -e "#ifndef __VK_CONFIG_H\n#define __VK_CONFIG_H" > config.h
+for dtype in VK_NEED_UCHAR VK_NEED_USHORT VK_NEED_UINT VK_NEED_ULONG; do
+	ctype=`echo $dtype | cut -f3 -d_ | tr [A-Z] [a-z]`
+	echo -n "Checking $ctype... "
+	$xcc -D$dtype config/ctype.c >/dev/null 2>&1
+	if [ $? = 0 ]; then
+		echo yes
+		rm -f a.out
+	else
+		echo no
+		echo "#define $dtype" >> config.h
+	fi
+done
+echo "#endif" >> config.h
+
 echo -n "Checking dynamic linking loader... "
 $xcc config/dl.c &>/dev/null
 if [ $? != 0 ]; then
@@ -177,15 +200,18 @@ fi
 echo "XFT_LIBS=$xft_libs" >> Makefile.cfg
 echo "LIBDL=$lib_dl" >> Makefile.cfg
 
-status=('no' 'yes')
 echo
 echo "Compile options:"
-echo "  Enable XFT: ${status[$use_xft]}"
-echo "  Enable spell checking: ${status[$use_spellcheck]}"
+echo -n "  Enable XFT: "; show_status $use_xft
+echo -n "  Enable spell checking: "; show_status $use_spellcheck
 echo "done."
 echo
+echo "Type \"make\" to compile"
+echo
 
+rm -f a.out
 sys=`uname -s | tr [A-Z] [a-z] | sed -e "s/.*bsd.*/bsd/"`
 ln -sf Makefile.$sys Makefile
 cd tools
+ln -sf ../config.h
 ln -sf Makefile.$sys Makefile
