@@ -24,13 +24,28 @@
 #define SYSTEM_TRAY_BEGIN_MESSAGE	1
 #define SYSTEM_TRAY_CANCEL_MESSAGE	2
 /*----------------------------------------------------------------------------*/
-Window systray = None;
+VKSystrayInfo systray;
 /*----------------------------------------------------------------------------*/
-void VKCheckSystray()
+void VKSystrayInit()
 {
-	if( systray == None ) {
-		Atom systray_atom = XInternAtom(display, "_NET_SYSTEM_TRAY_S0", False);
-		systray = XGetSelectionOwner(display, systray_atom);
+	systray.window = XInternAtom(display, "WINDOW", False);
+	systray.manager = XInternAtom(display, "MANAGER", False);
+	systray.handler = XInternAtom(display, "_NET_SYSTEM_TRAY_S0", False);
+	systray.request = XInternAtom(display, "_NET_SYSTEM_TRAY_OPCODE", False);
+	systray.owner = XGetSelectionOwner(display, systray.handler);
+}
+/*----------------------------------------------------------------------------*/
+void VKSystrayProcess(XEvent *event)
+{
+	if( event->xclient.type == systray.manager ||
+		event->xclient.type == systray.window ) {
+		TRACE("Systray owner changed to 0x%08X\n", event->xclient.data.l[2]);
+		systray.owner = XGetSelectionOwner(display, systray.handler);
+		if( systray.redocking ) {
+			extern void VKDockMainWindow();
+			systray.redocking = 0;
+			VKDockMainWindow();
+		}
 	}
 }
 /*----------------------------------------------------------------------------*/
@@ -41,15 +56,15 @@ void VKRequestDocking()
 
 		memset(&e, 0, sizeof(e));
 		e.xclient.type = ClientMessage;
-		e.xclient.window = systray;
-		e.xclient.message_type = XInternAtom(display, "_NET_SYSTEM_TRAY_OPCODE", False);
+		e.xclient.window = systray.owner;
+		e.xclient.message_type = systray.request;
 		e.xclient.format = 32;
 		e.xclient.data.l[0] = CurrentTime;
 		e.xclient.data.l[1] = SYSTEM_TRAY_REQUEST_DOCK;
 		e.xclient.data.l[2] = main_window;
 		e.xclient.data.l[3] = 0;
 		e.xclient.data.l[4] = 0;
-		XSendEvent(display, systray, False, NoEventMask, &e);
+		XSendEvent(display, systray.owner, False, NoEventMask, &e);
 		XSync(display, False);
 	}
 }
