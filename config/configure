@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #----------------------------------------------------------------------------#
 #  configuration script for xvnkb                                            #
 #----------------------------------------------------------------------------#
@@ -93,7 +93,7 @@ for a in $*; do
 done
 
 if [ "$use_spellcheck" = "1" ]; then
-	vk_opt="$vk_opt -DVK_SPELL_CHECKING"
+	vk_opt="$vk_opt -DVK_CHECK_SPELLING"
 fi
 
 rm -f Makefile.cfg
@@ -103,10 +103,17 @@ if [ "$XLIB_DIR" != "" ]; then
 fi
 
 echo -n "Checking dynamic linking loader... "
-$xcc config/dl.c -ldl &>/dev/null
+$xcc config/dl.c &>/dev/null
 if [ $? != 0 ]; then
-	echo no
-	exit
+	$xcc config/dl.c -ldl &>/dev/null
+	if [ $? != 0 ]; then
+		rm -f a.out
+		echo no
+		exit
+	fi
+	lib_dl=-ldl
+else
+	lib_dl=
 fi
 rm -f a.out
 echo yes
@@ -129,20 +136,20 @@ if [ "$xlib_dir" = "" ]; then
 fi
 
 if [ "$use_xft" = "1" ]; then
-	echo -n "Checking xft-config... "
-	xft_incs=`xft-config --cflags 2>/dev/null`
-	xft_libs=`xft-config --libs 2>/dev/null`
+	echo -n "Checking pkg-config... "
+	xft_incs=`pkg-config --cflags xft 2>/dev/null`
+	xft_libs=`pkg-config --libs xft 2>/dev/null`
 	if [ $? != 0 ]; then
 		echo no
-		echo -n "Checking freetype-config... "
-		xft_incs=`freetype-config --cflags 2>/dev/null`
+		echo -n "Checking xft-config... "
+		xft_incs=`xft-config --cflags 2>/dev/null`
+		xft_libs=`xft-config --libs 2>/dev/null`
 		if [ $? != 0 ]; then
 			echo no
 			xft_incs=
 			xft_libs=-lXft
 		else
 			echo yes
-			xft_libs="`freetype-config --libs` -lXft"
 		fi
 	else
 		echo yes
@@ -168,6 +175,7 @@ if [ "$vk_opt" != "" ]; then
 	echo "VK_OPT=$vk_opt" >> Makefile.cfg
 fi
 echo "XFT_LIBS=$xft_libs" >> Makefile.cfg
+echo "LIBDL=$lib_dl" >> Makefile.cfg
 
 status=('no' 'yes')
 echo

@@ -11,7 +11,7 @@ endif
 FPTR=-fomit-frame-pointer -D_REENTRANT
 XLIB_INC=$(XLIB_DIR)/include
 XLIB_PATH=$(XLIB_DIR)/lib
-LIBS=-lX11 -ldl
+LIBS=-lX11 $(LIBDL)
 
 .PHONY: config debug core core_debug tools uninstall
 
@@ -26,7 +26,7 @@ GUI_OBJS=data.o flash.o main.o event.o mainwin.o menu.o hotkey.o \
 all: do-it-all
 
 .c.o:
-	$(CC) $(CFLAGS) $(FPTR) $(VK_OPT) -DVERSION=\"$(VERSION)\" -Wall -I$(XLIB_INC) -c $<
+	$(CC) -fpic $(CFLAGS) $(FPTR) $(VK_OPT) -DVERSION=\"$(VERSION)\" -Wall -I$(XLIB_INC) -c $<
 
 $(CORE): $(CORE_OBJS)
 	$(CC) $(CFLAGS) -shared -fpic -Wl,-soname,$@ -o $@ $(CORE_OBJS) -L$(XLIB_PATH) $(LIBS)
@@ -38,14 +38,14 @@ main: $(CORE) $(GUI)
 	@echo >/dev/null
 
 tools:
-	@make -C tools
+	@$(MAKE) -C tools
 
 clean:
-	@make -C tools clean
+	@$(MAKE) -C tools clean
 	rm -f *.o core
 
 distclean:
-	@make -C tools distclean
+	@$(MAKE) -C tools distclean
 	rm -f *.o core
 	rm -f $(CORE) $(GUI)
 	rm -f Makefile.cfg
@@ -74,19 +74,19 @@ dep: Makefile.dep
 Makefile.dep:
 	@echo
 	@echo -n "Create $@ ... "
-	@gcc -I$(XLIB_INC) -MM *.c > $@
+	@$(CC) -I$(XLIB_INC) -MM *.c > $@
 	@echo done
 	@echo
 
 ifneq (Makefile.cfg,$(wildcard Makefile.cfg))
 do-it-all: config
-	@make
+	@$(MAKE)
 else
 ifeq (Makefile.dep,$(wildcard Makefile.dep))
 include Makefile.dep
 do-it-all: main tools
 else
 do-it-all: dep
-	@make main tools
+	@$(MAKE) main tools
 endif
 endif
