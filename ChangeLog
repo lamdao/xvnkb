@@ -1,4 +1,11 @@
 0.2.8:
+	* 2004/01/17:
+	- Release
+	- Simplify & fix some bugs in new_install.sh/new_uninstall.sh
+	- Use size hint in docking mode only (fix bug when drawing floating icon)
+	* 2004/01/16:
+	- Add new_install.sh/new_uninstall.sh scripts, new xvnkb.spec
+	- Add old_install & old_uninstall entries: old install/uninstall style
 	* 2004/01/13:
 	- Fix thinko in size calcation of Message box
 	- Display message box instead of exit if error occurs on setting locale
