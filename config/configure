@@ -49,6 +49,8 @@ fi
 echo
 echo "Configuration for xvnkb $version on `uname`"
 echo
+echo "  Type \"$0 --help\" for more information"
+echo
 
 if [ "$xcc" = "" ]; then
 	xcc=gcc
