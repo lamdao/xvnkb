@@ -1,4 +1,19 @@
 0.2.8:
+	* 2003/11/20:
+	- Name correction for Telex method, ABC instead of Vietkey (much better :))
+	  -- Rename telex-vkstyle.h => telex-abcstyle.h
+	  -- Usage: --use-abcstroke as option of configure script to enable
+	- Changed configure script's option names: --use-{ext,pro,abc}stroke
+	- Changed some marcro names: VK_USE_{EXT,PRO,ABC}STROKE
+	- Cleanup some stupid codes
+	- Fixed more bugs/thinko in extended Telex mode
+	  -- Usage: --use-extstroke as option of configure script to enable
+	  -- Rule: ] => u+, [ => o+, } => U+, { => O+
+	           w => u+, W => U+
+	- Add ProTelex mode (Programmer Telex mode - use by myself :))
+	  -- Usage: --use-prostroke as option of configure script to enable
+	  -- Rule: [ => u+, ] => o+, { => U+, } => O+
+	           w => u+, W => U+
 	* 2003/11/18:
 	- Fixed thinko in Shift/Capslock case => Fixed bug in VNI input method
 	- Add more extra keystroke for all input methods
