@@ -37,7 +37,7 @@ if [ ! -f VERSION ]; then
 	echo
 	echo "Version info is missing. Try:"
 	echo
-	echo "$ echo version.numder > VERSION"
+	echo "$ echo version.number > VERSION"
 	echo
 	echo "then run ./configure again"
 	echo
@@ -57,10 +57,10 @@ fi
 vk_opt=
 xlib_dir=
 use_xft=1
-use_spellcheck=1
-use_vietkey=0
-use_extra=0
+use_abcstroke=0
+use_extstroke=0
 use_prostroke=0
+use_spellcheck=1
 for a in $*; do
 	case "$a" in
 #		--prefix=*)
@@ -77,17 +77,16 @@ for a in $*; do
 			fi
 			;;
 
-		--use-vkstroke)
-			use_vietkey=1
+		--use-abcstroke)
+			use_abcstroke=1
 			;;
 
-		--use-xstroke)
-			use_extra=1
+		--use-extstroke)
+			use_extstroke=1
 			;;
 
 		--use-prostroke)
 			use_prostroke=1
-			use_extra=0
 			;;
 
 		--no-spellcheck)
@@ -108,8 +107,9 @@ for a in $*; do
 			echo "Options:"
 			echo "--help             Display help and exit"
 			echo "--x-dir=DIR        Xlib path"
-			echo "--use-xstroke      Enable extra Telex keystroke"
-			echo "--use-vkstroke     Enable Vietkey likes keystroke"
+			echo "--use-extstroke    Enable extended keystroke"
+			echo "--use-prostroke    Enable programmer keystroke"
+			echo "--use-abcstroke    Enable ABC liked Telex keystroke"
 			echo "--no-spellcheck    Spelling check"
 			echo "--no-xft           X freetype"
 			echo
@@ -131,17 +131,17 @@ if [ "$use_spellcheck" = "1" ]; then
 	echo "#define VK_CHECK_SPELLING" >> config.h
 fi
 
-if [ "$use_vietkey" = "1" ]; then
-	echo "#define VK_USE_VIETKEYSTROKE" >> config.h
+if [ "$use_abcstroke" = "1" ]; then
+	echo "#define VK_USE_ABCSTROKE" >> config.h
 fi
 
 if [ "$use_prostroke" = "1" ]; then
 	echo "#define VK_USE_PROSTROKE" >> config.h
-	use_extra=1
+	use_extstroke=1
 fi
 
-if [ "$use_extra" = "1" ]; then
-	echo "#define VK_USE_EXTRASTROKE" >> config.h
+if [ "$use_extstroke" = "1" ]; then
+	echo "#define VK_USE_EXTSTROKE" >> config.h
 fi
 
 for dtype in VK_NEED_UCHAR VK_NEED_USHORT VK_NEED_UINT VK_NEED_ULONG; do
@@ -245,8 +245,8 @@ echo
 echo "Compile options:"
 echo -n "  Enable XFT: "; show_status $use_xft
 echo -n "  Enable spell checking: "; show_status $use_spellcheck
-echo -n "  Enable Vietkey like keystroke: "; show_status $use_vietkey
-echo -n "  Enable extra Telex keystroke: "; show_status $use_extra
+echo -n "  Enable extended keystroke: "; show_status $use_extstroke
+echo -n "  Enable ABC liked Telex keystroke: "; show_status $use_abcstroke
 echo "done."
 echo
 echo "Type \"make\" to compile"
