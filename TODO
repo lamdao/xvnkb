@@ -1,5 +1,4 @@
 * What's next ?
-	- Allow xvnkb GUI docking to systray
 	- Support hotkey for spellcheck & charsets
 	- Rewrite xvnkb_setup.sh in C (add GUI)
 	- Support interface font selection dialog
