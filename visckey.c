@@ -215,7 +215,8 @@ static inline void VKAppend(ushort lastkey, char key)
 	static char *vwchk = "|ia|ua|oa|ai|ui|oi|au|iu|eu|ie|ue|oe|ye|ao|uo|eo|ay|uy|uu|ou|io|";
 
 	if( vk_spelling && !tempoff ) {
-		int kp = strchr(spchk, key) - spchk;
+		char *sp = strchr(spchk, key);
+		int kp = sp ? (sp - spchk) : -1;
 
 		if( !count ) {
 			if( kp>=0 && kp<12 ) {
@@ -224,7 +225,7 @@ static inline void VKAppend(ushort lastkey, char key)
 				lvs[0] = key;
 			}
 			else
-			if( kp>37 )
+			if( kp==12 || kp>37 )
 				return;
 			else {
 				vp = -1;
@@ -232,7 +233,7 @@ static inline void VKAppend(ushort lastkey, char key)
 			}
 		}
 		else
-		if( kp>37 ) {
+		if( kp==12 || kp>37 ) {
 			VKClearBuffer();
 			return;
 		}
@@ -423,8 +424,11 @@ inline long VKAddKey( char key )
 /*----------------------------------------------------------------------------*/
 inline void VKClearBuffer()
 {
-	tempoff = count = *word = vpc = 0;
+	tempoff = count = *word = 0;
+#ifdef VK_CHECK_SPELLING
+	vpc = 0;
 	vp = -1;
+#endif
 }
 /*----------------------------------------------------------------------------*/
 inline long VKBackspaceDelete()
