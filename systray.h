@@ -20,11 +20,22 @@
 #ifndef __VK_SYSTRAY_H
 #define __VK_SYSTRAY_H
 /*----------------------------------------------------------------------------*/
-#define VKIsDockable()	(systray != None)
+typedef struct {
+	Atom window;
+	Atom manager;
+	Atom handler;
+	Atom request;
+	Window owner;
+	int redocking;
+} VKSystrayInfo;
 /*----------------------------------------------------------------------------*/
-void VKCheckSystray();
+#define VKIsDockable()		(systray.owner != None)
+#define VKSetAutoDocking(a)	(systray.redocking = a)
+/*----------------------------------------------------------------------------*/
+void VKSystrayInit();
+void VKSystrayProcess(XEvent *event);
 void VKRequestDocking();
 /*----------------------------------------------------------------------------*/
-extern Window systray;
+extern VKSystrayInfo systray;
 /*----------------------------------------------------------------------------*/
 #endif
