@@ -22,6 +22,8 @@
 #include <ctype.h>
 #include <unistd.h>
 /*----------------------------------------------------------------------------*/
+#include "debug.h"
+/*----------------------------------------------------------------------------*/
 #include "visckey.h"
 #include "utf.h"
 #include "viqr.h"
@@ -115,13 +117,6 @@ static inline int utf_vn_cmp(register ushort u1, register ushort u2)
 	register int i = -1, j = -1;
 	register ushort *v = V;
 
-	/*
-	i = j = 0;
-	while( v[i]>0 && v[i]!=u1 ) i++;
-	if( v[i]==0 ) i = -1;
-	while( v[j]>0 && v[j]!=u2 ) j++;
-	if( v[j]==0 ) j = -1;
-	*/
 	VKLookupChar(v, u1);
 	if( *v ) i = v - V;
 	v = V;
@@ -211,7 +206,7 @@ static inline void VKShiftBuffer()
 static inline void VKAppend(ushort lastkey, char key)
 {
 	static char *spchk = "AIUEOYaiueoy|BDFJKLQSVWXZbdfjklqsvwxz|'`~?.^*+=";
-	static char *vwchk = "|ia|ua|oa|ai|ui|oi|au|iu|eu|ie|ue|oe|ye|ao|uo|eo|ay|uy|uu|ou|";
+	static char *vwchk = "|ia|ua|oa|ai|ui|oi|au|iu|eu|ie|ue|oe|ye|ao|uo|eo|ay|uy|uu|ou|io|";
 
 	if( !tempoff ) {
 		int kp = strchr(spchk, key) - spchk;
