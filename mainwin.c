@@ -131,13 +131,24 @@ void VKCreateMainWindow()
 #ifndef USE_XFT
 	XSetFont(display, main_gc, vk_font->fid);
 #endif
+	XStoreName(display, main_window, PROGRAM_NAME);
+	XChangeProperty(display, main_window, XInternAtom(display, "WM_CLASS", False),
+		XA_STRING, 8, PropModeReplace, PROGRAM_NAME, strlen(PROGRAM_NAME));
+	XChangeProperty(display, main_window, XInternAtom(display, "_NET_WM_NAME", False),
+		XA_STRING, 8, PropModeReplace, PROGRAM_NAME, strlen(PROGRAM_NAME));
 	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
 
 	VKSetMainWindowHints(vk_icon_height, vk_icon_height);
 
-	VKCheckSystray();
-	if( vk_docking && VKIsDockable() )
-		VKRequestDocking();
+	if( vk_docking ) {
+		if( VKIsDockable() )
+			VKRequestDocking();
+		else {
+			vk_docking = 0;
+			XMapWindow(display, main_window);
+			VKSetAutoDocking(1);
+		}
+	}
 	else {
 		vk_docking = 0;
 		XMapWindow(display, main_window);
@@ -156,10 +167,12 @@ void VKDestroyMainWindow()
 /*----------------------------------------------------------------------------*/
 void VKDockMainWindow()
 {
-	vk_docking = 1;
-	VKDestroyMainWindow();
-	VKCreateMainWindow();
-	VKUpdateDockingMessage();
+	if( VKIsDockable() ) {
+		vk_docking = 1;
+		VKDestroyMainWindow();
+		VKCreateMainWindow();
+		VKUpdateDockingMessage();
+	}
 }
 /*----------------------------------------------------------------------------*/
 void VKUndockMainWindow()
@@ -230,16 +243,25 @@ void VKMainWindowProcess(XEvent *event, void *data)
 				XRaiseWindow(display, main_window);
 			break;
 		case ReparentNotify:
-			//docking = event->xreparent.parent != root;
-			//VKUpdateDockingMessage();
+			if( vk_docking && event->xreparent.parent == root ) {
+				VKUndockMainWindow();
+				VKSetAutoDocking(1);
+			}
 			break;
 		case ConfigureNotify:
 			vk_x = event->xconfigure.x;
 			vk_y = event->xconfigure.y;
 			vk_icon_width = event->xconfigure.width;
 			vk_icon_height = event->xconfigure.height;
+			if( vk_icon_height > vk_icon_width )
+				vk_icon_width = vk_icon_height;
+			else
+				vk_icon_height = vk_icon_width;
+
 			VKSetMainWindowHints(vk_icon_width, vk_icon_height);
 			break;
+		case ClientMessage:
+			TRACE("MessageID = %ld\n", event->xclient.data.l[1]);
 	}
 }
 /*----------------------------------------------------------------------------*/
