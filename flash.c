@@ -90,7 +90,7 @@ void VKCreateFlash()
 #ifndef USE_XFT
 	XSetFont(display, flash_gc, vk_font->fid);
 #endif
-	VKRegisterEvent(flash_window, VKFlashWindowProcess);
+	VKRegisterEvent(flash_window, VKFlashWindowProcess, NULL);
 }
 /*----------------------------------------------------------------------------*/
 void VKDestroyFlash()
@@ -115,7 +115,7 @@ void VKHideFlash()
 	XUnmapWindow(display, flash_window);
 }
 /*----------------------------------------------------------------------------*/
-void VKFlashWindowProcess(XEvent *event)
+void VKFlashWindowProcess(XEvent *event, void *data)
 {
 	int i, x, y;
 #ifdef USE_XFT

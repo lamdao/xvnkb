@@ -24,6 +24,7 @@ void VKChangeUsing();
 void VKChangeMethod();
 void VKSwitchMethod();
 void VKChangeCharset(int id);
+void VKSetSpelling(int s);
 void VKResetMode();
 /*----------------------------------------------------------------------------*/
 #endif

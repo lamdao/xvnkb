@@ -1,4 +1,7 @@
 0.2.8:
+	- Add menu option to disable/enable spellcheck
+	- Fixed compilation on FreeBSD
+	- Fixed configure/Makefile (checking dl, xft libs)
 	- Fixed crashing on KDE 3.x (cvs version)
 	- Fixed error with determination of focus window
 	  -- Very rarely, found in Links2.1pre9 graphics only (at the moment)

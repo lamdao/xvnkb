@@ -25,11 +25,13 @@
 #define VKP_CHARSET			"VK_CHARSET"
 #define VKP_METHOD			"VK_METHOD"
 #define VKP_USING			"VK_USING"
+#define VKP_SPELLING		"VK_SPELLING"
 #define VKP_HOTKEY			"VK_HOTKEY"
 /*----------------------------------------------------------------------------*/
 extern Atom vk_using_atom;
 extern Atom vk_method_atom;
 extern Atom vk_charset_atom;
+extern Atom vk_spelling_atom;
 extern Atom vk_hotkey_atom;
 /*----------------------------------------------------------------------------*/
 void VKAtomInit(Display *display);

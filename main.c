@@ -51,7 +51,7 @@ void VKCheckMouseStatus()
 	}
 }
 /*----------------------------------------------------------------------------*/
-void VKRootWindowProcess(XEvent *event)
+void VKRootWindowProcess(XEvent *event, void *data)
 {
 	char *name = XGetAtomName(display, ((XPropertyEvent *)event)->atom);
 	if( name!=NULL ) { 
@@ -75,7 +75,7 @@ void VKRootWindowProcess(XEvent *event)
 void VKMainProcess()
 {
 	XSelectInput(display, root, PropertyChangeMask);
-	VKRegisterEvent(root, VKRootWindowProcess);
+	VKRegisterEvent(root, VKRootWindowProcess, NULL);
 	while( !vk_done ) {
 		usleep(1000);
 

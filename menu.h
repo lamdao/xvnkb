@@ -23,7 +23,7 @@
 void VKShowMenu();
 void VKHideMenu();
 void VKCreateMenuWindow();
-void VKMenuWindowProcess(XEvent *event);
+void VKMenuWindowProcess(XEvent *event, void *data);
 void VKDestroyMenuWindow();
 /*----------------------------------------------------------------------------*/
 #endif

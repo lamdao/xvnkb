@@ -132,6 +132,10 @@ void VKLoadConfig(int argc, char **argv)
 					vk_interface = atoi(svalue) & 1;
 					continue;
 				}
+				if( !strcasecmp(key, "spelling") ) {
+					vk_spelling = atoi(svalue) & 1;
+					continue;
+				}
 				if( !strcasecmp(key, "hotkey") ) {
 					vk_hotkey = strdup(svalue);
 					continue;
@@ -199,7 +203,7 @@ void VKSaveConfig()
 		"#  font: fontname --- Display font (All items of xvnkb - flash,icon,menu).\n"
 		"#  interface: 0 - English, 1 - Vietnamese.\n"
 		"#  hotkey: use Key Symbols (e.g. Alt Shift_L).\n"
-		"left %d\ntop %d\nmethod %d\nenable %d\ncharset %d\ninterface %d\n";
+		"left %d\ntop %d\nmethod %d\nenable %d\ncharset %d\ninterface %d\nspelling %d\n";
 
 	if( !fp )
 		printf("Write configuration error!\n");
@@ -207,7 +211,7 @@ void VKSaveConfig()
 		fprintf(fp, vk_config_form,
 			vk_x, vk_y,
 			vk_method, vk_using,
-			vk_charset, vk_interface);
+			vk_charset, vk_interface, vk_spelling);
 		if( vk_font_name ) {
 			fprintf(fp, "font %s\n", vk_font_name);
 			free(vk_font_name);

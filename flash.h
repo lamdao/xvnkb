@@ -27,6 +27,6 @@ void VKCreateFlash();
 void VKDestroyFlash();
 void VKShowFlash();
 void VKHideFlash();
-void VKFlashWindowProcess(XEvent *event);
+void VKFlashWindowProcess(XEvent *event, void *data);
 /*----------------------------------------------------------------------------*/
 #endif

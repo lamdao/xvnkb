@@ -22,9 +22,9 @@
 /*----------------------------------------------------------------------------*/
 #include "data.h"
 /*----------------------------------------------------------------------------*/
-typedef void (*VKEventAction)(XEvent *event);
+typedef void (*VKEventAction)(XEvent *event, void *data);
 /*----------------------------------------------------------------------------*/
-void VKRegisterEvent(Window window, VKEventAction action);
+void VKRegisterEvent(Window window, VKEventAction action, void *data);
 void VKUnregisterEvent(Window window);
 void VKDispatchEvent(XEvent *event);
 void VKGrabFocus(Window window);

@@ -21,7 +21,7 @@
 #define	__MAINWINDOW_H
 /*----------------------------------------------------------------------------*/
 void VKCreateMainWindow();
-void VKMainWindowProcess(XEvent *event);
+void VKMainWindowProcess(XEvent *event, void *data);
 void VKDestroyMainWindow();
 /*----------------------------------------------------------------------------*/
 #endif

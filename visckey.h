@@ -27,10 +27,13 @@ extern inline void VKClearBuffer();
 extern inline long VKBackspaceDelete();
 extern inline void VKSwitchMethod();
 extern inline void VKChangeCharset(int id);
+extern inline void VKSetSpelling(int s);
 /*----------------------------------------------------------------------------*/
 extern int vk_using;
 extern int vk_method;
 extern int vk_charset;
+extern int vk_spelling;
+/*----------------------------------------------------------------------------*/
 extern char vk_buffer[256];
 extern int vk_blength;
 extern int vk_plength;

@@ -53,6 +53,9 @@ vk_menu_item vk_menu_data[][25] =
 	{
 	{ 0, 0, "About",				-2 },
 	{ 0, 0, "Miscellaneous",		 0 },
+#ifdef VK_CHECK_SPELLING
+	{ 0, 0, "Check spelling",		 7, &vk_spelling, 1 },
+#endif
 	{ 0, 0, "Set hotkey",			 5, NULL },
 	{ 0, 0, "Set interface font",	 6, NULL },
 	{ 0, 0, "Input method",			 0 },
@@ -76,6 +79,9 @@ vk_menu_item vk_menu_data[][25] =
 	{
 	{ 0, 0, "Thông tin",			-2 },
 	{ 0, 0, "Linh tinh",			 0 },
+#ifdef VK_CHECK_SPELLING
+	{ 0, 0, "Kiểm tra từ",			 7, &vk_spelling, 1 },
+#endif
 	{ 0, 0, "Chọn phím bật/tắt",	 5, NULL },
 	{ 0, 0, "Chọn font giao diện",	 6, NULL },
 	{ 0, 0, "Kiểu gõ",				 0 },
@@ -112,7 +118,7 @@ extern void VKDestroyFlash();
 extern void VKShowHotkeyWindow();
 extern void VKDrawHotkeyWindow();
 /*----------------------------------------------------------------------------*/
-void MenuProcess(XEvent *event);
+void MenuProcess(XEvent *event, void *data);
 /*----------------------------------------------------------------------------*/
 void CreateMenuWindow(vk_menu *m, int w, int h)
 {
@@ -131,7 +137,7 @@ void CreateMenuWindow(vk_menu *m, int w, int h)
 #ifndef USE_XFT
 	XSetFont(display, m->gc, vk_font->fid);
 #endif
-	VKRegisterEvent(m->win, MenuProcess);
+	VKRegisterEvent(m->win, MenuProcess, m);
 }
 /*----------------------------------------------------------------------------*/
 void CalculateItemWidth(vk_menu_item *current, vk_menu_item *item)
@@ -388,6 +394,12 @@ void MenuMousePress(vk_menu *m, XEvent *event)
 		case 5:
 			VKShowHotkeyWindow();
 			break;
+	#ifdef VK_CHECK_SPELLING
+		case 7:
+			vk_spelling = (vk_spelling + 1) & 1;
+			VKSetSpelling(vk_spelling);
+			break;
+	#endif
 	}
 	VKDrawIcon();
 	VKHideMenu();
@@ -425,23 +437,9 @@ void MenuMouseMove(vk_menu *m, XEvent *event)
 	}
 }
 /*----------------------------------------------------------------------------*/
-vk_menu *FindMenu(Window w)
+void MenuProcess(XEvent *event, void *data)
 {
-	vk_menu_item *item;
-
-	if( menu.win==w )
-		return &menu;
-	item = menu.items;
-	while( item ) {
-		if( item->type==0 && item->menu->win==w ) break;
-		item = item->next;
-	}
-	return item->menu;
-}
-/*----------------------------------------------------------------------------*/
-void MenuProcess(XEvent *event)
-{
-	vk_menu *m = FindMenu(event->xany.window);
+	vk_menu *m = (vk_menu *)data;
 	switch( event->type ) {
 		case Expose:
 		case GraphicsExpose:

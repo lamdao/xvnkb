@@ -55,6 +55,10 @@
 /*----------------------------------------------------------------------------*/
 #define	MAIN_EVENT_MASKS	ExposureMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask
 /*----------------------------------------------------------------------------*/
+#ifndef __linux__
+typedef unsigned long ulong;
+#endif
+/*----------------------------------------------------------------------------*/
 extern int screen;
 extern int screen_width;
 extern int screen_height;
@@ -85,6 +89,7 @@ extern char *vk_config_file;
 extern int vk_method;
 extern int vk_charset;
 extern int vk_using;
+extern int vk_spelling;
 extern int vk_interface;
 extern char *vk_hotkey;
 /*----------------------------------------------------------------------------*/

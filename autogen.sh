@@ -13,3 +13,9 @@ ln -sf ../property.h ./tools
 ln -sf ../typedefs.h ./tools
 ln -sf ../xconfig.c ./tools
 ln -sf ../xconfig.h ./tools
+ln -sf ../xresource.c ./tools
+ln -sf ../xresource.h ./tools
+ln -sf ../event.c ./tools
+ln -sf ../event.h ./tools
+ln -sf ../button.c ./tools
+ln -sf ../button.h ./tools

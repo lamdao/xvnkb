@@ -49,7 +49,7 @@ hk_info hk = {
 /*----------------------------------------------------------------------------*/
 void VKHotkeyAccept();
 void VKHotkeyReject();
-void VKHotkeyWindowProcess(XEvent *event);
+void VKHotkeyWindowProcess(XEvent *event, void *data);
 /*----------------------------------------------------------------------------*/
 VKButtonControl B[2][2] = {
 	{
@@ -201,7 +201,7 @@ void VKCreateHotkeyWindow()
 #ifndef USE_XFT
 	XSetFont(display, hk.gc, vk_font->fid);
 #endif
-	VKRegisterEvent(hk.window, VKHotkeyWindowProcess);
+	VKRegisterEvent(hk.window, VKHotkeyWindowProcess, &hk);
 
 	VKCreateButtons(hk.window, B[0], 2);
 	VKCreateButtons(hk.window, B[1], 2);
@@ -317,7 +317,7 @@ void VKHotkeyReject()
 	VKHideHotkeyWindow();
 }
 /*----------------------------------------------------------------------------*/
-void VKHotkeyWindowProcess(XEvent *event)
+void VKHotkeyWindowProcess(XEvent *event, void *data)
 {
 	if( event->xany.window!=hk.window ) {
 		VKHotkeyReject();

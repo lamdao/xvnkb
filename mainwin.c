@@ -28,7 +28,7 @@ void VKIconLoadInterface()
 	Ss[0] = vk_interface==VK_VIETNAMESE ? "Tắt" : "Off";
 }
 /*----------------------------------------------------------------------------*/
-void VKMainWindowProcess(XEvent *event);
+void VKMainWindowProcess(XEvent *event, void *data);
 /*----------------------------------------------------------------------------*/
 void VKDrawIcon()
 {
@@ -47,7 +47,6 @@ void VKDrawIcon()
 	x = (vk_icon_width - fi.width)/2;
 	y = vk_text_ascent + (vk_icon_height - h)/2 + 1;
 
-	XRaiseWindow(display, main_window);
 	XClearWindow(display, main_window);
 	VKSetColor(display, main_gc, clBackground);
 	XFillRectangle(display, main_window, main_gc,
@@ -116,7 +115,7 @@ void VKCreateMainWindow()
 #ifndef USE_XFT
 	XSetFont(display, main_gc, vk_font->fid);
 #endif
-	VKRegisterEvent(main_window, VKMainWindowProcess);
+	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
 	XMapWindow(display, main_window);
 
 	VKSetDefaultColor();
@@ -130,7 +129,7 @@ void VKDestroyMainWindow()
 	XDestroyWindow(display, main_window);
 }
 /*----------------------------------------------------------------------------*/
-void VKMainWindowProcess(XEvent *event)
+void VKMainWindowProcess(XEvent *event, void *data)
 {
 	static int x, y;
 	static int dragging = False, has_moved = False;
@@ -181,7 +180,8 @@ void VKMainWindowProcess(XEvent *event)
 			}
 			break;
 		case VisibilityNotify:
-			XRaiseWindow(display, main_window);
+			if( ((XVisibilityEvent *)event)->state != VisibilityUnobscured )
+				XRaiseWindow(display, main_window);
 			break;
 	}
 }

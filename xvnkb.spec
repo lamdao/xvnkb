@@ -1,5 +1,5 @@
 %define name xvnkb
-%define version 0.2.7
+%define version 0.2.8
 %define rel 1
 #%define myprefix /usr/local
 
@@ -39,6 +39,7 @@ mkdir -p $RPM_BUILD_ROOT%{myprefix}/share/xvnkb
 install -m 755 %{name} $RPM_BUILD_ROOT%{myprefix}/bin
 install -m 755 %{name}.so.%{version} $RPM_BUILD_ROOT%{myprefix}/lib
 install -m 755 tools/xvnkb_ctrl $RPM_BUILD_ROOT%{myprefix}/bin
+install -m 755 tools/xvnkb_setup $RPM_BUILD_ROOT%{myprefix}/bin
 install -m 755 scripts/xvnkb_setup.sh $RPM_BUILD_ROOT%{myprefix}/bin
 install -m 755 scripts/* $RPM_BUILD_ROOT%{myprefix}/share/xvnkb
 
@@ -46,9 +47,7 @@ install -m 755 scripts/* $RPM_BUILD_ROOT%{myprefix}/share/xvnkb
 rm -rf $RPM_BUILD_ROOT
 
 %post
-echo
-echo "Please run /usr/local/bin/xvnkb_setup.sh to complete installation!"
-echo
+/usr/local/bin/xvnkb_setup
 
 %files
 %defattr(-,root,root)
@@ -57,14 +56,17 @@ echo
 %{myprefix}/*/*
 
 %changelog
+* Sun Apr 20 2003 Dao Hai Lam <lam@visc-network.com>
+- updated to version 0.2.8
+
 * Sun Mar  2 2003 Dao Hai Lam <lam@visc-network.com>
-- update to version 0.2.7
+- updated to version 0.2.7
 
 * Sun Feb  9 2003 Dao Hai Lam <lam@visc-network.com>
-- update to version 0.2.6
+- updated to version 0.2.6
 
 * Tue Aug 13 2002 Dao Hai Lam <lam@visc-network.com>
-- update to version 0.2.5
+- updated to version 0.2.5
 
 * Thu May  9 2002 Nguyen-Dai Quy <Quy@NguyenDai.org>
 - updated to version 0.2.4

@@ -28,10 +28,14 @@
 #include "property.h"
 /*----------------------------------------------------------------------------*/
 typedef unsigned char uchar;
+#ifndef __linux__
+typedef unsigned long ulong;
+#endif
 /*----------------------------------------------------------------------------*/
 Atom vk_using_atom;
 Atom vk_method_atom;
 Atom vk_charset_atom;
+Atom vk_spelling_atom;
 Atom vk_hotkey_atom;
 /*----------------------------------------------------------------------------*/
 extern Window root;
@@ -51,6 +55,7 @@ void VKAtomInit(Display *display)
 	vk_charset_atom = VKInternAtom(display, VKP_CHARSET);
 	vk_method_atom = VKInternAtom(display, VKP_METHOD);
 	vk_using_atom = VKInternAtom(display, VKP_USING);
+	vk_spelling_atom = VKInternAtom(display, VKP_SPELLING);
 	vk_hotkey_atom = VKInternAtom(display, VKP_HOTKEY);
 }
 /*----------------------------------------------------------------------------*/
@@ -61,8 +66,8 @@ long VKGetValue(Display *display, Atom key)
 	long *s;
 	ulong ni, br;
 
-	if( XGetWindowProperty(display, root, key, 0, 1, False,
-							XA_CARDINAL, &at, &af, &ni, &br, (uchar **)&s)==Success ) {
+	if( XGetWindowProperty(display, root, key, 0, 1, False, XA_CARDINAL,
+							&at, &af, &ni, &br, (uchar **)&s)==Success ) {
 		if( s!=NULL ) {
 			long v = *s;
 			XFree(s);
@@ -74,7 +79,8 @@ long VKGetValue(Display *display, Atom key)
 /*----------------------------------------------------------------------------*/
 void VKSetValue(Display *display, Atom key, long value)
 {
-	XChangeProperty(display, root, key, XA_CARDINAL, 32, PropModeReplace, (uchar*)&value, 1);
+	XChangeProperty(display, root, key, XA_CARDINAL, 32, PropModeReplace,
+					(uchar*)&value, 1);
 }
 /*----------------------------------------------------------------------------*/
 void VKGetValues(Display *display, Atom key, long *values, int n)
@@ -84,8 +90,8 @@ void VKGetValues(Display *display, Atom key, long *values, int n)
 	long *s;
 	ulong ni, br;
 
-	if( XGetWindowProperty(display, root, key, 0, n, False,
-							XA_CARDINAL, &at, &af, &ni, &br, (uchar **)&s)==Success ) {
+	if( XGetWindowProperty(display, root, key, 0, n, False, XA_CARDINAL,
+							&at, &af, &ni, &br, (uchar **)&s)==Success ) {
 		if( s!=NULL ) {
 			memcpy(values, s, n * sizeof(long));
 			XFree(s);
@@ -95,7 +101,8 @@ void VKGetValues(Display *display, Atom key, long *values, int n)
 /*----------------------------------------------------------------------------*/
 void VKSetValues(Display *display, Atom key, long *values, int n)
 {
-	XChangeProperty(display, root, key, XA_CARDINAL, 32, PropModeReplace, (uchar*)values, n);
+	XChangeProperty(display, root, key, XA_CARDINAL, 32, PropModeReplace,
+					(uchar*)values, n);
 }
 /*----------------------------------------------------------------------------*/
 char *VKGetString(Display *display, Atom key)
@@ -115,6 +122,7 @@ char *VKGetString(Display *display, Atom key)
 /*----------------------------------------------------------------------------*/
 void VKSetString(Display *display, Atom key, uchar *value)
 {
-	XChangeProperty(display, root, key, XA_STRING, 8, PropModeReplace, value, strlen(value)+1);
+	XChangeProperty(display, root, key, XA_STRING, 8, PropModeReplace,
+					value, strlen(value)+1);
 }
 /*----------------------------------------------------------------------------*/

@@ -16,7 +16,8 @@ DEFS=$(VK_OPT) -DVERSION=\"$(VERSION)\" -DXVNKB_TOOL
 .PHONY: debug need-config uninstall
 
 CONTROL_OBJS=xvnkb_ctrl.o data.o mode.o property.o xconfig.o
-TOOLS=xvnkb_ctrl
+SETUP_OBJS=xvnkb_setup.o data.o xresource.o event.o button.o
+TOOLS=xvnkb_ctrl xvnkb_setup
 
 all: do-it-all
 
@@ -25,6 +26,9 @@ all: do-it-all
 
 xvnkb_ctrl: $(CONTROL_OBJS)
 	$(CC) $(CFLAGS) -o $@ $(CONTROL_OBJS) -L$(XLIB_PATH) $(LIBS)
+
+xvnkb_setup: $(SETUP_OBJS)
+	$(CC) $(CFLAGS) -o $@ $(SETUP_OBJS) -L$(XLIB_PATH) $(LIBS) $(XFT_LIBS)
 
 main-tools: $(TOOLS)
 

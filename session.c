@@ -86,6 +86,9 @@ void VKStartXSession()
 	VKChangeCharset(vk_charset);
 	VKChangeMethod();
 	VKChangeUsing();
+#ifdef VK_CHECK_SPELLING
+	VKSetSpelling(vk_spelling);
+#endif
 	if( !vk_hotkey )
 		vk_hotkey = strdup(VK_HOTKEY_STRING);
 	else {

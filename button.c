@@ -20,9 +20,6 @@
 #include "data.h"
 #include "button.h"
 /*----------------------------------------------------------------------------*/
-static int bc = 0;
-VKButtonControl *bb[20];
-/*----------------------------------------------------------------------------*/
 void VKDrawButton(VKButtonControl *b)
 {
 	if( b->style==VKB_NORMAL ) {
@@ -62,21 +59,19 @@ void VKDrawButton(VKButtonControl *b)
 	}
 }
 /*----------------------------------------------------------------------------*/
-void VKButtonControlProcess(XEvent *event)
+void VKButtonControlProcess(XEvent *event, void *data)
 {
-	register int i;
-	for( i=0; i<bc; i++ )
-		if( bb[i]->win == event->xany.window ) break;
+	VKButtonControl *bc = (VKButtonControl *)data;
 	switch( event->type ) {
 		case Expose:
 		case GraphicsExpose:
-			VKDrawButton(bb[i]);
+			VKDrawButton(bc);
 			break;
 		case ButtonRelease:
-			if( bb[i]->style==VKB_NORMAL )
-				bb[i]->action();
+			if( bc->style==VKB_NORMAL )
+				bc->action();
 			else
-				bb[i]->action(((XButtonEvent *)event)->y < bb[i]->h/2);
+				bc->action(((XButtonEvent *)event)->y < bc->h/2);
 			break;
 	}
 }
@@ -103,8 +98,7 @@ void VKCreateButton(Window p, VKButtonControl *b)
 	XSelectInput(display, b->win, MAIN_EVENT_MASKS);
 	XDefineCursor(display, b->win, vk_cursor);
 	b->gc = XCreateGC(display, b->win, 0, 0);
-	VKRegisterEvent(b->win, VKButtonControlProcess);
-	bb[bc++] = b;
+	VKRegisterEvent(b->win, VKButtonControlProcess, b);
 }
 /*----------------------------------------------------------------------------*/
 void VKDestroyButton(VKButtonControl *b)

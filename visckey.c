@@ -42,7 +42,9 @@
 #define	chr_Q	'Q'
 #define	chr_q	'q'
 /*----------------------------------------------------------------------------*/
+#ifndef WORDSIZE
 #define WORDSIZE	32
+#endif
 /*----------------------------------------------------------------------------*/
 int count;
 ushort word[WORDSIZE], *pw;
@@ -51,11 +53,13 @@ ushort backup[WORDSIZE];
 int vk_using = 0;
 int vk_method = VKM_TELEX;
 int vk_charset = VKC_UTF8;
+int vk_spelling = 1;
+/*----------------------------------------------------------------------------*/
 int vk_blength, vk_plength;
 char vk_buffer[256];
 char **vk_charmap = UTF8;
 /*----------------------------------------------------------------------------*/
-#ifdef VK_SPELL_CHECKING
+#ifdef VK_CHECK_SPELLING
 int vp = -1;
 int vpc = 0;
 int vps[WORDSIZE];
@@ -188,8 +192,10 @@ static inline void VKShiftBuffer()
 	tempoff = 0;
 	word[0] = word[count-1];
 	count = 1;
-#ifdef VK_SPELL_CHECKING
-	// FIXME: word[0] maybe a vowel with ascent
+#ifdef VK_CHECK_SPELLING
+	if( !vk_spelling ) return;
+
+	// FIXME: word[0] maybe a vowel with accent
 	if( !strchr(vowels, word[0]) ) {
 		vp = -1;
 		vpc = 0;
@@ -202,13 +208,13 @@ static inline void VKShiftBuffer()
 #endif
 }
 /*----------------------------------------------------------------------------*/
-#ifdef VK_SPELL_CHECKING
+#ifdef VK_CHECK_SPELLING
 static inline void VKAppend(ushort lastkey, char key)
 {
 	static char *spchk = "AIUEOYaiueoy|BDFJKLQSVWXZbdfjklqsvwxz|'`~?.^*+=";
 	static char *vwchk = "|ia|ua|oa|ai|ui|oi|au|iu|eu|ie|ue|oe|ye|ao|uo|eo|ay|uy|uu|ou|io|";
 
-	if( !tempoff ) {
+	if( vk_spelling && !tempoff ) {
 		int kp = strchr(spchk, key) - spchk;
 
 		if( !count ) {
@@ -254,6 +260,7 @@ static inline void VKAppend(ushort lastkey, char key)
 					vps[vpc++] = vp;
 					vp = count;
 				}
+				#undef lower
 			}
 		}
 		else
@@ -361,7 +368,8 @@ inline long VKAddKey( char key )
 /*----------------------------------------------------------------------------*/
 inline void VKClearBuffer()
 {
-	tempoff = count = *word = 0;
+	tempoff = count = *word = vpc = 0;
+	vp = -1;
 }
 /*----------------------------------------------------------------------------*/
 inline long VKBackspaceDelete()
@@ -370,7 +378,7 @@ inline long VKBackspaceDelete()
 		register ushort *u = UTF16;
 		register ushort c = word[ --count ];
 
-	#ifdef VK_SPELL_CHECKING
+	#ifdef VK_CHECK_SPELLING
 		if( vp==count ) vp = vps[--vpc];
 	#endif
 		if( tempoff==count ) tempoff = 0;
@@ -400,5 +408,13 @@ inline void VKChangeCharset(int id)
 	static char **cmap[] = { TCVN, VNI, VIQR, VISCII, VPS, UTF8 };
 	vk_charmap = cmap[vk_charset = (id % 6)];
 	VKClearBuffer();
+}
+/*----------------------------------------------------------------------------*/
+/* Check spelling                                                             */
+/*----------------------------------------------------------------------------*/
+inline void VKSetSpelling(int s)
+{
+	VKClearBuffer();
+	vk_spelling = s;
 }
 /*----------------------------------------------------------------------------*/

@@ -281,6 +281,7 @@ extern int XNextEvent(Display* display, XEvent *event)
 			VKInitResource(display, vk_using_atom, &vk_using, VKM_OFF);
 			VKInitResource(display, vk_method_atom, &vk_method, VKM_OFF);
 			VKInitResource(display, vk_charset_atom, &vk_charset, VKC_UTF8);
+			VKInitResource(display, vk_spelling_atom, &vk_spelling, 1);
 			VKInitHotkeyResource(display, &hotkey);
 			VKChangeCharset(vk_charset);
 
@@ -326,7 +327,7 @@ extern int XNextEvent(Display* display, XEvent *event)
 				char *name = XGetAtomName(display, ((XPropertyEvent *)event)->atom);
 				if( name!=NULL ) {
 					long id;
-					
+
 					if( !strcmp(name, VKP_HOTKEY) ) {
 						VKGetValues(display, ((XPropertyEvent *)event)->atom,
 									(long *)&hotkey, 2);
@@ -341,6 +342,9 @@ extern int XNextEvent(Display* display, XEvent *event)
 					else
 					if( !strcmp(name, VKP_USING) )
 						vk_using = id;
+					else
+					if( !strcmp(name, VKP_SPELLING) )
+						VKSetSpelling(id);
 					TRACE("%s[%ld]\n", name, id);
 					XFree(name);
 				}

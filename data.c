@@ -38,6 +38,7 @@ Window flash_window = None;
 int vk_method;
 int vk_charset;
 int vk_using;
+int vk_spelling = 1;
 int vk_interface = 0;
 char *vk_hotkey = NULL;
 /*----------------------------------------------------------------------------*/

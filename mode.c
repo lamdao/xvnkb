@@ -52,3 +52,11 @@ void VKResetMode()
 	}
 }
 /*----------------------------------------------------------------------------*/
+#ifdef VK_CHECK_SPELLING
+void VKSetSpelling(int s)
+{
+	if( display )
+		VKSetValue(display, vk_spelling_atom, s);
+}
+#endif
+/*----------------------------------------------------------------------------*/

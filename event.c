@@ -22,6 +22,7 @@
 typedef struct {
 	Window			window;
 	VKEventAction	action;
+	void			*data;
 } VKEventHandler;
 /*----------------------------------------------------------------------------*/
 #define MAX_HANDLERS	32
@@ -40,13 +41,14 @@ void VKReleaseFocus()
 	wfocus = None;
 }
 /*----------------------------------------------------------------------------*/
-void VKRegisterEvent(Window window, VKEventAction action)
+void VKRegisterEvent(Window window, VKEventAction action, void *data)
 {
 	int i;
 	for( i=0; i<MAX_HANDLERS; i++ )
 		if( !handlers[i].action || handlers[i].window==window ) {
 			handlers[i].window = window;
 			handlers[i].action = action;
+			handlers[i].data = data;
 			return;
 		}
 }
@@ -67,7 +69,7 @@ void VKDispatchEvent(XEvent *event)
 	Window w = wfocus!=None ? wfocus : event->xany.window;
 	for( i=0; i<MAX_HANDLERS; i++ )
 		if( handlers[i].action && w == handlers[i].window ) {
-			handlers[i].action( event );
+			handlers[i].action( event, handlers[i].data );
 			return;
 		}
 }
