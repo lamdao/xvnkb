@@ -23,6 +23,7 @@
 #include "flash.h"
 #include "session.h"
 #include "mainwin.h"
+#include "systray.h"
 #include "menu.h"
 #include "hotkey.h"
 #include "property.h"
@@ -53,7 +54,14 @@ void VKCheckMouseStatus()
 /*----------------------------------------------------------------------------*/
 void VKRootWindowProcess(XEvent *event, void *data)
 {
-	char *name = XGetAtomName(display, ((XPropertyEvent *)event)->atom);
+	char *name;
+
+	if( event->type == ClientMessage ) {
+		VKSystrayProcess(event);
+		return;
+	}
+
+	name = XGetAtomName(display, ((XPropertyEvent *)event)->atom);
 	if( name!=NULL ) { 
 		if( !strcmp(name, VKP_CHARSET) )
 			vk_charset = VKGetValue(display, ((XPropertyEvent *)event)->atom);
@@ -74,7 +82,7 @@ void VKRootWindowProcess(XEvent *event, void *data)
 /*----------------------------------------------------------------------------*/
 void VKMainProcess()
 {
-	XSelectInput(display, root, PropertyChangeMask);
+	XSelectInput(display, root, PropertyChangeMask|StructureNotifyMask);
 	VKRegisterEvent(root, VKRootWindowProcess, NULL);
 	while( !vk_done ) {
 		usleep(1000);
@@ -104,6 +112,7 @@ void VKInitialization()
 	VKLoadXResource();
 	VKCreateFlash();
 	VKShowFlash();
+	VKSystrayInit();
 	VKCreateMainWindow();
 	VKCreateMenuWindow();
 	VKCreateHotkeyWindow();
