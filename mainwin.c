@@ -34,7 +34,7 @@ void VKMainWindowProcess(XEvent *event, void *data);
 void VKDrawIcon()
 {
 	long x, y, h, l;
-	char *S = docking ? (vk_method == VKM_OFF ? "N" : "V") : Ss[vk_method];
+	char *S = vk_docking ? (vk_method == VKM_OFF ? "N" : "V") : Ss[vk_method];
 
 #ifdef USE_XFT
 	XftDraw *draw;
@@ -75,7 +75,16 @@ void VKSetDefaultColor()
 	clText = clRed;
 }
 /*----------------------------------------------------------------------------*/
-void VKCreateMainWindow()
+void VKSetMainWindowHints(int w, int h)
+{
+	XSizeHints sh;
+	sh.flags = PMinSize | PMaxSize;
+	sh.min_width = sh.max_width = w;
+	sh.min_height = sh.max_height = h;
+	XSetWMNormalHints(display, main_window, &sh);
+}
+/*----------------------------------------------------------------------------*/
+void VKCalcMainWindowSize()
 {
 #ifdef USE_XFT
 	XGlyphInfo fi;
@@ -86,7 +95,6 @@ void VKCreateMainWindow()
 	vk_icon_width = XTextWidth(vk_font, "Telex", 5) + 16;
 	vk_icon_height = 16 + vk_text_height;
 #endif
-	VKIconLoadInterface();
 	if( vk_x==-1 && vk_y==-1 ) {
 		vk_x = screen_width - vk_icon_width - 12;
 		vk_y = screen_height - vk_icon_height - 2;
@@ -104,6 +112,12 @@ void VKCreateMainWindow()
 		if( vk_y+vk_icon_height>=screen_height )
 			vk_y = screen_height - vk_icon_height - 1;
 	}
+}
+/*----------------------------------------------------------------------------*/
+void VKCreateMainWindow()
+{
+	VKIconLoadInterface();
+	VKCalcMainWindowSize();
 	main_window = XCreateWindow(display, root,
 					vk_x, vk_y, vk_icon_width, vk_icon_height, 0,
 					DefaultDepth(display, screen), InputOutput, visual,
@@ -119,11 +133,15 @@ void VKCreateMainWindow()
 #endif
 	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
 
+	VKSetMainWindowHints(vk_icon_height, vk_icon_height);
+
 	VKCheckSystray();
-	if( VKIsDockable() )
+	if( vk_docking && VKIsDockable() )
 		VKRequestDocking();
-	else
+	else {
+		vk_docking = 0;
 		XMapWindow(display, main_window);
+	}
 
 	VKSetDefaultColor();
 }
@@ -134,6 +152,22 @@ void VKDestroyMainWindow()
 
 	XFreeGC(display, main_gc);
 	XDestroyWindow(display, main_window);
+}
+/*----------------------------------------------------------------------------*/
+void VKDockMainWindow()
+{
+	vk_docking = 1;
+	VKDestroyMainWindow();
+	VKCreateMainWindow();
+	VKUpdateDockingMessage();
+}
+/*----------------------------------------------------------------------------*/
+void VKUndockMainWindow()
+{
+	vk_docking = 0;
+	VKDestroyMainWindow();
+	VKCreateMainWindow();
+	VKUpdateDockingMessage();
 }
 /*----------------------------------------------------------------------------*/
 void VKMainWindowProcess(XEvent *event, void *data)
@@ -153,7 +187,7 @@ void VKMainWindowProcess(XEvent *event, void *data)
 			dragging = event->xbutton.button==Button1;
 			break;
 		case MotionNotify:
-			if( !docking && dragging ) {
+			if( !vk_docking && dragging ) {
 				has_moved = True;
 				vk_x += event->xbutton.x_root - x;
 				vk_y += event->xbutton.y_root - y;
@@ -196,13 +230,15 @@ void VKMainWindowProcess(XEvent *event, void *data)
 				XRaiseWindow(display, main_window);
 			break;
 		case ReparentNotify:
-			docking = event->xreparent.parent != root;
+			//docking = event->xreparent.parent != root;
+			//VKUpdateDockingMessage();
 			break;
 		case ConfigureNotify:
 			vk_x = event->xconfigure.x;
 			vk_y = event->xconfigure.y;
 			vk_icon_width = event->xconfigure.width;
 			vk_icon_height = event->xconfigure.height;
+			VKSetMainWindowHints(vk_icon_width, vk_icon_height);
 			break;
 	}
 }

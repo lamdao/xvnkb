@@ -25,5 +25,6 @@ void VKHideMenu();
 void VKCreateMenuWindow();
 void VKMenuWindowProcess(XEvent *event, void *data);
 void VKDestroyMenuWindow();
+void VKUpdateDockingMessage();
 /*----------------------------------------------------------------------------*/
 #endif

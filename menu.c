@@ -20,6 +20,15 @@
 #include "data.h"
 #include "flash.h"
 #include "event.h"
+#include "mainwin.h"
+#include "systray.h"
+#include "menu.h"
+/*----------------------------------------------------------------------------*/
+#ifdef VK_CHECK_SPELLING
+#define DOCK_MSG_IDX	3
+#else
+#define DOCK_MSG_IDX	2
+#endif
 /*----------------------------------------------------------------------------*/
 typedef struct vk_menu_item {
 	int x, y;
@@ -48,6 +57,11 @@ typedef struct vk_menu {
 /*----------------------------------------------------------------------------*/
 #define MENU_PADDING	4
 /*----------------------------------------------------------------------------*/
+static char *vk_dock_message[][2] = {
+	{"Docking to systray", "Undocking"},
+	{"Đặt vào khay", "Gỡ khỏi khay"}
+};
+/*----------------------------------------------------------------------------*/
 vk_menu_item vk_menu_data[][25] =
 {
 	{
@@ -56,6 +70,7 @@ vk_menu_item vk_menu_data[][25] =
 #ifdef VK_CHECK_SPELLING
 	{ 0, 0, "Check spelling",		 7, &vk_spelling, 1 },
 #endif
+	{ 0, 0, NULL,					 8, NULL },
 	{ 0, 0, "Set hotkey",			 5, NULL },
 	{ 0, 0, "Set interface font",	 6, NULL },
 	{ 0, 0, "Input method",			 0 },
@@ -82,6 +97,7 @@ vk_menu_item vk_menu_data[][25] =
 #ifdef VK_CHECK_SPELLING
 	{ 0, 0, "Kiểm tra từ",			 7, &vk_spelling, 1 },
 #endif
+	{ 0, 0, NULL,					 8, NULL },
 	{ 0, 0, "Chọn phím bật/tắt",	 5, NULL },
 	{ 0, 0, "Chọn font giao diện",	 6, NULL },
 	{ 0, 0, "Kiểu gõ",				 0 },
@@ -206,6 +222,7 @@ void VKCreateMenuWindow()
 #endif
 	w = fi.width;
 
+	VKUpdateDockingMessage();
 	while( item && item->name ) {
 		switch( item->type ) {
 			case 0:
@@ -399,6 +416,12 @@ void MenuMousePress(vk_menu *m, XEvent *event)
 			VKSetSpelling(vk_spelling);
 			break;
 	#endif
+		case 8:
+			if( !vk_docking )
+				VKDockMainWindow();
+			else
+				VKUndockMainWindow();
+			break;
 	}
 	VKDrawIcon();
 	VKHideMenu();
@@ -451,5 +474,12 @@ void MenuProcess(XEvent *event, void *data)
 			MenuMouseMove(m, event);
 			break;
 	}
+}
+/*----------------------------------------------------------------------------*/
+void VKUpdateDockingMessage()
+{
+	vk_menu_item *item = &vk_menu_data[vk_interface][DOCK_MSG_IDX];
+	item->name = vk_dock_message[vk_interface][vk_docking];
+	item->length = strlen(item->name);
 }
 /*----------------------------------------------------------------------------*/

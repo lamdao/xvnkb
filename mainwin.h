@@ -23,5 +23,7 @@
 void VKCreateMainWindow();
 void VKMainWindowProcess(XEvent *event, void *data);
 void VKDestroyMainWindow();
+void VKDockMainWindow();
+void VKUndockMainWindow();
 /*----------------------------------------------------------------------------*/
 #endif
