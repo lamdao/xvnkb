@@ -187,6 +187,7 @@ vk_menu_item *CreateSubMenu(vk_menu_item *item, vk_menu_item *child)
 /*----------------------------------------------------------------------------*/
 void VKCreateMenuWindow()
 {
+	int h = 1, w;
 	char *s = menu.name;
 	vk_menu_item *citem = NULL;
 	vk_menu_item *item = vk_menu_data[vk_interface];
@@ -197,7 +198,7 @@ void VKCreateMenuWindow()
 	XRectangle fi;
 	XmbTextExtents(vk_fontset, s, strlen(s), 0, &fi);
 #endif
-	int h = 1, w = fi.width;
+	w = fi.width;
 
 	while( item && item->name ) {
 		switch( item->type ) {
