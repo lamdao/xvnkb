@@ -25,7 +25,11 @@
 #include "debug.h"
 /*----------------------------------------------------------------------------*/
 #include "visckey.h"
+#ifndef VK_USE_VIETKEYSTROKE
 #include "utf.h"
+#else
+#include "utf-vkstyle.h"
+#endif
 #include "viqr.h"
 #include "tcvn.h"
 #include "vni.h"
@@ -309,8 +313,30 @@ inline long VKAddKey( char key )
 	if( count>=30 )
 		VKShiftBuffer();
 
-	if( !count || tempoff )
+	if( !count || tempoff ) {
+	#ifdef VK_USE_EXTRASTROKE
+		if( !count ) {
+			i = 0;
+			while( m[i].level == 0 ) {
+				if( m[i].modifier == key ) break;
+				i++;
+			}
+			if( m[i].level == 0 ) {
+			#ifdef VK_CHECK_SPELLING
+				vpc = 1;
+				vps[vp = 0] = -1;
+				lvs[0] = key;
+			#endif
+				backup[ 0 ] = (ushort)key;
+				word[ count++ ] = (ushort)(int)m[i].code;
+				vk_plength = VKStrLen(word, 1);
+				VKMapToCharset(word, 1);
+				return -3;
+			}
+		}
+	#endif
 		VKAppendKey( word, count, key );
+	}
 
 	lastkey = word[ count-1 ];
 	for( i=0; m[i].modifier; i++ ) {
@@ -320,6 +346,23 @@ inline long VKAddKey( char key )
    	}
 	if( !v ) VKAppendKey( word, count, key );
 	switch( m[j].level ) {
+	#ifdef VK_USE_EXTRASTROKE
+		case 0:
+			c = word[ p=count-1 ];
+			if( c == (ushort)(int)v ) {
+				word[ tempoff=p ] = key;
+				i = -2;
+			}
+			else {
+				backup[ count ] = (ushort)key;
+				word[ count++ ] = (ushort)(int)v;
+				i = -3;
+				p++;
+			}
+			vk_plength = VKStrLen(&word[p], 1);
+			VKMapToCharset(&word[p], 1);
+			return i;
+	#endif
 		case 1:
 			c = word[ p=count-1 ];
 			break;
