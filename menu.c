@@ -141,7 +141,7 @@ void CreateMenuWindow(vk_menu *m, int w, int h)
 	m->w = w + 36;
 	m->h = h * (vk_text_height + 4) + MENU_PADDING;
 	m->tx = 12;
-	m->ty = vk_font->ascent + 4;
+	m->ty = vk_text_ascent + 4;
 	m->win = XCreateWindow(display, root,
 					m->x, m->y, m->w, m->h, 0,
 					DefaultDepth(display, screen), InputOutput, visual,
