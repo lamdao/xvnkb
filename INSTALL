@@ -10,19 +10,34 @@ o First of all:
 
       $ ./configure --x-dir=/path/to/Xlib
 
-    - Enable spell checking support
+    - Disable spelling check
 
-      $ ./configure --spell-check
+      $ ./configure --no-spellcheck
 
-    - Enable gtk2 support
+    - Enable extended keystroke 
+      (Rule: ] => u+, [ => o+, } => U+, { => O+, w => u+, W => U+)
 
-      $ ./configure --with-gtk2
+      $ ./configure --use-extstroke
 
-    - All above options can be combine together
+    - Enable programmer keystroke
+      (Rule: [ => u+, ] => o+, { => U+, } => O+, w => u+, W => U+)
+
+      $ ./configure --use-prostroke
+
+    - Enable ABC-liked Telex keystroke
+      (some additional features as ..... )
+
+      $ ./configure --use-abcstroke
+
+    - Without  X freetype
+
+      $ ./configure ----no-xft
+
+    - Some above options can be combined together
 	
-      $ ./configure --spell-check --with-gtk2
+      $ ./configure --use-extstroke --use-abcstroke
 
-    - Display help of configure script
+    - Display help information of configure script
 
       $ ./configure --help
 
