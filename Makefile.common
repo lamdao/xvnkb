@@ -9,7 +9,7 @@ CORE=xvnkb.so.$(VERSION)
 CORE_OBJS=xvnkb.o visckey.o property.o
 
 GUI=xvnkb
-GUI_OBJS=data.o flash.o main.o event.o mainwin.o menu.o hotkey.o \
+GUI_OBJS=data.o flash.o main.o event.o mainwin.o menu.o hotkey.o systray.o \
 		mode.o property.o session.o xconfig.o xresource.o label.o button.o
 
 
@@ -66,6 +66,6 @@ dep: Makefile.dep
 Makefile.dep:
 	@echo
 	@echo -n "Create $@ ... "
-	@$(CC) -I$(XLIB_INC) -MM *.c > $@
+	@$(CC) -MM *.c > $@
 	@echo done
 	@echo
