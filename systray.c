@@ -24,14 +24,14 @@
 #define SYSTEM_TRAY_BEGIN_MESSAGE	1
 #define SYSTEM_TRAY_CANCEL_MESSAGE	2
 /*----------------------------------------------------------------------------*/
-int docking = 0;
-/*----------------------------------------------------------------------------*/
 Window systray = None;
 /*----------------------------------------------------------------------------*/
 void VKCheckSystray()
 {
-	Atom systray_atom = XInternAtom(display, "_NET_SYSTEM_TRAY_S0", False);
-	systray = XGetSelectionOwner(display, systray_atom);
+	if( systray == None ) {
+		Atom systray_atom = XInternAtom(display, "_NET_SYSTEM_TRAY_S0", False);
+		systray = XGetSelectionOwner(display, systray_atom);
+	}
 }
 /*----------------------------------------------------------------------------*/
 void VKRequestDocking()
