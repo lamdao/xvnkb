@@ -244,7 +244,6 @@ void VKDestroyMenuWindow()
 			VKUnregisterEvent(mi->menu->win);
 			XFreeGC(display, mi->menu->gc);
 			XDestroyWindow(display, mi->menu->win);
-			free(mi);
 		}
 	}
 	VKUnregisterEvent(menu.win);
