@@ -80,7 +80,15 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 	int i, len;
 	int state = event->state;
 	KeySym key = XKeycodeToKeysym(display, event->keycode,
-										state & VK_UPPERCASE_STATES ? 1 : 0);
+					state & VK_SHIFT ? 1 : 0);
+
+	if( (state & VK_CAPS_LOCK) ) {
+		if( key >= 'A' && key <= 'Z' )
+			key = tolower(key);
+		else
+		if( key >= 'a' && key <= 'z' )
+			key = toupper(key);
+	}
 
 	if( key==hotkey.sym && (state & hotkey.state)==hotkey.state ) {
 		bk = 0;
@@ -89,8 +97,16 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 		VKSetValue(display, vk_method_atom, vk_method);
 	#endif
 		TRACE("m=%d, u=%d, c=%d\n", vk_method, vk_using, vk_charset);
+		return;
 	}
-	else
+
+	if( vk_method == VKM_VNI && (state & VK_SHIFT) ) {
+		static char *vni_shift = ")!@#$%^&*(";
+
+		if( (sp = strchr(vni_shift, key)) )
+			key = '0' + sp - vni_shift;
+	}
+
 	switch( key ) {
 		case XK_Linefeed:
 		case XK_Clear:
