@@ -340,8 +340,12 @@ inline long VKAddKey( char key )
 
 	lastkey = word[ count-1 ];
 	for( i=0; m[i].modifier; i++ ) {
-		if( lastkey==m[i].modifier && m[i].level==2 )
+		/*
+		if( lastkey==m[i].modifier && m[i].level==2 ) {
+			DUMP("dzo^ = %d, %d, %c, %c\n", i, lastkey, lastkey, m[i].modifier);
 			VKAppendKey( word, count, key );
+		}
+		*/
 		if( key==m[i].modifier ) v = m[j=i].code;
    	}
 	if( !v ) VKAppendKey( word, count, key );
@@ -369,7 +373,8 @@ inline long VKAddKey( char key )
 		case 1:
 			c = word[ p=count-1 ];
 	#ifdef VK_USE_EXTRASTROKE
-			if( (key == 'w' || key == 'W') && (wcase || strchr(consonants, c)) ) {
+			if( (key == 'w' || key == 'W') &&
+				(wcase || c == utf_d9 || c == utf_D9 || strchr(consonants, c)) ) {
 				for( i = 0; !m[i].level && m[i].modifier != key; i++ );
 				v = m[i].code;
 				goto __extra_case;
@@ -411,7 +416,7 @@ inline long VKAddKey( char key )
 	}
 	else {
 		word[tempoff=count++] = (ushort)key;
-		word[p] = backup[p];
+		word[p] = v[i].r1;//backup[p];
 	}
 
 	VKMapToCharset(&word[p], count-p);
