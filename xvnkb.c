@@ -76,7 +76,9 @@ static char *separators[] = {
 /*----------------------------------------------------------------------------*/
 static void __attribute__ ((constructor)) xvnkb_init(void)
 {
-	putenv("GTK_IM_MODULE=xim");
+	static char gtk_xim_module[24] = "GTK_IM_MODULE=xim";
+
+	putenv(gtk_xim_module);
 	/* TODO:
 	 - Initialize some more variables
 	 */
@@ -108,12 +110,14 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 		return;
 	}
 
+/*
 	if( vk_method == VKM_VNI && (state & VK_SHIFT) ) {
 		static char *vni_shift = ")!@#$%^&*(";
 
 		if( (sp = strchr(vni_shift, key)) )
 			key = '0' + sp - vni_shift;
 	}
+*/
 
 	switch( key ) {
 		case XK_Linefeed:
