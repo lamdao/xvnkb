@@ -74,6 +74,14 @@ static char *separators[] = {
 	" !@#$%&)_|\\-{}[]:\";<>,/",				// VKM_VIQR
 };
 /*----------------------------------------------------------------------------*/
+static void __attribute__ ((constructor)) xvnkb_init(void)
+{
+	putenv("GTK_IM_MODULE=xim");
+	/* TODO:
+	 - Initialize some more variables
+	 */
+}
+/*----------------------------------------------------------------------------*/
 static inline void key_handler(Display *display, XKeyEvent *event)
 {
 	char *sp;
