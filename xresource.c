@@ -124,6 +124,14 @@ void VKFontSetInit()
 }
 #endif
 /*----------------------------------------------------------------------------*/
+inline void VKAllocColorName(char *name, ulong *color)
+{
+	XColor c;
+	XParseColor(display, colormap, name, &c);
+	XAllocColor(display, colormap, &c);
+	*color = c.pixel;
+}
+/*----------------------------------------------------------------------------*/
 void VKLoadPalette()
 {
 #ifdef USE_XFT
@@ -135,29 +143,13 @@ void VKLoadPalette()
 	XftColorAllocName(display, visual, colormap, "gray", &clGray );
 	XftColorAllocName(display, visual, colormap, "SteelBlue", &clMenuBar );
 #else
-	XColor color;
-
-	XParseColor(display, colormap, "red", &color);
-	XAllocColor(display, colormap, &color);
-	clRed = color.pixel;
-	XParseColor(display, colormap, "yellow", &color);
-	XAllocColor(display, colormap, &color);
-	clYellow = color.pixel;
-	XParseColor(display, colormap, "white", &color);
-	XAllocColor(display, colormap, &color);
-	clWhite = color.pixel;
-	XParseColor(display, colormap, "black", &color);
-	XAllocColor(display, colormap, &color);
-	clBlack = color.pixel;
-	XParseColor(display, colormap, "blue", &color);
-	XAllocColor(display, colormap, &color);
-	clBlue = color.pixel;
-	XParseColor(display, colormap, "gray", &color);
-	XAllocColor(display, colormap, &color);
-	clGray = color.pixel;
-	XParseColor(display, colormap, "SteelBlue", &color);
-	XAllocColor(display, colormap, &color);
-	clMenuBar = color.pixel;
+	VKAllocColorName("red", &clRed);
+	VKAllocColorName("yellow", &clYellow);
+	VKAllocColorName("white", &clWhite);
+	VKAllocColorName("black", &clBlack);
+	VKAllocColorName("blue", &clBlue);
+	VKAllocColorName("gray", &clGray);
+	VKAllocColorName("SteelBlue", &clMenuBar);
 #endif
 }
 /*----------------------------------------------------------------------------*/
