@@ -63,7 +63,16 @@ vk_hotkey_info hotkey = {
 /*----------------------------------------------------------------------------*/
 static int bk = 0;
 /*----------------------------------------------------------------------------*/
-static char *separators = " !@#$%&)_|\\-{}[]:\";<>,/'`~?.^*(+=";
+static char *separators[] = {
+	" ",										// VKM_OFF
+	" !@#$%&)_|\\-{}[]:\";<>,/'`~?.^*(+=",		// VKM_VNI
+	" !@#$%&)_|\\-:\";<>,/'`~?.^*(+="			// VKM_TELEX
+#ifndef VK_USE_EXTRASTROKE
+	"{}[]"
+#endif
+	,
+	" !@#$%&)_|\\-{}[]:\";<>,/",				// VKM_VIQR
+};
 /*----------------------------------------------------------------------------*/
 static inline void key_handler(Display *display, XKeyEvent *event)
 {
@@ -115,34 +124,56 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 			}
 			break;
 		default:
-			if( vk_method==VKM_OFF || key>0xFF ) break;
+			if( vk_method==VKM_OFF || key>0xFF || key<0x01 ) break;
 
-			sp = strchr(separators, key);
-			if( (sp && (vk_method!=VKM_VIQR || sp-separators<23)) ||
-				(state & VK_NOTACCEPT_STATES) ) {
+			sp = strchr(separators[vk_method], key);
+			if( sp || (state & VK_NOTACCEPT_STATES) ) {
 				VKClearBuffer();
 				break;
 			}
 
-			if( VKAddKey(key)>=0 ) {
-				xk.display = display;
-				xk.window = focus;
-				xk.keycode = VK_MAGIC_CHAR;
-				xk.time = event->time;
-				xk.serial = event->serial;
-				XPutBackEvent(display, (XEvent *)&xk);
-
-				xk.keycode = bs;
-				for( bk=1, i=0; i<vk_plength-1; i++, bk++ ) {
-					xk.time -= 2;
-					xk.serial--;
+			switch( VKAddKey(key) ) {
+				case -1:
+					break;
+			#ifdef VK_USE_EXTRASTROKE
+				case -2:
+					xk.display = display;
+					xk.window = focus;
+					xk.keycode = VK_MAGIC_CHAR;
+					xk.time = event->time;
+					xk.serial = event->serial;
 					XPutBackEvent(display, (XEvent *)&xk);
-				}
-				rk = event->keycode;
-				event->time = xk.time - 2;
-				event->serial = xk.serial - 1;
-				event->keycode = bs;
-				event->state = 0;
+					rk = event->keycode;
+					event->time -= 2;
+					event->serial -= 1;
+					event->keycode = bs;
+					event->state = 0;
+					break;
+				case -3:
+					event->keycode = VK_MAGIC_CHAR;
+					event->state = 0;
+					break;
+			#endif
+				default:
+					xk.display = display;
+					xk.window = focus;
+					xk.keycode = VK_MAGIC_CHAR;
+					xk.time = event->time;
+					xk.serial = event->serial;
+					XPutBackEvent(display, (XEvent *)&xk);
+
+					xk.keycode = bs;
+					for( bk=1, i=0; i<vk_plength-1; i++, bk++ ) {
+						xk.time -= 2;
+						xk.serial--;
+						XPutBackEvent(display, (XEvent *)&xk);
+					}
+					rk = event->keycode;
+					event->time = xk.time - 2;
+					event->serial = xk.serial - 1;
+					event->keycode = bs;
+					event->state = 0;
+					break;
 			}
 	}
 }
