@@ -49,6 +49,12 @@ install: all
 uninstall:
 	@./xvnkb_uninstall
 
+old_install:
+	@./script/install.sh
+
+old_uninstall:
+	@./script/uninstall.sh
+
 debug: clean
 	@$(MAKE) CFLAGS="-DDEBUG $(CFLAGS)"
 
