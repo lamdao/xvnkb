@@ -1,4 +1,7 @@
 0.2.8:
+	* 2004/01/07:
+	- Add dock/undock capabilities
+	- Save docking information to resource file
 	* 2004/01/06:
 	- GUI - dockable to systray
 	- CORE - force setting GTK_IM_MODILE=xim (work around for gtk2/gnome2)
