@@ -305,8 +305,10 @@ extern int XNextEvent(Display* display, XEvent *event)
 		case KeyPress:
 			if( bk )
 				bk--;
-			else
+			else {
+				focus = ((XKeyEvent *)event)->window;
 				key_handler(display, (XKeyEvent *)event);
+			}
 			break;
 		case FocusIn:
 			rk = bk = 0;
