@@ -160,11 +160,11 @@ xvnkb  - Vietnamese keyboard input for X-Window
       Ex: release number is 2.2.0
          "/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
 
-      Or just use 
+      More simpler:
+
          export GTK_IM_MODULE=xim
-      insteads of 
-         export GTK_IM_MODULE=/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so
-      in the above files.
+
+      Gtk will lookup for you automatically.
 
 
 Thank you for using xvnkb!!! Have fun!!!

@@ -159,6 +159,12 @@ xvnkb  - Vietnamese keyboard input for X-Window
     Vi' du.: so^' release la` 2.2.0
         "/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
 
+    Ca'ch ddo+n gia?n ho+n:
+
+        export GTK_IM_MODULE=xim
+
+    Gtk se~ tu+. ddo^.ng ti`m giu'p ba.n
+
 Ca'm o+n ba.n dda~ su+? du.ng xvnkb!!! Chu'c ba.n la`m vie^.c vui ve? !!!
 
 Dao Hai Lam <lam@visc-network.com>
