@@ -1,7 +1,7 @@
 #!/bin/sh
 ln -sf ./config/configure .
-ln -sf ./scripts/install.sh ./xvnkb_install
-ln -sf ./scripts/uninstall.sh ./xvnkb_uninstall
+ln -sf ./scripts/new_install.sh ./xvnkb_install
+ln -sf ./scripts/new_uninstall.sh ./xvnkb_uninstall
 ln -sf ./scripts/xvnkb.lconf.sh ./xvnkb_localeconf
 ln -sf ./Makefile.linux ./Makefile.sunos
 ln -sf ./Makefile.linux ./tools/Makefile.sunos
