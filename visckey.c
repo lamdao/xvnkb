@@ -48,7 +48,6 @@
 /*----------------------------------------------------------------------------*/
 int count;
 ushort word[WORDSIZE], *pw;
-ushort backup[WORDSIZE];
 /*----------------------------------------------------------------------------*/
 int vk_using = 0;
 int vk_method = VKM_TELEX;
@@ -294,7 +293,7 @@ static inline void VKAppend(ushort lastkey, char key)
 /*----------------------------------------------------------------------------*/
 #define VKAppendKey( word, count, key )	\
 {										\
-	VKAppend(lastkey, key);				\
+	VKAppend(c, key);					\
 	return -1;							\
 }
 /*----------------------------------------------------------------------------*/
@@ -302,7 +301,7 @@ inline long VKAddKey( char key )
 {
 	int p = -1;
 	int i, j=-1;
-	ushort c, cc, lastkey = 0;
+	ushort c = 0, cc;
 	modifier_t *m = modes[ vk_method-1 ];
 	vietcode_t *v = NULL;
 	#ifdef VK_USE_EXTRASTROKE
@@ -326,33 +325,25 @@ inline long VKAddKey( char key )
 				vps[vp = 0] = -1;
 				lvs[0] = key;
 			#endif
-				backup[ 0 ] = (ushort)key;
 				wcase = (key == 'w' || key == 'W');
 				word[ count++ ] = (ushort)(int)m[i].code;
-				vk_plength = VKStrLen(word, 1);
 				VKMapToCharset(word, 1);
 				return -3;
 			}
 		}
 	#endif
+		wcase = 0;
 		VKAppendKey( word, count, key );
 	}
 
-	lastkey = word[ count-1 ];
-	for( i=0; m[i].modifier; i++ ) {
-		/*
-		if( lastkey==m[i].modifier && m[i].level==2 ) {
-			DUMP("dzo^ = %d, %d, %c, %c\n", i, lastkey, lastkey, m[i].modifier);
-			VKAppendKey( word, count, key );
-		}
-		*/
+	c = word[ p=count-1 ];
+	for( i=0; m[i].modifier; i++ )
 		if( key==m[i].modifier ) v = m[j=i].code;
-   	}
 	if( !v ) VKAppendKey( word, count, key );
+
 	switch( m[j].level ) {
 	#ifdef VK_USE_EXTRASTROKE
 		case 0:
-			c = word[ p=count-1 ];
 	__extra_case:
 			vk_plength = VKStrLen(&word[p], 1);
 			if( c == (ushort)(int)v ) {
@@ -361,7 +352,6 @@ inline long VKAddKey( char key )
 				i = -2;
 			}
 			else {
-				backup[ count ] = (ushort)key;
 				word[ count++ ] = (ushort)(int)v;
 				wcase = (key == 'w' || key == 'W');
 				i = -3;
@@ -371,7 +361,6 @@ inline long VKAddKey( char key )
 			return i;
 	#endif
 		case 1:
-			c = word[ p=count-1 ];
 	#ifdef VK_USE_EXTRASTROKE
 			if( (key == 'w' || key == 'W') &&
 				(wcase || c == utf_d9 || c == utf_D9 || strchr(consonants, c)) ) {
@@ -382,9 +371,9 @@ inline long VKAddKey( char key )
 			wcase = 0;
 	#endif
 			break;
-		default:
 		case 2:
-			i = count - 1;
+		default:
+			i = p;
 			while( i>=0 && word[i]<0x80 && !strchr( vowels, word[i] ) ) i--;
 			if( i<0 ) VKAppendKey(word, count, key);
 
@@ -410,14 +399,8 @@ inline long VKAddKey( char key )
 	for( i=0; (cc=v[i].c)!=0 && c!=cc; i++ );
 	if( !cc ) VKAppendKey( word, count, key );
 	vk_plength = VKStrLen(&word[p], count-p);
-	if( !v[i].r2 ) {
-		backup[p] = c;
-		word[p] = v[i].r1;
-	}
-	else {
-		word[tempoff=count++] = (ushort)key;
-		word[p] = v[i].r1;//backup[p];
-	}
+	if( v[i].r2 ) word[tempoff=count++] = (ushort)key;
+	word[p] = v[i].r1;
 
 	VKMapToCharset(&word[p], count-p);
 	return p;
