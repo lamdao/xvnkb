@@ -24,6 +24,7 @@
 #define	VK_CAPS_LOCK			0x02
 #define VK_CONTROL				0x04
 #define VK_ALT					0x08
+#define VK_WINKEY				0x40
 #define	VK_NUM_LOCK				0x10
 #define	VK_SCROLL_LOCK			0x80
 #define	VK_NOTACCEPT_STATES		0x6C

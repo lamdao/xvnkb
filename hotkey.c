@@ -229,6 +229,7 @@ void VKParseHotkey(char *s, int *state, KeySym *sym)
 		{"Alt",		VK_ALT},
 		{"Control",	VK_CONTROL},
 		{"Shift",	VK_SHIFT},
+		{"Winkey",	VK_WINKEY},
 		{NULL, 0}
 	};
 
@@ -294,11 +295,12 @@ void VKParseKeyEvent(XKeyEvent *event)
 			VKHideHotkeyWindow();
 			break;
 		default:
-			if( state & (VK_ALT|VK_CONTROL|VK_SHIFT) ) {
+			if( state & (VK_ALT|VK_CONTROL|VK_SHIFT|VK_WINKEY) ) {
 				*v = 0;
 				if( state & VK_ALT ) strcat(v, "Alt ");
 				if( state & VK_CONTROL ) strcat(v, "Control ");
 				if( state & VK_SHIFT ) strcat(v, "Shift ");
+				if( state & VK_WINKEY ) strcat(v, "Winkey ");
 				strcat(v, XKeysymToString(k));
 				VKSetLabel(&hk.value, v);
 			}
