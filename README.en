@@ -121,30 +121,41 @@ xvnkb  - Vietnamese keyboard input for X-Window
     # ln -s /usr/share/locale/en_US.UTF-8 en_US.UTF-8
     # ln -s /usr/share/locale/vi_VN.UTF-8 vi_VN.UTF-8
 
-	* Gtk/Gnome 2.x
-	Gtk/Gnome 2.x applications can use xvnkb with X-Input-Method.
-	- Temporary setting: right click on	input box and choose X-Input-Method
-	- Permanent setting:
-	Edit file /etc/gtk-2.0/gtk.modules like this:
-	,-- /etc/gtk-2.0/gtk.modules ------------------------------------
-	| ...
-	|
-	| "/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so" 
-	| "xim" "X Input Method" "gtk+" "/usr/share/locale" "ko:ja:zh:vi"
-	|
-	| ...
-	|
-	| #"/usr/lib/gtk-2.0/<gtk-release>/immodules/im-viqr.so" 
-	| #"viqr" "Vietnamese (VIQR)" "gtk+" "/usr/share/locale" "vi"
-	|
-	| ...
-	`----------------------------------------------------------------
+    * Gtk/Gnome 2.x
+    Gtk/Gnome 2.x applications can use xvnkb with X-Input-Method.
+    - Temporary setting: right click on input box and choose X-Input-Method
+    - Permanent setting:
+      o For whole system
+        Edit file /etc/gtk-2.0/gtk.modules like this:
+        ,--[ /etc/gtk-2.0/gtk.modules ]----------------------------------
+        | ...
+        |
+        | "/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so" 
+        | "xim" "X Input Method" "gtk+" "/usr/share/locale" "ko:ja:zh:vi"
+        |
+        | ...
+        |
+        | #"/usr/lib/gtk-2.0/<gtk-release>/immodules/im-viqr.so" 
+        | #"viqr" "Vietnamese (VIQR)" "gtk+" "/usr/share/locale" "vi"
+        |
+        | ...
+        `----------------------------------------------------------------
 
-	Where:
-		<gtk-release>: exactly release number of gtk in your system
+      o For normal user:
+        Add following line to $HOME/.bash_profile or $HOME/.xinitrc
+        ,--[ $HOME/.bash_profile or $HOME/.xinitrc ] --------------------
+        | ...
+        |
+        | export GTK_IM_MODULE=/usr/lib/gtk-2.0/<gtk-release>/immodules/im-xim.so
+        |
+        | ...
+        `----------------------------------------------------------------
 
-	Ex: release number is 2.2.0
-		"/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
+      Where:
+         <gtk-release>: exactly release number of gtk in your system
+
+      Ex: release number is 2.2.0
+         "/usr/lib/gtk-2.0/2.2.0/immodules/im-xim.so"
 
 Thank you for using xvnkb!!! Have fun!!!
 
