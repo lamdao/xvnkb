@@ -87,6 +87,7 @@ extern int vk_charset;
 extern int vk_using;
 extern int vk_spelling;
 extern int vk_interface;
+extern int vk_docking;
 extern char *vk_hotkey;
 /*----------------------------------------------------------------------------*/
 extern int vk_icon_width;
