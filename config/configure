@@ -39,7 +39,7 @@ else
 fi
 
 echo
-echo "xvnkb $version configuration..."
+echo "xvnkb $version"
 echo
 
 if [ "$xcc" = "" ]; then
@@ -79,8 +79,13 @@ for a in $*; do
 			;;
 
 		--help)
-#			echo "$0 [--help] [--prefix=<path>] [--x-dir=<path>] [--spell-check]."
-			echo "$0 [--help] [--x-dir=<path>] [--no-spellcheck] [--no-xft]."
+			echo "Usage: ./configure [OPTION]... [VAR=VALUE]..."
+			echo ""
+			echo "Options:"
+			echo "--help             Display help and exit"
+			echo "--x-dir=DIR        Xlib path"
+			echo "--no-spellcheck    Spelling check"
+			echo "--no-xft           X freetype"
 			echo
 			exit
 			;;
