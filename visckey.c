@@ -48,6 +48,7 @@
 /*----------------------------------------------------------------------------*/
 int count;
 ushort word[WORDSIZE], *pw;
+ushort backup[WORDSIZE];
 /*----------------------------------------------------------------------------*/
 int vk_using = 0;
 int vk_method = VKM_TELEX;
@@ -222,6 +223,7 @@ static inline void VKAppend(ushort lastkey, char key)
 				vps[vp = 0] = -1;
 				lvs[0] = key;
 			}
+			else
 			if( kp>37 )
 				return;
 			else {
@@ -300,7 +302,7 @@ static inline void VKAppend(ushort lastkey, char key)
 inline long VKAddKey( char key )
 {
 	int p = -1;
-	int i, j=-1;
+	int i, j = -1;
 	ushort c = 0, cc;
 	modifier_t *m = modes[ vk_method-1 ];
 	vietcode_t *v = NULL;
@@ -308,7 +310,7 @@ inline long VKAddKey( char key )
 	static int wcase = 0;
 	#endif
 
-	if( count>=30 )
+	if( count >= 30 )
 		VKShiftBuffer();
 
 	if( !count || tempoff ) {
@@ -325,20 +327,21 @@ inline long VKAddKey( char key )
 				vps[vp = 0] = -1;
 				lvs[0] = key;
 			#endif
-				wcase = (key == 'w' || key == 'W');
+				backup[ 0 ] = (ushort)key;
 				word[ count++ ] = (ushort)(int)m[i].code;
+				wcase = (key == 'w' || key == 'W');
 				VKMapToCharset(word, 1);
 				return -3;
 			}
 		}
-	#endif
 		wcase = 0;
+	#endif
 		VKAppendKey( word, count, key );
 	}
 
-	c = word[ p=count-1 ];
-	for( i=0; m[i].modifier; i++ )
-		if( key==m[i].modifier ) v = m[j=i].code;
+	c = word[ p = count-1 ];
+	for( i = 0; m[i].modifier; i++ )
+		if( key == m[i].modifier ) v = m[j = i].code;
 	if( !v ) VKAppendKey( word, count, key );
 
 	switch( m[j].level ) {
@@ -347,11 +350,12 @@ inline long VKAddKey( char key )
 	__extra_case:
 			vk_plength = VKStrLen(&word[p], 1);
 			if( c == (ushort)(int)v ) {
-				word[ tempoff=p ] = key;
+				word[ tempoff = p ] = key;
 				wcase = 0;
 				i = -2;
 			}
 			else {
+				backup[ count ] = (ushort)key;
 				word[ count++ ] = (ushort)(int)v;
 				wcase = (key == 'w' || key == 'W');
 				i = -3;
@@ -374,33 +378,42 @@ inline long VKAddKey( char key )
 		case 2:
 		default:
 			i = p;
-			while( i>=0 && word[i]<0x80 && !strchr( vowels, word[i] ) ) i--;
-			if( i<0 ) VKAppendKey(word, count, key);
+			while( i >= 0 && word[i] < 0x80 && !strchr(vowels, word[i]) ) i--;
+			if( i < 0 ) VKAppendKey(word, count, key);
 
-			while( i-1>=0 && ( strchr(vowels, word[i-1]) || word[i-1]>0x80 ) &&
-				utf_vn_cmp( word[i-1], word[i] )<0 ) i--;
-			if( i==count-1 && i-1>=0 &&	(j=ui_group( word[i-1] ))>0 )
+			while( i-1 >= 0 &&
+				(strchr(vowels, word[i-1]) || word[i-1] > 0x80) &&
+				utf_vn_cmp( word[i-1], word[i] ) < 0 ) i--;
+			if( i == count-1 && i-1 >= 0 &&	(j = ui_group(word[i-1])) > 0 )
 			switch( word[i] ) {
 				case chr_a:
 				case chr_A:
-					if( i-2<0 ||
-						(j<24 && word[i-2]!=chr_q && word[i-2]!=chr_Q) ||
-						(j>24 && word[i-2]!=chr_g && word[i-2]!=chr_G) ) i--;
+					if( i-2 < 0 ||
+						(j < 24 && word[i-2] != chr_q && word[i-2] != chr_Q) ||
+						(j > 24 && word[i-2] != chr_g && word[i-2] != chr_G) )
+						i = i - 1;
 					break;
 				case chr_u:
 				case chr_U:
-					if( i-2<0 || (word[i-2]!=chr_g && word[i-2]!=chr_G) ) i--;
+					if( i-2 < 0 || (word[i-2] != chr_g && word[i-2] != chr_G) )
+						i = i - 1;
 					break;
 			}
-			c = word[p=i];
+			c = word[p = i];
 			break;
 	}
 
-	for( i=0; (cc=v[i].c)!=0 && c!=cc; i++ );
+	for( i = 0; (cc = v[i].c) != 0 && c != cc; i++ );
 	if( !cc ) VKAppendKey( word, count, key );
 	vk_plength = VKStrLen(&word[p], count-p);
-	if( v[i].r2 ) word[tempoff=count++] = (ushort)key;
-	word[p] = v[i].r1;
+	if( !v[i].r2 ) {
+		word[ p ] = v[i].r1;
+		backup[ p ] = c;
+	}
+	else {
+		word[ tempoff = count++ ] = (ushort)key;
+		word[ p ] = backup[ p ];
+	}
 
 	VKMapToCharset(&word[p], count-p);
 	return p;
