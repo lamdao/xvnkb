@@ -223,28 +223,26 @@ if [ "$LANG" = "" -o "$LANG" = "UTF-8" -o "$LANG" = "vi_VN" ]; then
 fi
 
 echo
-echo "For using Unicode input, you have to set LANG=*UTF-8 (see README)"
+echo "For using Unicode input, you have to set LANG=*.UTF-8 (see README)"
 echo
 echo "Set LANG"
-echo "(1) UTF-8"
-echo "(2) $LANG.UTF-8"
-echo "(3) vi_VN.UTF-8"
-echo "(4) Do not modify <*>"
+echo "(1) $LANG.UTF-8"
+echo "(2) vi_VN.UTF-8"
+echo "(3) Do not modify <*>"
 echo
 echo -n "Please select a number: "
 read r
 
 case "$r" in
-	1) LANG="UTF-8";;
-	2) LANG="$LANG.UTF-8";;
-	3) LANG="vi_VN.UTF-8";;
+	1) LANG="$LANG.UTF-8";;
+	2) LANG="vi_VN.UTF-8";;
 	*) LANG="";;
 esac
 
 if [ "$LANG" = "" ]; then
 	echo
-	echo "You can set LANG=*UTF-8 manually to use Unicode input later."
-	echo "Also remember to create *UTF-8 locale"
+	echo "You can set LANG=*.UTF-8 manually to use Unicode input later."
+	echo "Also remember to create *.UTF-8 locale"
 	echo "See README for more information."
 else
 	check_locale
