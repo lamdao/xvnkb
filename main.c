@@ -147,11 +147,11 @@ void VKCheckSystem()
 	static char *locale_messages[] = {
 		"Missing locale information for LANG %s in\n"
 		"/usr/share/locale/%s.\n"
-		"We may not work with Vietnamese properly."
+		"We may not work with Vietnamese properly.%s\n"
 		"Please refer to xvnkb manual to create the information.",
 		"Không tìm thấy các thông tin về bản địa cho LANG %s tại\n"
 		"/usr/share/locale/%s.\n"
-		"Chúng ta có thể sẽ không làm việc được với tiếng Việt.\n"
+		"Chúng ta có thể sẽ không làm việc được với tiếng Việt.%s\n"
 		"Tham khảo thêm tài liệu của xvnkb để tạo các thông tin này."
 	};
 
@@ -210,7 +210,10 @@ void VKCheckSystem()
 				VKShowFlash();
 			}
 			else {
-				sprintf(buf, locale_messages[vk_interface], sys_lang, sys_lang);
+				extern int sys_utf8;
+				sprintf(buf, locale_messages[vk_interface], sys_lang, sys_lang,
+						sys_utf8 ? "" :
+						"\nAnd xvnkb will display Vietnamese text incorrectly.");
 				VKShowMessage(buf);
 			}
 		}
