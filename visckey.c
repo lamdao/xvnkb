@@ -45,7 +45,7 @@
 #define WORDSIZE	32
 /*----------------------------------------------------------------------------*/
 int count;
-ushort word[WORDSIZE];
+ushort word[WORDSIZE], *pw;
 ushort backup[WORDSIZE];
 /*----------------------------------------------------------------------------*/
 int vk_using = 0;
@@ -174,7 +174,7 @@ static inline void VKMapToCharset(register ushort *w, int count)
 {
 	register char *s;
 	if( !vk_charmap ) return;
-	for( s = vk_buffer; count>0; count--, w++ )
+	for( s = vk_buffer, pw = w; count>0; count--, w++ )
 		if( *w<127 )
 			*s++ = (char)*w;
 		else
