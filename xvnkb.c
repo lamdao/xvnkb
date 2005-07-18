@@ -289,7 +289,7 @@ static void VKInitResource(Display *display, Atom atom, int *resource,
 	if( value!=-1 )
 		*resource = value;
 	else
-		VKSetValue(display, atom, default_value);
+		VKSetValue(display, atom, *resource = default_value);
 }
 /*----------------------------------------------------------------------------*/
 static void VKInitHotkeyResource(Display *display, vk_hotkey_info *hotkey)
