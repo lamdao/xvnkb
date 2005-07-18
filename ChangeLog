@@ -1,4 +1,8 @@
 0.2.9:
+	* 2005/07/18:
+	- No need to check LOCALE anymore, almost distro are ready for UTF-8 locale
+	* 2005/04/01:
+	- Init default resource
 	* 2004/01/24:
 	- Fix telnet segmentation fault
 	- Remove fast VNI
