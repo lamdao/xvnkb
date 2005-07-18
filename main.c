@@ -180,6 +180,7 @@ void VKCheckSystem()
 			VKShowMessage(core_messages[vk_interface]);
 	}
 
+	/*
 	if( core_ok ) {
 		if( sys_lang && (strstr(sys_lang, "UTF-8") || strstr(sys_lang, "utf8")) )
 			lang_ok = 1;
@@ -218,6 +219,7 @@ void VKCheckSystem()
 			}
 		}
 	}
+	*/
 }
 /*----------------------------------------------------------------------------*/
 void VKFinalization()
