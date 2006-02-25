@@ -86,6 +86,10 @@ void VKSetMainWindowHints(int w, int h)
 /*----------------------------------------------------------------------------*/
 void VKCalcMainWindowSize()
 {
+	if( vk_docking ) {
+		VKSystrayCalcIconSize();
+		return;
+	}
 #ifdef USE_XFT
 	XGlyphInfo fi;
 	XftTextExtentsUtf8(display, vk_font, (uchar *)"Telex", 5, &fi);
