@@ -44,11 +44,11 @@
 #include "mode.h"
 /*----------------------------------------------------------------------------*/
 #ifdef USE_XFT
-#define VK_FONT_12			"helvetica:size=12:style=bold"
-#define VK_FONT_14			"helvetica:size=14:style=bold"
+#define VK_FONT_SMALL			"helvetica:size=9:style=bold"
+#define VK_FONT_LARGE			"helvetica:size=10:style=bold"
 #else
-#define VK_FONT_12			"*helvetica-bold-r*120*"
-#define VK_FONT_14			"*helvetica-bold-r*140*"
+#define VK_FONT_SMALL			"*helvetica-bold-r*-80-*"
+#define VK_FONT_LARGE			"*helvetica-bold-r*-100-*"
 #endif
 #define VK_VN_FONT			"-*-clearlyu-medium-r-normal--*-*-*-*-*-*-iso10646-1"
 /*----------------------------------------------------------------------------*/
