@@ -125,7 +125,7 @@ void VKInitResource()
 	visual = DefaultVisual(display, screen);
 	root = RootWindow(display, screen);
 	old_error_handler = XSetErrorHandler(VKErrorHandler);
-	vk_font_name = VK_FONT_12;
+	vk_font_name = VK_FONT_SMALL;
 }
 /*----------------------------------------------------------------------------*/
 void VKStartSession()

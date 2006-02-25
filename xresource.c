@@ -90,7 +90,7 @@ void VKUseDefaultFont()
 {
 	if( vk_font_name ) free(vk_font_name);
 	vk_font_name = vk_interface==VK_ENGLISH ?
-		strdup(screen_width<=800 ? VK_FONT_12 : VK_FONT_14) :
+		strdup(screen_width<=800 ? VK_FONT_SMALL : VK_FONT_LARGE) :
 		strdup(VK_VN_FONT);
 }
 /*----------------------------------------------------------------------------*/
@@ -169,7 +169,7 @@ void VKLoadXResource()
 	VKLoadPalette();
 
 	if( !vk_font_name )
-		vk_font_name = strdup(screen_width<=800 ? VK_FONT_12 : VK_FONT_14);
+		vk_font_name = strdup(screen_width<=800 ? VK_FONT_SMALL : VK_FONT_LARGE);
 
 	if( !vk_font_name ) error("Error: not enough memory!");
 #ifdef USE_XFT
@@ -179,7 +179,7 @@ void VKLoadXResource()
 #else
 	vk_font = XLoadQueryFont(display, vk_font_name);
 	if( !vk_font )
-		vk_font = XLoadQueryFont(display, screen_width<=800 ? VK_FONT_12 : VK_FONT_14);
+		vk_font = XLoadQueryFont(display, screen_width<=800 ? VK_FONT_SMALL : VK_FONT_LARGE);
 	VKFontSetInit();
 #endif
 	if( !vk_font ) error("Cannot load font %s\n", vk_font_name);
