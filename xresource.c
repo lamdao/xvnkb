@@ -21,11 +21,10 @@
 #include <locale.h>
 /*----------------------------------------------------------------------------*/
 int sys_utf8 = 1;
-char *sys_lang = NULL;
 /*----------------------------------------------------------------------------*/
 void VKLocaleInit()
 {
-	char *lang = sys_lang = getenv("LANG");
+	char *lang = getenv("LANG");
 	lang = lang ? strdup(lang) : strdup("en_US");
 	if( !strstr(lang, ".UTF-8") ) {
 		char env[256];
