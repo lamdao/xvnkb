@@ -161,7 +161,7 @@ void CalculateItemWidth(vk_menu_item *current, vk_menu_item *item)
 	char *s = item->name;
 #ifdef USE_XFT
 	XGlyphInfo fi;
-	XftTextExtentsUtf8(display, vk_font, s, item->length = strlen(s), &fi);
+	XftTextExtentsUtf8(display, vk_font, (uchar *)s, item->length = strlen(s), &fi);
 #else
 	XRectangle fi;
 	XmbTextExtents(vk_fontset, s, item->length = strlen(s), 0, &fi);
@@ -215,7 +215,7 @@ void VKCreateMenuWindow()
 	vk_menu_item *item = vk_menu_data[vk_interface];
 #ifdef USE_XFT
 	XGlyphInfo fi;
-	XftTextExtentsUtf8(display, vk_font, s, strlen(s), &fi);
+	XftTextExtentsUtf8(display, vk_font, (uchar *)s, strlen(s), &fi);
 #else
 	XRectangle fi;
 	XmbTextExtents(vk_fontset, s, strlen(s), 0, &fi);

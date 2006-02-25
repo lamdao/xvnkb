@@ -131,7 +131,7 @@ void VKCreateMsgBoxWindow(char *message)
 	msgbox.text = p;
 	p = strtok(p, "\n");
 #ifdef USE_XFT
-	XftTextExtentsUtf8(display, vk_font, p, j = strlen(p), &fi);
+	XftTextExtentsUtf8(display, vk_font, (uchar *)p, j = strlen(p), &fi);
 #else
 	XmbTextExtents(vk_fontset, p, j = strlen(p), 0, &fi);
 #endif
@@ -143,7 +143,7 @@ void VKCreateMsgBoxWindow(char *message)
 		p = strtok(0, "\n");
 		if( !p ) break;
 #ifdef USE_XFT
-		XftTextExtentsUtf8(display, vk_font, p, j = strlen(p), &fi);
+		XftTextExtentsUtf8(display, vk_font, (uchar *)p, j = strlen(p), &fi);
 #else
 		XmbTextExtents(vk_fontset, p, j = strlen(p), 0, &fi);
 #endif
@@ -164,7 +164,7 @@ void VKCreateMsgBoxWindow(char *message)
 	for( i = 0; i < 2; i++ ) {
 		VKButtonControl *b = &B[i];
 	#ifdef USE_XFT
-		XftTextExtentsUtf8(display, vk_font, b->text, strlen(b->text), &fi);
+		XftTextExtentsUtf8(display, vk_font, (uchar *)b->text, strlen(b->text), &fi);
 	#else
 		XmbTextExtents(vk_fontset, b->text, strlen(b->text), 0, &fi);
 	#endif

@@ -39,7 +39,7 @@ void VKDrawIcon()
 #ifdef USE_XFT
 	XftDraw *draw;
 	XGlyphInfo fi;
-	XftTextExtentsUtf8(display, vk_font, S, l=strlen(S), &fi);
+	XftTextExtentsUtf8(display, vk_font, (uchar *)S, l=strlen(S), &fi);
 #else
 	XRectangle fi;
 	XmbTextExtents(vk_fontset, S, l=strlen(S), 0, &fi);
@@ -88,7 +88,7 @@ void VKCalcMainWindowSize()
 {
 #ifdef USE_XFT
 	XGlyphInfo fi;
-	XftTextExtentsUtf8(display, vk_font, "Telex", 5, &fi);
+	XftTextExtentsUtf8(display, vk_font, (uchar *)"Telex", 5, &fi);
 	vk_icon_width = fi.width + 16;
 	vk_icon_height = 16 + vk_text_height;
 #else
@@ -133,9 +133,9 @@ void VKCreateMainWindow()
 #endif
 	XStoreName(display, main_window, PROGRAM_NAME);
 	XChangeProperty(display, main_window, XInternAtom(display, "WM_CLASS", False),
-		XA_STRING, 8, PropModeReplace, PROGRAM_NAME, strlen(PROGRAM_NAME));
+		XA_STRING, 8, PropModeReplace, (uchar *)PROGRAM_NAME, strlen(PROGRAM_NAME));
 	XChangeProperty(display, main_window, XInternAtom(display, "_NET_WM_NAME", False),
-		XA_STRING, 8, PropModeReplace, PROGRAM_NAME, strlen(PROGRAM_NAME));
+		XA_STRING, 8, PropModeReplace, (uchar *)PROGRAM_NAME, strlen(PROGRAM_NAME));
 	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
 
 	if( vk_docking ) {
