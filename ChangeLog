@@ -1,4 +1,9 @@
 0.2.9:
+	* 2006/02/26:
+	- Implement systray size calculation (work around for some systray
+	  non-compliant with freedesktop specs)
+	- Use type-casting to avoid some warning messages when compile
+	- Cleanup & fix bugs
 	* 2005/07/18:
 	- No need to check LOCALE anymore, almost distro are ready for UTF-8 locale
 	* 2005/04/01:
