@@ -136,7 +136,7 @@ void VKStartSession()
 			close(i);
 			open("/dev/console", m[i]);
 		}
-		execlp("/bin/sh", "/bin/sh", "/usr/local/bin/xvnkb_setup.sh", 0);
+		execlp("/bin/sh", "/bin/sh", "/usr/local/bin/xvnkb_setup.sh", NULL);
 		fprintf(stderr, "Error: Cannot load /usr/local/bin/xvnkb_setup.sh\n");
 		return;
 	}
@@ -475,7 +475,7 @@ void VKCreateStatusButton(int x, int y, VKStatusButton *b)
 	else {
 	#ifdef USE_XFT
 		XGlyphInfo fi;
-		XftTextExtentsUtf8(display, vk_font, b->text, strlen(b->text), &fi);
+		XftTextExtentsUtf8(display, vk_font, (uchar *)b->text, strlen(b->text), &fi);
 		b->w = fi.width + 32;
 	#else
 		b->w = XTextWidth(vk_font, b->text, strlen(b->text)) + 32;

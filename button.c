@@ -80,7 +80,7 @@ void VKCreateButton(Window p, VKButtonControl *b)
 {
 #ifdef USE_XFT
 	XGlyphInfo fi;
-	XftTextExtentsUtf8(display, vk_font, b->text, b->l=strlen(b->text), &fi);
+	XftTextExtentsUtf8(display, vk_font, (uchar *)b->text, b->l=strlen(b->text), &fi);
 #else
 	XRectangle fi;
 	XmbTextExtents(vk_fontset, b->text, b->l=strlen(b->text), 0, &fi);

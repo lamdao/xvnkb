@@ -54,7 +54,7 @@ void VKSetLabel(VKLabel *l, char *v)
 	{
 	#ifdef USE_XFT
 		XGlyphInfo fi;
-		XftTextExtentsUtf8(display, vk_font, v, l->l, &fi);
+		XftTextExtentsUtf8(display, vk_font, (uchar *)v, l->l, &fi);
 	#else
 		XRectangle fi;
 		XmbTextExtents(vk_fontset, v, l->l, 0, &fi);

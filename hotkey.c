@@ -149,7 +149,7 @@ void VKCreateHotkeyWindow()
 	XGlyphInfo fi;
 	fw = 2 * vk_font->max_advance_width;
 	XftTextExtentsUtf8(display, vk_font,
-						max_hk_string, strlen(max_hk_string), &fi);
+						(uchar *)max_hk_string, strlen(max_hk_string), &fi);
 #else
 	XRectangle fi;
 	fw = 2 * vk_font->per_char['W'].width;
@@ -171,7 +171,7 @@ void VKCreateHotkeyWindow()
 	for( i=0; i<2; i++ ) {
 		VKButtonControl *b = B[i];
 	#ifdef USE_XFT
-		XftTextExtentsUtf8(display, vk_font, "Cancel", 6, &fi);
+		XftTextExtentsUtf8(display, vk_font, (uchar *)"Cancel", 6, &fi);
 	#else
 		XmbTextExtents(vk_fontset, "Cancel", 6, 0, &fi);
 	#endif

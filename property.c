@@ -110,7 +110,7 @@ char *VKGetString(Display *display, Atom key)
 
 	if( XGetWindowProperty(display, root, key, 0, VKP_MAX_LENGTH, False,
 							XA_STRING, &at, &af, &ni, &br, &s)==Success ) {
-		return s;
+		return (char *)s;
 	}
 
 	return NULL;
@@ -119,6 +119,6 @@ char *VKGetString(Display *display, Atom key)
 void VKSetString(Display *display, Atom key, uchar *value)
 {
 	XChangeProperty(display, root, key, XA_STRING, 8, PropModeReplace,
-					value, strlen(value)+1);
+					value, strlen((char *)value)+1);
 }
 /*----------------------------------------------------------------------------*/
