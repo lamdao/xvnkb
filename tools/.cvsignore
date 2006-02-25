@@ -8,3 +8,6 @@ property.h
 typedefs.h
 xconfig.c
 xconfig.h
+xvnkb_ctrl
+xvnkb_setup
+Makefile.dep
