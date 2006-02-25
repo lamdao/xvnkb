@@ -33,6 +33,7 @@ typedef struct {
 #define VKSetAutoDocking(a)	(systray.redocking = a)
 /*----------------------------------------------------------------------------*/
 void VKSystrayInit();
+void VKSystrayCalcIconSize();
 void VKSystrayProcess(XEvent *event);
 void VKRequestDocking();
 /*----------------------------------------------------------------------------*/

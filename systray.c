@@ -33,6 +33,19 @@ void VKSystrayInit()
 	systray.handler = XInternAtom(display, "_NET_SYSTEM_TRAY_S0", False);
 	systray.request = XInternAtom(display, "_NET_SYSTEM_TRAY_OPCODE", False);
 	systray.owner = XGetSelectionOwner(display, systray.handler);
+	VKSystrayCalcIconSize();
+}
+/*----------------------------------------------------------------------------*/
+void VKSystrayCalcIconSize()
+{
+	if( VKIsDockable() ) {
+		Window r;
+		int x, y;
+		uint w, h, b, d;
+		XGetGeometry(display, systray.owner, &r, &x, &y, &w, &h, &b, &d);
+		vk_icon_width = w;
+		vk_icon_height = h;
+	}
 }
 /*----------------------------------------------------------------------------*/
 void VKSystrayProcess(XEvent *event)
