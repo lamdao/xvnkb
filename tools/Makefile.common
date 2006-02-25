@@ -34,6 +34,7 @@ clean:
 
 distclean: clean
 	rm -f $(TOOLS)
+	rm -f Makefile.dep
 	rm -f Makefile
 	rm -f config.h
 
