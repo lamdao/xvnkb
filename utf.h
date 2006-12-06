@@ -170,6 +170,7 @@
 #define	utf_D9		0x0110
 #define	utf_d		0x0064
 #define	utf_d9		0x0111
+#define	utf_vnd		0x20AB
 /*----------------------------------------------------------------------------*/
 #define	utf_W		0x0057
 #define	utf_w		0x0077
@@ -350,6 +351,13 @@ vietcode_t code_z[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
+vietcode_t code_sign[] =
+{
+	{ utf_d9,	utf_vnd },				// dd => VND sign
+	{ utf_vnd,	utf_d9 },				// VND sign => dd
+	{ 0 }
+};
+/*----------------------------------------------------------------------------*/
 modifier_t telex[] =
 {
 #ifdef VK_USE_EXTSTROKE
@@ -379,6 +387,7 @@ modifier_t telex[] =
 	{1, 'w', code_w},
 	{1, 'D', code_D},
 	{1, 'd', code_d},
+	{1, '_', code_sign},
 	{2, 'S', code_S},
 	{2, 's', code_s},
 	{2, 'F', code_F},
@@ -1485,6 +1494,7 @@ modifier_t vni[] =
 	{1, '7', code_7},
 	{1, '8', code_8},
 	{1, '9', code_9},
+	{1, '_', code_sign},
 	{2, '1', code_1},
 	{2, '2', code_2},
 	{2, '3', code_3},
@@ -1502,6 +1512,7 @@ modifier_t viqr[] =
 	{1, '(', code_8},
 	{1, 'D', code_D},
 	{1, 'd', code_d},
+	{1, '_', code_sign},
 	{2, '\'', code_1},
 	{2, '`', code_2},
 	{2, '?', code_3},
@@ -1539,7 +1550,9 @@ ushort UTF16[] = {
 	utf_u7, utf_u71, utf_u72, utf_u73, utf_u74, utf_u75,
 	utf_i,  utf_i1,  utf_i2,  utf_i3,  utf_i4,  utf_i5,
 	utf_y,  utf_y1,  utf_y2,  utf_y3,  utf_y4,  utf_y5,
-	utf_d9, 0
+	utf_d9,
+	utf_vnd,
+	0
 };
 /*----------------------------------------------------------------------------*/
 #endif
