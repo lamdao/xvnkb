@@ -188,7 +188,7 @@ void VKLoadConfig(int argc, char **argv)
 	if( vk_method!=VKM_OFF && vk_method!=vk_using )
 		vk_using = vk_method;
 
-	vk_charset = vk_charset<0 ? VKC_TCVN : vk_charset % 6;
+	vk_charset = vk_charset<0 ? VKC_UTF8 : vk_charset % 6;
 }
 /*----------------------------------------------------------------------------*/
 void VKSaveConfig()
