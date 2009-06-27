@@ -191,7 +191,8 @@ void VKLoadConfig(int argc, char **argv)
 	vk_charset = vk_charset<0 ? VKC_UTF8 : vk_charset % 6;
 
 	if( !fp ) {
-		vk_using = VKM_TELEX;
+		vk_using = vk_method = VKM_TELEX;
+		vk_charset = VKC_UTF8;
 		vk_docking = 1;
 		VKSaveConfig();
 	}
