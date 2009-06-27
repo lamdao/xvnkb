@@ -31,6 +31,10 @@ typedef enum {
 	VKC_TCVN, VKC_VNI, VKC_VIQR, VKC_VISCII, VKC_VPS, VKC_UTF8
 } vk_charsets;
 /*----------------------------------------------------------------------------*/
+typedef enum {
+	VKD_OFF, VKD_ON, VKD_AUTO
+} vk_docking_modes;
+/*----------------------------------------------------------------------------*/
 #ifdef VK_NEED_UCHAR
 typedef unsigned char uchar;
 #endif
