@@ -49,6 +49,15 @@ void VKSystemInit()
 }
 /*----------------------------------------------------------------------------*/
 XErrorHandler old_error_handler;
+XIOErrorHandler old_io_error_handler;
+/*----------------------------------------------------------------------------*/
+int VKIOErrorHandler(Display *display)
+{
+	extern void VKSaveConfig();
+
+	VKSaveConfig();
+	return old_io_error_handler(display);
+}
 /*----------------------------------------------------------------------------*/
 int VKErrorHandler(Display *display, XErrorEvent *event)
 {
@@ -82,6 +91,7 @@ void VKStartXSession()
 		exit(1);
 	}
 	old_error_handler = XSetErrorHandler(VKErrorHandler);
+	old_io_error_handler = XSetIOErrorHandler(VKIOErrorHandler);
 	VKAtomInit(display);
 	VKChangeCharset(vk_charset);
 	VKChangeMethod();
