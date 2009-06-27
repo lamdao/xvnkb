@@ -142,15 +142,16 @@ void VKCreateMainWindow()
 		XA_STRING, 8, PropModeReplace, (uchar *)PROGRAM_NAME, strlen(PROGRAM_NAME));
 	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
 
-	if( vk_docking == VKD_ON ) {
+	if( vk_docking != VKD_OFF ) { // ON or AUTO
 		if( VKIsDockable() ) {
+			vk_docking = VKD_ON;
 			VKSetMainWindowHints(vk_icon_height, vk_icon_height);
 			VKRequestDocking();
 		}
 		else {
 			vk_docking = VKD_OFF;
 			XMapWindow(display, main_window);
-			VKSetAutoDocking(1);
+			VKSetAutoDocking(VKD_ON);
 		}
 	}
 	else {
@@ -249,7 +250,7 @@ void VKMainWindowProcess(XEvent *event, void *data)
 		case ReparentNotify:
 			if( vk_docking == VKD_ON && event->xreparent.parent == root ) {
 				VKUndockMainWindow();
-				VKSetAutoDocking(1);
+				VKSetAutoDocking(VKD_ON);
 			}
 			break;
 		case ConfigureNotify:

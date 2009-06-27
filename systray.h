@@ -30,7 +30,7 @@ typedef struct {
 } VKSystrayInfo;
 /*----------------------------------------------------------------------------*/
 #define VKIsDockable()		(systray.owner != None)
-#define VKSetAutoDocking(a)	(systray.redocking = a)
+#define VKSetAutoDocking(a)	(systray.redocking = a, vk_docking = VKD_AUTO)
 /*----------------------------------------------------------------------------*/
 void VKSystrayInit();
 void VKSystrayCalcIconSize();
