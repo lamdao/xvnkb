@@ -89,8 +89,14 @@ void VKRootWindowInit()
 /*----------------------------------------------------------------------------*/
 void VKMainProcess()
 {
+	int xfd = ConnectionNumber(display);
+
 	while( !vk_done ) {
-		usleep(1000);
+		struct timeval tv = {1, 0};
+		fd_set rfds;
+		FD_ZERO(&rfds);
+		FD_SET(xfd, &rfds);
+		select(xfd+1, &rfds, 0, 0, &tv);
 
 		if( vk_timeout && vk_flash_on )
 			VKHideFlash();
