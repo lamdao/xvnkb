@@ -417,7 +417,7 @@ void MenuMousePress(vk_menu *m, XEvent *event)
 			break;
 	#endif
 		case 8:
-			if( !vk_docking )
+			if( vk_docking != VKD_ON )
 				VKDockMainWindow();
 			else
 				VKUndockMainWindow();
@@ -479,7 +479,7 @@ void MenuProcess(XEvent *event, void *data)
 void VKUpdateDockingMessage()
 {
 	vk_menu_item *item = &vk_menu_data[vk_interface][DOCK_MSG_IDX];
-	item->name = vk_dock_message[vk_interface][vk_docking];
+	item->name = vk_dock_message[vk_interface][vk_docking == VKD_ON];
 	item->length = strlen(item->name);
 }
 /*----------------------------------------------------------------------------*/

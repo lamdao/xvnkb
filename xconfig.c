@@ -196,7 +196,7 @@ void VKLoadConfig(int argc, char **argv)
 		vk_firstboot = 1;
 		vk_using = vk_method = VKM_TELEX;
 		vk_charset = VKC_UTF8;
-		vk_docking = 1;
+		vk_docking = VKD_ON;
 		VKSaveConfig();
 	}
 }

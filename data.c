@@ -40,7 +40,7 @@ int vk_charset;
 int vk_using;
 int vk_spelling = 1;
 int vk_interface = 0;
-int vk_docking = 0;
+int vk_docking = VKD_OFF;
 char *vk_hotkey = NULL;
 /*----------------------------------------------------------------------------*/
 int vk_done = False;

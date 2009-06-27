@@ -34,7 +34,7 @@ void VKMainWindowProcess(XEvent *event, void *data);
 void VKDrawIcon()
 {
 	long x, y, h, l;
-	char *S = vk_docking ? (vk_method == VKM_OFF ? "N" : "V") : Ss[vk_method];
+	char *S = (vk_docking == VKD_ON) ? (vk_method == VKM_OFF ? "N" : "V") : Ss[vk_method];
 
 #ifdef USE_XFT
 	XftDraw *draw;
@@ -86,7 +86,7 @@ void VKSetMainWindowHints(int w, int h)
 /*----------------------------------------------------------------------------*/
 void VKCalcMainWindowSize()
 {
-	if( vk_docking ) {
+	if( vk_docking == VKD_ON ) {
 		VKSystrayCalcIconSize();
 		return;
 	}
@@ -142,19 +142,19 @@ void VKCreateMainWindow()
 		XA_STRING, 8, PropModeReplace, (uchar *)PROGRAM_NAME, strlen(PROGRAM_NAME));
 	VKRegisterEvent(main_window, VKMainWindowProcess, NULL);
 
-	if( vk_docking ) {
+	if( vk_docking == VKD_ON ) {
 		if( VKIsDockable() ) {
 			VKSetMainWindowHints(vk_icon_height, vk_icon_height);
 			VKRequestDocking();
 		}
 		else {
-			vk_docking = 0;
+			vk_docking = VKD_OFF;
 			XMapWindow(display, main_window);
 			VKSetAutoDocking(1);
 		}
 	}
 	else {
-		vk_docking = 0;
+		vk_docking = VKD_OFF;
 		XMapWindow(display, main_window);
 	}
 
@@ -172,7 +172,7 @@ void VKDestroyMainWindow()
 void VKDockMainWindow()
 {
 	if( VKIsDockable() ) {
-		vk_docking = 1;
+		vk_docking = VKD_ON;
 		VKDestroyMainWindow();
 		VKCreateMainWindow();
 		VKUpdateDockingMessage();
@@ -181,7 +181,7 @@ void VKDockMainWindow()
 /*----------------------------------------------------------------------------*/
 void VKUndockMainWindow()
 {
-	vk_docking = 0;
+	vk_docking = VKD_OFF;
 	VKDestroyMainWindow();
 	VKCreateMainWindow();
 	VKUpdateDockingMessage();
@@ -204,7 +204,7 @@ void VKMainWindowProcess(XEvent *event, void *data)
 			dragging = event->xbutton.button==Button1;
 			break;
 		case MotionNotify:
-			if( !vk_docking && dragging ) {
+			if( vk_docking != VKD_ON && dragging ) {
 				has_moved = True;
 				vk_x += event->xbutton.x_root - x;
 				vk_y += event->xbutton.y_root - y;
@@ -247,13 +247,13 @@ void VKMainWindowProcess(XEvent *event, void *data)
 				XRaiseWindow(display, main_window);
 			break;
 		case ReparentNotify:
-			if( vk_docking && event->xreparent.parent == root ) {
+			if( vk_docking == VKD_ON && event->xreparent.parent == root ) {
 				VKUndockMainWindow();
 				VKSetAutoDocking(1);
 			}
 			break;
 		case ConfigureNotify:
-			if( vk_docking ) {
+			if( vk_docking == VKD_ON ) {
 				vk_x = event->xconfigure.x;
 				vk_y = event->xconfigure.y;
 				vk_icon_width = event->xconfigure.width;
