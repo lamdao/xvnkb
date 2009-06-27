@@ -255,7 +255,7 @@ extern int XLookupString(XKeyEvent *event, char *buffer, int size,
 	if( event->keycode!=VK_MAGIC_CHAR )
 		r = (*fptr)(event, buffer, size, keysym, cstatus);
 	else
-	if( buffer ) {
+	if( keysym && buffer ) {
 	#ifdef VK_USE_KEYSYM
 		extern ushort *pw;
 	#endif
