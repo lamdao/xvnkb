@@ -92,6 +92,8 @@ void VKUsage(char *program)
 	exit(2);
 }
 /*----------------------------------------------------------------------------*/
+static int vk_firstboot = 0;
+/*----------------------------------------------------------------------------*/
 void VKLoadConfig(int argc, char **argv)
 {
 	FILE *fp;
@@ -191,6 +193,7 @@ void VKLoadConfig(int argc, char **argv)
 	vk_charset = vk_charset<0 ? VKC_UTF8 : vk_charset % 6;
 
 	if( !fp ) {
+		vk_firstboot = 1;
 		vk_using = vk_method = VKM_TELEX;
 		vk_charset = VKC_UTF8;
 		vk_docking = 1;
@@ -231,6 +234,10 @@ void VKSaveConfig()
 		}
 		fclose(fp);
 	}
-	free(vk_config_file);
+
+	if (vk_firstboot)
+		vk_firstboot = 0;
+	else
+		free(vk_config_file);
 }
 /*----------------------------------------------------------------------------*/
