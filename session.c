@@ -122,6 +122,7 @@ void VKStopXSession()
 {
 	VKResetMode();
 	XSync(display, False);
+	XSetIOErrorHandler(old_io_error_handler);
 	XSetErrorHandler(old_error_handler);
 	XCloseDisplay(display);
 }
