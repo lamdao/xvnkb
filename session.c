@@ -39,7 +39,7 @@ void VKSystemInit()
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTRAP, SIG_IGN);
 	signal(SIGIOT, SIG_IGN);
-	signal(SIGTERM, SIG_IGN);
+//	signal(SIGTERM, SIG_IGN);
 	signal(SIGHUP, SIG_IGN);
 	signal(SIGCHLD, SIG_IGN);
 	signal(SIGALRM, VKSigAlarm);
