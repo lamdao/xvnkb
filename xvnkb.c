@@ -49,14 +49,13 @@ typedef struct {
 	long sym;
 } vk_hotkey_info;
 /*----------------------------------------------------------------------------*/
-Window root = -1;
-Window focus = -1;
+static Window root = -1;
+static Window focus = -1;
 /*----------------------------------------------------------------------------*/
-static KeyCode rk = 0;
 static KeyCode bs = 0;
 static XKeyEvent xk;
 /*----------------------------------------------------------------------------*/
-vk_hotkey_info hotkey = {
+static vk_hotkey_info hotkey = {
 	VK_HOTKEY_STATE,
 	VK_HOTKEY_CODE
 };
@@ -84,11 +83,51 @@ static void __attribute__ ((constructor)) xvnkb_init(void)
 	 */
 }
 /*----------------------------------------------------------------------------*/
+static inline void set_xk(Display *display, XKeyEvent *event, KeyCode kcode)
+{
+	xk.display = display;
+	xk.window = focus;
+	xk.serial = event->serial;
+	xk.time = event->time;
+	xk.keycode = kcode;
+	xk.state = 0;
+}
+/*----------------------------------------------------------------------------*/
+static inline void put_magic_key(Display *display, XKeyEvent *event)
+{
+	XEvent e;
+	XCheckTypedWindowEvent(display, focus, KeyRelease, &e);
+
+	set_xk(display, event, VK_MAGIC_CHAR);
+	XPutBackEvent(display, (XEvent *)&xk);
+	xk.keycode = bs;
+}
+/*----------------------------------------------------------------------------*/
+static inline void put_bs_event(Display *display, int count)
+{
+	int i;
+	for (i = 0; i < count; i++) {
+		xk.time -= 1;
+		xk.type = KeyRelease;
+		XPutBackEvent(display, (XEvent *)&xk);
+		xk.time -= 1;
+		xk.type = KeyPress;
+		XPutBackEvent(display, (XEvent *)&xk);
+	}
+	bk = count;
+}
+/*----------------------------------------------------------------------------*/
+static inline void put_update_string(Display *display, XKeyEvent *event)
+{
+	put_magic_key(display, event);
+	put_bs_event(display, vk_plength);
+	event->type = LASTEvent;
+}
+/*----------------------------------------------------------------------------*/
 static inline void key_handler(Display *display, XKeyEvent *event)
 {
 	char *sp;
-	int i, len;
-	int state = event->state;
+	int len, state = event->state;
 	KeySym key = XKeycodeToKeysym(display, event->keycode,
 					state & VK_SHIFT ? 1 : 0);
 
@@ -138,17 +177,8 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 		case XK_BackSpace:
 			len = VKBackspaceDelete();
 			if( len>0 ) {
-				xk.display = display;
-				xk.window = focus;
-				xk.keycode = bs;
-				xk.serial = event->serial+len;
-				xk.time = event->time+len;
-				for( i=0; i<len; i++ ) {
-					XPutBackEvent(display, (XEvent *)&xk);
-					xk.serial--;
-					xk.time--;
-				}
-				bk = len;
+				set_xk(display, event, bs);
+				put_bs_event(display, len);
 			}
 			break;
 		default:
@@ -165,23 +195,7 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 					break;
 			#ifdef VK_USE_EXTSTROKE
 				case -2:
-					xk.display = display;
-					xk.window = focus;
-					xk.keycode = VK_MAGIC_CHAR;
-					xk.time = event->time;
-					xk.serial = event->serial;
-					XPutBackEvent(display, (XEvent *)&xk);
-					xk.keycode = bs;
-					for( bk=1, i=0; i<vk_plength-1; i++, bk++ ) {
-						xk.time -= 2;
-						xk.serial--;
-						XPutBackEvent(display, (XEvent *)&xk);
-					}
-					rk = event->keycode;
-					event->time = xk.time - 2;
-					event->serial = xk.serial - 1;
-					event->keycode = bs;
-					event->state = 0;
+					put_update_string(display, event);
 					break;
 				case -3:
 					event->keycode = VK_MAGIC_CHAR;
@@ -189,24 +203,7 @@ static inline void key_handler(Display *display, XKeyEvent *event)
 					break;
 			#endif
 				default:
-					xk.display = display;
-					xk.window = focus;
-					xk.keycode = VK_MAGIC_CHAR;
-					xk.time = event->time;
-					xk.serial = event->serial;
-					XPutBackEvent(display, (XEvent *)&xk);
-
-					xk.keycode = bs;
-					for( bk=1, i=0; i<vk_plength-1; i++, bk++ ) {
-						xk.time -= 2;
-						xk.serial--;
-						XPutBackEvent(display, (XEvent *)&xk);
-					}
-					rk = event->keycode;
-					event->time = xk.time - 2;
-					event->serial = xk.serial - 1;
-					event->keycode = bs;
-					event->state = 0;
+					put_update_string(display, event);
 					break;
 			}
 	}
@@ -364,27 +361,23 @@ extern int XNextEvent(Display* display, XEvent *event)
 	(*fptr)(display, event);
 	switch( event->type ) {
 		case KeyRelease:
-			if( rk==((XKeyEvent *)event)->keycode ) {
-				((XKeyEvent *)event)->keycode = bs;
-				((XKeyEvent *)event)->state = 0;
-				rk = 0;
-			}
 			break;
 		case KeyPress:
-			if( bk )
+			if( bk ) {
+				TRACE("bk = %d\n", bk);
 				bk--;
-			else {
+			} else {
 				focus = ((XKeyEvent *)event)->window;
 				key_handler(display, (XKeyEvent *)event);
 			}
 			break;
 		case FocusIn:
-			rk = bk = 0;
+			bk = 0;
 			focus = ((XFocusChangeEvent *)event)->window;
 			VKClearBuffer();
 			break;
 		case ButtonPress:
-			rk = bk = 0;
+			bk = 0;
 			VKClearBuffer();
 			break;
 	#ifndef VK_CORE_ONLY
@@ -421,4 +414,6 @@ extern int XNextEvent(Display* display, XEvent *event)
 
 	return 0;
 }
+/*----------------------------------------------------------------------------*/
+#include "property.c"
 /*----------------------------------------------------------------------------*/
