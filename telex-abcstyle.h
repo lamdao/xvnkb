@@ -20,7 +20,7 @@
 #ifndef __VK_ABC_TELEX
 #define __VK_ABC_TELEX
 /*----------------------------------------------------------------------------*/
-vietcode_t code_A[] =
+static vietcode_t code_A[] =
 {
 	{ utf_A,	utf_A6 },				//	A => A^
 	{ utf_A1,	utf_A61 },				//	A => A^'
@@ -61,7 +61,7 @@ vietcode_t code_A[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_a[] =
+static vietcode_t code_a[] =
 {
 	{ utf_A,	utf_a6 },				//	A => a^
 	{ utf_A1,	utf_a61 },				//	A' => a^'
@@ -102,7 +102,7 @@ vietcode_t code_a[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_E[] =
+static vietcode_t code_E[] =
 {
 	{ utf_E,	utf_E6 },				//	E => E^
 	{ utf_E1,	utf_E61 },				//	E' => E^'
@@ -131,7 +131,7 @@ vietcode_t code_E[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_e[] =
+static vietcode_t code_e[] =
 {
 	{ utf_E,	utf_e6 },				//	E => e^
 	{ utf_E1,	utf_e61 },				//	E' => e^'
@@ -160,7 +160,7 @@ vietcode_t code_e[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_O[] =
+static vietcode_t code_O[] =
 {
 	{ utf_O,	utf_O6 },				//	O => O^
 	{ utf_O1,	utf_O61 },				//	O' => O^'
@@ -201,7 +201,7 @@ vietcode_t code_O[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_o[] =
+static vietcode_t code_o[] =
 {
 	{ utf_O,	utf_o6 },				//	O => o^
 	{ utf_O1,	utf_o61 },				//	O' => O^'
@@ -242,7 +242,7 @@ vietcode_t code_o[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_D[] =
+static vietcode_t code_D[] =
 {
 	{ utf_D,	utf_D9 },				//	D => -D
 	{ utf_D9,	utf_D, utf_D },			//	-D => DD
@@ -251,7 +251,7 @@ vietcode_t code_D[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_d[] =
+static vietcode_t code_d[] =
 {
 	{ utf_D,	utf_d9 },				//	D => -d
 	{ utf_D9,	utf_d, utf_d },			//	-D => dd
@@ -260,7 +260,7 @@ vietcode_t code_d[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_W[] =
+static vietcode_t code_W[] =
 {
 	{ utf_A,	utf_A8 },				//	A => A(
 	{ utf_A1,	utf_A81 },				//	A' => A('
@@ -361,7 +361,7 @@ vietcode_t code_W[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_w[] =
+static vietcode_t code_w[] =
 {
 	{ utf_A,	utf_a8 },				//	A => a(
 	{ utf_A1,	utf_a81 },				//	A' => a('
@@ -462,7 +462,7 @@ vietcode_t code_w[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_S[] =
+static vietcode_t code_S[] =
 {
 	{ utf_A,	utf_A1 },				//	A => A'
 	{ utf_A1,	utf_A, utf_S },			//	A' => AS
@@ -622,7 +622,7 @@ vietcode_t code_S[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_s[] =
+static vietcode_t code_s[] =
 {
 	{ utf_A,	utf_a1 },				//	A => a'
 	{ utf_A1,	utf_a, utf_s },			//	A' => as
@@ -782,7 +782,7 @@ vietcode_t code_s[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_F[] =
+static vietcode_t code_F[] =
 {
 	{ utf_A,	utf_A2 },				//	A => A`
 	{ utf_A1,	utf_A2 },				//	A' => A`
@@ -942,7 +942,7 @@ vietcode_t code_F[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_f[] =
+static vietcode_t code_f[] =
 {
 	{ utf_A,	utf_a2 },				//	A => a`
 	{ utf_A1,	utf_a2 },				//	A' => a`
@@ -1102,7 +1102,7 @@ vietcode_t code_f[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_R[] =
+static vietcode_t code_R[] =
 {
 	{ utf_A,	utf_A3 },				//	A => A?
 	{ utf_A1,	utf_A3 },				//	A' => A?
@@ -1262,7 +1262,7 @@ vietcode_t code_R[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_r[] =
+static vietcode_t code_r[] =
 {
 	{ utf_A,	utf_a3 },				//	A => a?
 	{ utf_A1,	utf_a3 },				//	A' => a?
@@ -1422,7 +1422,7 @@ vietcode_t code_r[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_X[] =
+static vietcode_t code_X[] =
 {
 	{ utf_A,	utf_A4 },				//	A => A~
 	{ utf_A1,	utf_A4 },				//	A' => A~
@@ -1582,7 +1582,7 @@ vietcode_t code_X[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_x[] =
+static vietcode_t code_x[] =
 {
 	{ utf_A,	utf_a4 },				//	A => a~
 	{ utf_A1,	utf_a4 },				//	A' => a~
@@ -1742,7 +1742,7 @@ vietcode_t code_x[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_J[] =
+static vietcode_t code_J[] =
 {
 	{ utf_A,	utf_A5 },				//	A => A.
 	{ utf_A1,	utf_A5 },				//	A' => A.
@@ -1902,7 +1902,7 @@ vietcode_t code_J[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_j[] =
+static vietcode_t code_j[] =
 {
 	{ utf_A,	utf_a5 },				//	A => a.
 	{ utf_A1,	utf_a5 },				//	A' => a.

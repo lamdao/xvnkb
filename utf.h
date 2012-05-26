@@ -203,7 +203,7 @@ typedef struct {
 #include "telex-abcstyle.h"
 #endif
 /*----------------------------------------------------------------------------*/
-vietcode_t code_z[] =
+static vietcode_t code_z[] =
 {
 	{ utf_A1,	utf_A },				//	A' => A
 	{ utf_A2,	utf_A },				//	A` => A
@@ -351,7 +351,7 @@ vietcode_t code_z[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_sign[] =
+static vietcode_t code_sign[] =
 {
 	{ utf_d9,	utf_vnd },				// dd => VND sign
 	{ utf_vnd,	utf_d9 },				// VND sign => dd
@@ -403,7 +403,7 @@ modifier_t telex[] =
 	{0, 0, 0}
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_6[] =
+static vietcode_t code_6[] =
 {
 	{ utf_A,	utf_A6 },				//	A => A^
 	{ utf_A1,	utf_A61 },				//	A' => A^'
@@ -509,7 +509,7 @@ vietcode_t code_6[] =
 	{ 0 },
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_7[] =
+static vietcode_t code_7[] =
 {
 	{ utf_O,	utf_O7 },				//	O => O+
 	{ utf_O1,	utf_O71 },				//	O' => O+'
@@ -577,7 +577,7 @@ vietcode_t code_7[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_8[] =
+static vietcode_t code_8[] =
 {
 	{ utf_A,	utf_A8 },				//	A => A(
 	{ utf_A1,	utf_A81 },				//	A' => A('
@@ -619,7 +619,7 @@ vietcode_t code_8[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_9[] =
+static vietcode_t code_9[] =
 {
 	{ utf_D,	utf_D9 },				//	D => -D
 	{ utf_D9,	utf_D, '9' },			//	-D => D9
@@ -628,7 +628,7 @@ vietcode_t code_9[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_1[] =
+static vietcode_t code_1[] =
 {
 	{ utf_A,	utf_A1 },				//	A => A'
 	{ utf_A1,	utf_A, '1' },			//	A' => A1
@@ -800,7 +800,7 @@ vietcode_t code_1[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_2[] =
+static vietcode_t code_2[] =
 {
 	{ utf_A,	utf_A2 },				//	A => A`
 	{ utf_A1,	utf_A2 },				//	A' => A`
@@ -972,7 +972,7 @@ vietcode_t code_2[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_3[] =
+static vietcode_t code_3[] =
 {
 	{ utf_A,	utf_A3 },				//	A => A?
 	{ utf_A1,	utf_A3 },				//	A' => A?
@@ -1144,7 +1144,7 @@ vietcode_t code_3[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_4[] =
+static vietcode_t code_4[] =
 {
 	{ utf_A,	utf_A4 },				//	A => A~
 	{ utf_A1,	utf_A4 },				//	A' => A~
@@ -1316,7 +1316,7 @@ vietcode_t code_4[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-vietcode_t code_5[] =
+static vietcode_t code_5[] =
 {
 	{ utf_A,	utf_A5 },				//	A => A.
 	{ utf_A1,	utf_A5 },				//	A' => A.
@@ -1488,7 +1488,7 @@ vietcode_t code_5[] =
 	{ 0 }
 };
 /*----------------------------------------------------------------------------*/
-modifier_t vni[] =
+static modifier_t vni[] =
 {
 	{1, '6', code_6},
 	{1, '7', code_7},
@@ -1504,7 +1504,7 @@ modifier_t vni[] =
 	{0, 0, 0}
 };
 /*----------------------------------------------------------------------------*/
-modifier_t viqr[] =
+static modifier_t viqr[] =
 {
 	{1, '^', code_6},
 	{1, '+', code_7},
@@ -1522,9 +1522,9 @@ modifier_t viqr[] =
 	{0, 0, 0}
 };
 /*----------------------------------------------------------------------------*/
-modifier_t *modes[] = { vni, telex, viqr };
+static modifier_t *modes[] = { vni, telex, viqr };
 /*----------------------------------------------------------------------------*/
-ushort UTF16[] = {
+static ushort UTF16[] = {
 	utf_A,  utf_A1,  utf_A2,  utf_A3,  utf_A4,  utf_A5,
 	utf_A6, utf_A61, utf_A62, utf_A63, utf_A64, utf_A65,
 	utf_A8, utf_A81, utf_A82, utf_A83, utf_A84, utf_A85,
