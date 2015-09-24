@@ -221,8 +221,8 @@ esac
 if [ "$LANG" = "" ]; then
 	echo "You can set LANG=*UTF-8 manually to use Unicode input later (see README)."
 else
-	check_locale
-	check_i18n
+#	check_locale
+#	check_i18n
 	echo "Add \"export LANG=$LANG\" to $PRELOAD_SCRIPT"
 	echo "export LANG=$LANG" >> $PRELOAD_SCRIPT
 fi
